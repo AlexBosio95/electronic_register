@@ -21,11 +21,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->registerPolicies();
-
-        Gate::define('access-route', function ($user) {
-            // Logica per determinare se l'utente può accedere alla route
-            return $user->isAllowedToAccessRoute(); 
-        });
+        //
     }
 }
