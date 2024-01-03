@@ -11,4 +11,7 @@ class Teacher extends Model
 
     protected $fillable = ['name','surname','birthday','address','city'];
 
+    public function classes(){
+        return $this->belongsToMany(Classe::class, 'teacher_classes', 'teacher_id', 'class_id');
+    }
 }
