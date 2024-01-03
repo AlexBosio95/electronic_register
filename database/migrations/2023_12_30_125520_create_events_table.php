@@ -8,6 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * Tabella che contiene un id univoco per ogni evento importante per ogni studente, quindi i voti, le presenze assenze e le note disciplinari
+     * Nel campo name c'è proprio il nome come Voto, nota disciplinare, Presenza
      */
     public function up(): void
     {

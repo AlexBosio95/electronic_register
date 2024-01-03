@@ -8,6 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * Tabella che rappresenta la scheda di valutazione, quindi ci sarà un campo per definire qual è l'alunno,
+     * la materia (relazione con tabella materie), il voto finale (enum) e il quadrimestre (periodo)
      */
     public function up(): void
     {

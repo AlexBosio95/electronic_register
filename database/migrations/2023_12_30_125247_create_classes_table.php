@@ -8,6 +8,7 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * Tabella che contiene le classi, l'id è l'identificativo univoco, name è invece il nome, esempio: "Prima A Liceo Scientifico"
      */
     public function up(): void
     {

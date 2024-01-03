@@ -8,6 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * Registro professori in cui ogni prof scrive cosa fa in ogni classe.
+     * Relazioni con tabelle materie e classi e note per scrivere cosa è stato effettivamente fatto
      */
     public function up(): void
     {
