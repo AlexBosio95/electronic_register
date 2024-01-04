@@ -70,11 +70,11 @@
                 </div>
             </header>
         
-            <div class="relative isolate px-6 pt-34 lg:px-8">
+            <div class="relative isolate px-8 pt-54 lg:px-8">
             <div class="absolute inset-x-0 -top-60 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
                 <div class="relative left-[calc(50%-11rem)] aspect-[1055/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#d3eaf2] to-[#9089fc] opacity-25 sm:left-[calc(50%-20rem)] sm:w-[102.1875rem]" style="clip-path: polygon(94.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
             </div>
-            <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+            <div class="mx-auto max-w-2xl py-42 sm:py-48 lg:py-52">
                 <div class="text-center">
                     <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Benvenuto al Registro Elettronico </h1>
                     <p class="mt-6 text-lg leading-8 text-gray-600">Siamo entusiasti di darti il benvenuto al nostro sistema di registro elettronico moderno e intuitivo! Crediamo nell'innovazione e nell'uso della tecnologia per semplificare e migliorare il processo educativo.</p>
@@ -84,8 +84,28 @@
                     </div>
                 </div>
             </div>        
-
-        </div>          
+        </div>    
+        
+        <!-- component -->
+        <!-- This is an example component -->
+        <footer class="p-4 bg-white shadow md:flex md:items-center md:justify-between md:p-6 dark:bg-gray-800">
+            <span class="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 Electronic Register™ All Rights Reserved.</span>
+            <ul class="flex flex-wrap items-center mt-3 sm:mt-0">
+                <li>
+                    <a href="#" class="mr-4 text-sm text-gray-500 hover:underline md:mr-6 dark:text-gray-400">About</a>
+                </li>
+                <li>
+                    <a href="#" class="mr-4 text-sm text-gray-500 hover:underline md:mr-6 dark:text-gray-400">Privacy
+                        Policy</a>
+                </li>
+                <li>
+                    <a href="#" class="mr-4 text-sm text-gray-500 hover:underline md:mr-6 dark:text-gray-400">Licensing</a>
+                </li>
+                <li>
+                    <a href="#" class="text-sm text-gray-500 hover:underline dark:text-gray-400">Contact</a>
+                </li>
+            </ul>
+        </footer>
 
     </body>
 </html>
