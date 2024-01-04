@@ -8,6 +8,9 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * Tabella che contiene tutti i professori,
+     * Sono presenti due relazioni con le tabelle classes e subjects, per definire quali materie insegnano e quali classi hanno
+     * Ci saranno due tabelle pivot per definire le due relazioni
      */
     public function up(): void
     {

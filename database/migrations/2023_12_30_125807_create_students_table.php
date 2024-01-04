@@ -8,6 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * Tabella che contiene tutti gli studenti.
+     * C'è una relazione con la tabella delle classi per definire a quale classe appartiene ogni studente.
      */
     public function up(): void
     {
