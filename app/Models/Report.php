@@ -11,4 +11,12 @@ class Report extends Model
 
     protected $table = "report";
     protected $fillable = ['outcome', 'period'];
+
+    public function students(){
+        $this->hasMany(Student::class);
+    }
+
+    public function subjects(){
+        $this->hasMany(Subject::class);
+    }
 }

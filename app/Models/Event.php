@@ -10,4 +10,8 @@ class Event extends Model
     use HasFactory;
 
     protected $fillable = "name";
+
+    public function studentregister(){
+        $this->belongsTo(StudentRegister::class);
+    }
 }

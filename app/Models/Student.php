@@ -14,4 +14,12 @@ class Student extends Model
     public function class(){
         $this->belongsTo(Classe::class);
     }
+
+    public function studentregister(){
+        $this->belongsTo(StudentRegister::class);
+    }
+
+    public function reports(){
+        $this->belongsTo(Report::class);
+    }
 }

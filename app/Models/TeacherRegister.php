@@ -11,4 +11,17 @@ class TeacherRegister extends Model
 
     protected $table = "teacher_register";
     protected $fillable = "note";
+
+    public function teachers(){
+        $this->hasMany(Teacher::class);
+    }
+
+    public function subjects(){
+        $this->hasMany(Subject::class);
+    }
+
+    public function classes(){
+        $this->hasMany(Subject::class);
+    }
+
 }

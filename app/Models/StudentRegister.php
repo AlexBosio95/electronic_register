@@ -11,4 +11,20 @@ class StudentRegister extends Model
 
     protected $table = "student_register";
     protected $fillable = "note";
+
+    function students(){
+        $this->hasMany(Student::class);
+    }
+
+    public function teachers(){
+        $this->hasMany(Teacher::class);
+    }
+
+    public function subjects(){
+        $this->hasMany(Subject::class);
+    }
+
+    public function events(){
+        $this->hasMany(Event::class);
+    }
 }

@@ -19,4 +19,8 @@ class Classe extends Model
     public function teachers(){
         return $this->belongsToMany(Classe::class, 'teacher_classes', 'class_id', 'teacher_id');
     }
+
+    public function teacherregister(){
+        $this->belongsTo(TeacherRegister::class);
+    }
 }
