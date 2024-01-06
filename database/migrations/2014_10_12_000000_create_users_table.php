@@ -8,6 +8,8 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
+     * tabella che contiene tutti gli user, tutto fatto da Laravel breeze, tranne il campo role che servirà
+     * per definire il ruolo di ciascun utente e quindi i permessi che potrà avere
      */
     public function up(): void
     {
@@ -17,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['admin', 'teacher', 'student']);
             $table->rememberToken();
             $table->timestamps();
         });
