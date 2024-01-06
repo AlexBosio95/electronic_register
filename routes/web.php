@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 //prova commmit
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('welcomeTailwind');
 });
 
 Route::get('/dashboard', function () {
