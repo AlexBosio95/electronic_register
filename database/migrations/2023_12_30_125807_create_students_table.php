@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('city', 80);
             $table->unsignedBigInteger('class_id'); 
             $table->foreign('class_id')->references('id')->on('classes');
+            $table->unsignedBigInteger('user_id'); 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
