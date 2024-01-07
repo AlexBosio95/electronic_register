@@ -21,6 +21,8 @@ return new class extends Migration
             $table->date('birthday');
             $table->string('address', 100);
             $table->string('city', 80);
+            $table->unsignedBigInteger('user_id'); 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
