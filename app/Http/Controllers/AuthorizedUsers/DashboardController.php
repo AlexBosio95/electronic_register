@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AuthorizedUsers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Classe;
+use App\Models\Teacher;
 
 class DashboardController extends Controller
 {
@@ -13,7 +14,10 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        
+        $classes = Classe::all();
+        $teacher = Teacher::all();
+
+        return view(('dashboard'), compact('classes', 'teacher'));
     }
 
     /**

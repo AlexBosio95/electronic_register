@@ -10,7 +10,7 @@ class Classe extends Model
     use HasFactory;
 
     protected $table = "classes";
-    protected $fillable = "name";
+    protected $fillable = ["name"];
 
     public function students(){
         $this->hasMany(Student::class);
