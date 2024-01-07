@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Route;
 
 */
 
-//prova commmit
-
 Route::get('/', function () {
     return view('welcomeTailwind');
 });
