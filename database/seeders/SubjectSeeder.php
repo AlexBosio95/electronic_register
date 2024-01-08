@@ -31,7 +31,11 @@ class SubjectSeeder extends Seeder
             'Topografia',
             'Latino',
             'Fisica',
-            'Chimica'
+            'Chimica',
+            'Gestione cantieri',
+            'Estimo',
+            'Tedesco',
+            'Greco'
         ];
         foreach ($subjects as $subject) {
             Subject::create(['name' => $subject]);
