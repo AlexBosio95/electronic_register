@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,13 +17,14 @@ class TeacherFactory extends Factory
      */
     public function definition(): array
     {
+        $users = User::all();
         return [
             'name' => $this->faker->name,
             'surname' => $this->faker->lastName,
             'birthday' => $this->faker->dateTimeThisCentury->format('Y-m-d'),
             'address' => $this->faker->address,
             'city' => $this->faker->city,
-            'user_id' => $this->faker->unique()->numberBetween(101, 150),  //tenere conto che dovranno essere unici
+            'user_id' => $this->faker->unique()->numberBetween(101, count($users)),  //tenere conto che dovranno essere unici
         ];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Classe;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,14 +18,16 @@ class StudentFactory extends Factory
      */
     public function definition(): array
     {
+        $classes = Classe::all();
+        $users = User::all();
         return [
             'name' => $this->faker->name,
             'surname' => $this->faker->lastName,
             'birthday' => $this->faker->dateTimeThisCentury->format('Y-m-d'),
             'address' => $this->faker->address,
             'city' => $this->faker->city,
-            'class_id' => $this->faker->numberBetween(1, 30),
-            'user_id' => $this->faker->unique()->numberBetween(1, 100),  //tenere conto che dovranno essere unici
+            'class_id' => $this->faker->numberBetween(1, count($classes)),
+            'user_id' => $this->faker->unique()->numberBetween(1, (count($users)-50)),  //tenere conto che dovranno essere unici
         ];
     }
 }
