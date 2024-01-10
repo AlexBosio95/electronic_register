@@ -17,6 +17,11 @@ class EventSeeder extends Seeder
             'Mark',
             'Disciplinary note',
             'Attendance',
+            'FirstHourLesson',
+            'SecondHourLesson',
+            'ThirdHourLesson',
+            'FourthHourLesson',
+            'FifthHourLesson'
         ];
         foreach ($events as $event) {
             Event::create(['name' => $event]);
