@@ -122,15 +122,15 @@
                     <td class="p-3">
                         <div class="flex align-items-center">
                             <div class="ml-3">
-                                <div class="">{{$student->students->name}}</div>
+                                <div class="">{{$student->id}}</div>
                             </div>
                         </div>
                     </td>
                     <td class="p-3">
-                        Technology
+                        {{$student->students->name}}
                     </td>
                     <td class="p-3 font-bold">
-                        200.00$
+                        {{$student->teachers->name}}
                     </td>
                     <td class="p-3">
                         <span class="bg-yellow-400 text-gray-50  rounded-md px-2">start sale</span>

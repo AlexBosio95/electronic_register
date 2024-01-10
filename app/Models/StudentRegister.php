@@ -17,7 +17,7 @@ class StudentRegister extends Model
     }
 
     public function teachers(){
-        return $this->hasMany(Teacher::class);
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
     public function subjects(){
