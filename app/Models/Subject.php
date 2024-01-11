@@ -9,7 +9,7 @@ class Subject extends Model
 {
     use HasFactory;
 
-    protected $fillable = "name";
+    protected $fillable = ["name"];
 
     public function studentregister(){
         $this->belongsTo(StudentRegister::class);
@@ -21,5 +21,9 @@ class Subject extends Model
 
     public function reports(){
         $this->belongsTo(Report::class);
+    }
+
+    public function teachers(){
+        return $this->belongsToMany(Subject::class, 'teacher_subjects', 'subject_id', 'teacher_id');
     }
 }

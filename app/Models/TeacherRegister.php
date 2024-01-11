@@ -10,7 +10,7 @@ class TeacherRegister extends Model
     use HasFactory;
 
     protected $table = "teacher_register";
-    protected $fillable = "note";
+    protected $fillable = ["note"];
 
     public function teachers(){
         $this->hasMany(Teacher::class);
