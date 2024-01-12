@@ -13,7 +13,7 @@ class Classe extends Model
     protected $fillable = ["name"];
 
     public function students(){
-        $this->hasMany(Student::class);
+        return $this->hasMany(Student::class);
     }
 
     public function teachers(){
@@ -21,6 +21,6 @@ class Classe extends Model
     }
 
     public function teacherregister(){
-        $this->belongsTo(TeacherRegister::class);
+        return $this->belongsTo(TeacherRegister::class);
     }
 }

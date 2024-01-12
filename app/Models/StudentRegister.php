@@ -13,18 +13,18 @@ class StudentRegister extends Model
     protected $fillable = ["note"];
 
     function students(){
-        $this->hasMany(Student::class);
+        return $this->belongsTo(Student::class, 'student_id');
     }
 
     public function teachers(){
-        $this->hasMany(Teacher::class);
+        return $this->belongsTo(Teacher::class, 'teacher_id');
     }
 
     public function subjects(){
-        $this->hasMany(Subject::class);
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 
     public function events(){
-        $this->hasMany(Event::class);
+        return $this->belongsTo(Event::class, 'event_id');
     }
 }
