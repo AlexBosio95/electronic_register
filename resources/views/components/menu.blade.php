@@ -1,8 +1,18 @@
+@props(['classes'])
+
 <div>
     <div class="w-80 bg-[#1F2937] flex flex-col items-center pt-5 pb-2 space-y-7 h-[720px]">
         <!-- menu items -->
         <div class="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-sm cursor-pointer">
-        
+        <div class="p-5">
+            <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <option selected>Choose a class</option>
+                @foreach ($classes as $class)
+                    <option :value="$class->id">{{$class->name}}</option>
+                @endforeach
+            </select>
+        </div>
+
             <div class="font-QuicksandMedium pl-4 text-gray-400/60 text-xs text-[11px] uppercase">Menu</div>
     
             <div class="w-full flex items-center gap-x-1.5 group select-none">

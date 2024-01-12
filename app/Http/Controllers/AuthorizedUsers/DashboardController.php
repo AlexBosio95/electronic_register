@@ -17,9 +17,6 @@ class DashboardController extends Controller
         $students = StudentRegister::all();
         $classes = Classe::all();
 
-        //TODO
-        // ritornare le classi nel controller menu
-
         return view(('teacher.presents'), compact('students', 'classes'));
     }
 
