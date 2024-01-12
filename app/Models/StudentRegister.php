@@ -21,10 +21,10 @@ class StudentRegister extends Model
     }
 
     public function subjects(){
-        return $this->hasMany(Subject::class);
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 
     public function events(){
-        return $this->hasMany(Event::class);
+        return $this->belongsTo(Event::class, 'event_id');
     }
 }

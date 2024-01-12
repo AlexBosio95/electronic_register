@@ -1,26 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\AuthorizedUsers;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\StudentRegister;
-use App\Models\Classe;
 
-class DashboardController extends Controller
+class menuController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $students = StudentRegister::all();
         $classes = Classe::all();
 
-        //TODO
-        // ritornare le classi nel controller menu
-
-        return view(('teacher.presents'), compact('students', 'classes'));
+        return view(('components.menu'), compact('classes'));
     }
 
     /**

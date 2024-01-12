@@ -1,9 +1,10 @@
-<x-app-layout>
-<div class="flex h-screen overflow-hidden">
-    <div class="w-96 bg-[#1F2937] flex flex-col items-center pt-5 pb-2 space-y-7">
+<div>
+    <div class="w-80 bg-[#1F2937] flex flex-col items-center pt-5 pb-2 space-y-7 h-[720px]">
         <!-- menu items -->
         <div class="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-sm cursor-pointer">
-            
+            @foreach ($classes as $class)
+                <p>{{$class->name}}</p>
+            @endforeach
             <div class="font-QuicksandMedium pl-4 text-gray-400/60 text-xs text-[11px] uppercase">Menu</div>
     
             <div class="w-full flex items-center gap-x-1.5 group select-none">
@@ -14,7 +15,7 @@
                     <svg class="h-5 w-5 !fill-red-500 group-hover:fill-red-600 dark:fill-gray-600  transition-colors duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                         <path d="M5 22h14a2 2 0 0 0 2-2v-9a1 1 0 0 0-.29-.71l-8-8a1 1 0 0 0-1.41 0l-8 8A1 1 0 0 0 3 11v9a2 2 0 0 0 2 2zm5-2v-5h4v5zm-5-8.59 7-7 7 7V20h-3v-5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v5H5z"></path>
                     </svg>
-                    <span class="font-QuicksandMedium">Note</span>
+                    <span class="font-QuicksandMedium">Presenze</span>
                 </div>
             </div>
     
@@ -49,18 +50,6 @@
                 </div>
             </div>
     
-            <div class="w-full flex items-center gap-x-1.5 group select-none">
-                <div class="w-1 rounded-xl h-8 bg-transparent transition-colors duration-200 relative overflow-hidden">
-                    <div class="absolute top-0 left-0 w-full h-[102%] translate-y-full group-hover:translate-y-0 bg-red-600 transition-all duration-300"></div>
-                </div>
-                <div class="group-hover:bg-white/10 w-full group-active:scale-95 self-stretch pl-2 rounded flex items-center space-x-2 transition-all duration-200 dark:group-hover:text-white dark:hover:text-white text-sm" href="#">
-                    <svg class="h-5 w-5 group-hover:fill-red-600 dark:fill-gray-600  transition-colors duration-200" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C21.9939 17.5203 17.5203 21.9939 12 22ZM12 4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C19.995 7.58378 16.4162 4.00496 12 4ZM17 13H11V7H13V11H17V13Z"></path>
-                    </svg>
-    
-                    <span class="font-QuicksandMedium">Presenze</span>
-                </div>
-            </div>
         </div>
     
         <!-- menu items -->
@@ -106,57 +95,4 @@
             </div>
         </div>
     </div>
-    <div class="w-full bg-[#1F2937] m-10 rounded-xl">
-        <table class="table text-gray-400 border-separate space-y-6 text-sm w-full">
-            <thead class="bg-gray-800 text-gray-500">
-                <tr>
-                    <th class="p-3">id</th>
-                    <th class="p-3 text-left">Student</th>
-                    <th class="p-3 text-left">Teacher</th>
-                    <th class="p-3 text-left">Subject</th>
-                    <th class="p-3 text-left">Event</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($students as $student)
-                <tr class="bg-gray-800">
-                    <td class="p-3">
-                        <div class="flex align-items-center">
-                            <div class="ml-3">
-                                <div class="">{{$student->id}}</div>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="p-3">
-                        {{$student->students->name}}
-                    </td>
-                    <td class="p-3 font-bold">
-                        {{$student->teachers->name}}
-                    </td>
-                    <td class="p-3">
-                        <span class="bg-yellow-400 text-gray-50  rounded-md px-2">start sale</span>
-                    </td>
-                    <td class="p-4 flex justify-start items-center h-full">
-                        <a href="#" class="text-gray-400 hover:text-gray-100 mr-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-gray-100 mx-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                            </svg>
-                        </a>
-                        <a href="#" class="text-gray-400 hover:text-gray-100 ml-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
-                            </svg>
-                        </a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
 </div>
-</x-app-layout>
