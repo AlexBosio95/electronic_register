@@ -8,10 +8,10 @@
             <thead class="bg-gray-800 text-gray-500">
                 <tr>
                     <th class="p-3">Student ID</th>
-                    <th class="p-3 text-left">Student</th>
-                    <th class="p-3 text-left">Teacher</th>
-                    <th class="p-3 text-left">Subject</th>
-                    <th class="p-3 text-left">Event</th>
+                    <th class="p-3 text-left">name</th>
+                    <th class="p-3 text-left">surname</th>
+                    <th class="p-3 text-left">class</th>
+                    <th class="p-3 text-left">Check</th>
                 </tr>
             </thead>
             <tbody>
@@ -20,21 +20,21 @@
                     <td class="p-3">
                         <div class="flex align-items-center">
                             <div class="ml-3">
-                                <div class="">{{$student->students->id}}</div>
+                                <div class="">{{$student->id}}</div>
                             </div>
                         </div>
                     </td>
                     <td class="p-3">
-                        {{$student->students->name}}
+                        {{$student->name}}
                     </td>
                     <td class="p-3">
-                        {{$student->teachers->name}}
+                        {{$student->surname}}
                     </td>
                     <td class="p-3">
-                        {{$student->subjects->name}}
+                        {{$student->class->name}}
                     </td>
                     <td class="p-3">
-                        {{$student->events->name}}
+                        
                     </td>
                 </tr>
                 @endforeach

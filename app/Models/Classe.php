@@ -13,7 +13,7 @@ class Classe extends Model
     protected $fillable = ["name"];
 
     public function students(){
-        return $this->hasMany(Student::class);
+        return $this->hasMany(Student::class, 'class_id');
     }
 
     public function teachers(){

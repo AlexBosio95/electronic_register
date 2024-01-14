@@ -12,14 +12,14 @@ class Student extends Model
     protected $fillable = ['name','surname','birthday','address','city'];
 
     public function class(){
-        $this->belongsTo(Classe::class);
+        return $this->belongsTo(Classe::class, 'class_id');
     }
 
     public function studentregister(){
-        $this->belongsTo(StudentRegister::class);
+        return $this->belongsTo(StudentRegister::class);
     }
 
     public function reports(){
-        $this->belongsTo(Report::class);
+        return $this->belongsTo(Report::class);
     }
 }
