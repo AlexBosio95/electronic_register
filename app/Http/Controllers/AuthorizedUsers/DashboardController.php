@@ -18,6 +18,8 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $userId = Auth::id();
+        $students = [];
+        $classes = [];
 
         $teacher = Teacher::where('user_id', $userId)->first();
 
@@ -33,7 +35,7 @@ class DashboardController extends Controller
                     if ($selectedClass) {
                         $students = $selectedClass->students;
                     } else {
-                        return view('teacher.presents')->withErrors(['message' => 'Invalid selected class.']);
+                        return view('teacher.presents', compact('students', 'classes'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
@@ -41,10 +43,10 @@ class DashboardController extends Controller
 
                 return view('teacher.presents', compact('students', 'classes'));
             } else {
-                return view('teacher.presents')->withErrors(['message' => 'No classes found for the teacher.']);
+                return view('teacher.presents', compact('students', 'classes'))->withErrors(['message' => 'No classes found for the teacher.']);
             }
         } else {
-            return view('teacher.presents')->withErrors(['message' => 'Teacher not found.']);
+            return view('teacher.presents', compact('students', 'classes'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
 
