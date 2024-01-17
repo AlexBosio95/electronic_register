@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthorizedUsers\DashboardController;
+use App\Http\Controllers\AuthorizedUsers\TeacherController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcomeTailwind');
 });
+
+
+//Rotte che serviranno SOLO agli utenti admin
+Route::middleware('auth')->group(function () {
+    //aggiungere i Controller
+    Route::get('/teachers', [TeacherController::class, 'index']);
+    //Route::resource('/students');
+    //Route::resource('/classes');
+    //Route::resource('/subjects');
+});
+
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
