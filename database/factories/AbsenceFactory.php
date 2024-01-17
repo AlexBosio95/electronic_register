@@ -18,11 +18,14 @@ class AbsenceFactory extends Factory
      */
     public function definition(): array
     {
+
         $students = Student::all();
+
         return [
             'student_id' => $this->faker->numberBetween(1,count($students)),
             'date' => $this->faker->date(),
             'reason' => $this->faker->sentence,
+            'status' => $this->faker->randomElement(['pending', 'approved', 'rejected']),
         ];
     }
 }
