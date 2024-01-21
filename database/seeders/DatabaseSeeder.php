@@ -32,7 +32,8 @@ class DatabaseSeeder extends Seeder
             ReportSeeder::class,
             TeacherClassesSeeder::class,
             TeacherSubjectsSeeder::class,
-            AbsenceSeeder::class
+            AbsenceSeeder::class,
+            SchoolCalendarSeeder::class
         ]);
     }
 }
