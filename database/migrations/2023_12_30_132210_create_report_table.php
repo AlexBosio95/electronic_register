@@ -21,8 +21,8 @@ return new class extends Migration
             $table->foreign('subject_id')->references('id')->on('subjects');
             $table->enum('outcome', ['2', '3', '4','5', '6', '7','8', '9', '10']);
             $table->enum('period', ['intermediate', 'final']);
-            $table->primary(['student_id', 'subject_id', 'period']);
             $table->timestamps();
+            //$table->primary(['student_id', 'subject_id', 'period']);
         });
     }
 

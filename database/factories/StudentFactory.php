@@ -28,6 +28,8 @@ class StudentFactory extends Factory
             'city' => $this->faker->city,
             'class_id' => $this->faker->numberBetween(1, count($classes)),
             'user_id' => $this->faker->unique()->numberBetween(1, (count($users)-50)),  //tenere conto che dovranno essere unici
+            'contact' => $this->faker->phoneNumber,
+            'contact2' => $this->faker->phoneNumber 
         ];
     }
 }
