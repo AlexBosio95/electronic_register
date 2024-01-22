@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('teacher_register', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('teacher_id'); 
-            $table->foreign('teacher_id')->references('id')->on('teachers');
-            $table->unsignedBigInteger('subject_id'); 
-            $table->foreign('subject_id')->references('id')->on('subjects');
-            $table->unsignedBigInteger('class_id'); 
-            $table->foreign('class_id')->references('id')->on('classes');
+            $table->unsignedBigInteger('teacher_id')->nullable(); 
+            $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('set null');
+            $table->unsignedBigInteger('subject_id')->nullable(); 
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('set null');
+            $table->unsignedBigInteger('class_id')->nullable(); 
+            $table->foreign('class_id')->references('id')->on('classes')->onDelete('set null');
             $table->string('note', 500);
             $table->timestamps();
         });

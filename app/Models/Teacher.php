@@ -20,10 +20,26 @@ class Teacher extends Model
     }
 
     public function studentregister(){
-        $this->belongsTo(StudentRegister::class);
+        $this->belongsTo(GradesStudentRegister::class);
+    }
+
+    public function notesregister(){
+        $this->belongsTo(NotesStudentRegister::class);
+    }
+
+    public function attendregister(){
+        $this->belongsTo(AttendStudentRegister::class);
     }
 
     public function teacherregister(){
         $this->belongsTo(TeacherRegister::class);
+    }
+
+    public function calendar(){
+        return $this->belongsTo(SchoolCalendar::class);
+    }
+
+    public function oldcalendar(){
+        return $this->belongsTo(SchoolCalendarOld::class);
     }
 }

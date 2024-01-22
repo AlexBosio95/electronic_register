@@ -11,8 +11,8 @@ class Subject extends Model
 
     protected $fillable = ["name"];
 
-    public function studentregister(){
-        $this->belongsTo(StudentRegister::class);
+    public function gradestudentregister(){
+        $this->belongsTo(GradesStudentRegister::class);
     }
 
     public function teacherregister(){
@@ -25,5 +25,13 @@ class Subject extends Model
 
     public function teachers(){
         return $this->belongsToMany(Subject::class, 'teacher_subjects', 'subject_id', 'teacher_id');
+    }
+
+    public function calendar(){
+        return $this->belongsTo(SchoolCalendar::class);
+    }
+
+    public function oldcalendar(){
+        return $this->belongsTo(SchoolCalendarOld::class);
     }
 }

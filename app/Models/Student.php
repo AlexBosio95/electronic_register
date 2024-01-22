@@ -15,8 +15,20 @@ class Student extends Model
         return $this->belongsTo(Classe::class, 'class_id');
     }
 
-    public function studentregister(){
-        return $this->belongsTo(StudentRegister::class);
+    public function grades(){
+        return $this->belongsTo(GradesStudentRegister::class);
+    }
+
+    public function notes(){
+        return $this->belongsTo(NotesStudentRegister::class);
+    }
+
+    public function presences(){
+        return $this->belongsTo(AttendStudentRegister::class);
+    }
+
+    public function absences(){
+        return $this->belongsTo(Absence::class);
     }
 
     public function reports(){
