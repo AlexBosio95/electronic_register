@@ -9,7 +9,7 @@ class AttendStudentRegister extends Model
 {
     use HasFactory;
 
-    public $table = ['attend_student_register'];
+    public $table = 'attend_student_register';
     public $fillable = ['student_id', 'teacher_id', 'data', 'presence', 'note'];
 
     public function teachers(){

@@ -9,7 +9,7 @@ class NotesStudentRegister extends Model
 {
     use HasFactory;
 
-    public $table = ['notes_student_register'];
+    public $table = 'notes_student_register';
     public $fillable = ['student_id', 'teacher_id', 'data', 'note'];
 
     public function teachers(){

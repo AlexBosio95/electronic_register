@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\StudentRegister;
+use App\Models\GradesStudentRegister;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class StudentRegisterSeeder extends Seeder
+class GradesStudentRegisterSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        StudentRegister::factory(200)->create();
+        GradesStudentRegister::factory(100)->create();
     }
 }

@@ -2,16 +2,14 @@
 
 namespace Database\Factories;
 
-use App\Models\Event;
 use App\Models\Student;
-use App\Models\Subject;
 use App\Models\Teacher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\StudentRegister>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\NotesStudentRegister>
  */
-class StudentRegisterFactory extends Factory
+class NotesStudentRegisterFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -22,13 +20,10 @@ class StudentRegisterFactory extends Factory
     {
         $teachers = Teacher::all();
         $students = Student::all();
-        $subjects = Subject::all();
-        $events = Event::all();
         return [
-            'teacher_id' => $this->faker->numberBetween(1,count($teachers)),
             'student_id' => $this->faker->numberBetween(1,count($students)),
-            'subject_id' => $this->faker->numberBetween(1,count($subjects)),
-            'event_id' => $this->faker->numberBetween(1,count($events)),
+            'teacher_id' => $this->faker->numberBetween(1,count($teachers)),
+            'data' => $this->faker->date(),
             'note' => $this->faker->sentence()
         ];
     }
