@@ -14,15 +14,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('report', function (Blueprint $table) {
-            $table->id();
             $table->unsignedBigInteger('student_id'); 
-            $table->foreign('student_id')->references('id')->on('students');
+            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->unsignedBigInteger('subject_id'); 
-            $table->foreign('subject_id')->references('id')->on('subjects');
+            $table->foreign('subject_id')->references('id')->on('subjects')->onDelete('cascade');
             $table->enum('outcome', ['2', '3', '4','5', '6', '7','8', '9', '10']);
             $table->enum('period', ['intermediate', 'final']);
             $table->timestamps();
-            //$table->primary(['student_id', 'subject_id', 'period']);
+            $table->primary(['student_id', 'subject_id', 'period']);
         });
     }
 

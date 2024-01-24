@@ -10,7 +10,7 @@ class Report extends Model
     use HasFactory;
 
     protected $table = "report";
-    protected $fillable = ['outcome', 'period'];
+    protected $fillable = ['student_id', 'subject_id', 'outcome', 'period'];
 
     public function students(){
         $this->hasMany(Student::class);

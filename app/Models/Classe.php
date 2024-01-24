@@ -23,4 +23,12 @@ class Classe extends Model
     public function teacherregister(){
         return $this->belongsTo(TeacherRegister::class);
     }
+
+    public function calendar(){
+        return $this->belongsTo(SchoolCalendar::class);
+    }
+
+    public function oldcalendar(){
+        return $this->belongsTo(SchoolCalendarOld::class);
+    }
 }

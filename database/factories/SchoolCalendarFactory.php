@@ -19,19 +19,25 @@ class SchoolCalendarFactory extends Factory
      */
     public function definition(): array
     {
-        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        $daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
         static $index = 0;
         $day = $daysOfWeek[$index % count($daysOfWeek)];
         $index++;
 
+        $timeStart = $this->faker->dateTimeBetween('08:00', '8:30')->format('H:i');
+        $timeEnd = $this->faker->dateTimeBetween('13:00', '15:00')->format('H:i');
+
         return [
             'day_of_week' => $day,
-            'time_start' => $this->faker->time('H:i'),
-            'time_end' => $this->faker->time('H:i'),
+            'time_start' => $timeStart,
+            'time_end' => $timeEnd,
+            'date_time_start' => $this->faker->date(),
+            'date_time_end' => $this->faker->date(),
             'subject_id' => Subject::inRandomOrder()->first()->id,
             'class_id' => Classe::inRandomOrder()->first()->id,
             'teacher_id' => Teacher::inRandomOrder()->first()->id,
+            'note' => $this->faker->sentence()
         ];
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
     {
         Schema::create('subjects', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 60);
+            $table->string('name', 80);
             $table->timestamps();
         });
     }
