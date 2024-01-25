@@ -87,7 +87,7 @@
     
                     <span class="font-QuicksandMedium">Note disciplinari</span>
                 </div>
-    
+            </div>
         </div>
     
         <!-- menu items -->
