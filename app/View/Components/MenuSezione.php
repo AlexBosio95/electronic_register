@@ -15,10 +15,10 @@ class MenuSezione extends Component
     public $first_page;
     public $other_pages;
 
-    public function __construct(string $first_page, array $other_pages)
+    public function __construct(string $pagina, array $others)
     {
-        $this->first_page = $first_page;
-        $this->other_pages = $other_pages;
+        $this->first_page = $pagina;
+        $this->other_pages = $others;
     }
 
     /**

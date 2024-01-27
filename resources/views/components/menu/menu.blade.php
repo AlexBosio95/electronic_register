@@ -12,7 +12,7 @@
                 $first_page = "Presenze";
                 $other_pages = ['Registro', 'Voti', 'Note_disciplinari'];
             @endphp
-            <x-menu-sezione :first_page="$first_page" :other_pages="$other_pages"></x-menu-sezione>
+            <x-menu-sezione :pagina="$first_page" :others="$other_pages"></x-menu-sezione>
             
         </div>
     
