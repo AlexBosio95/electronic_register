@@ -8,14 +8,12 @@
 
             <div class="font-QuicksandMedium pl-4 text-gray-400/60 text-xs text-[11px] uppercase">Menu</div>
     
-            <x-menu-sezione :pagina="'Presenze'"></x-menu-sezione>
-
-            <x-menu-sezione :pagina="'Registro'"></x-menu-sezione>
-    
-            <x-menu-sezione :pagina="'Voti'"></x-menu-sezione>
-    
-            <x-menu-sezione :pagina="'Note disciplinari'"></x-menu-sezione>
-
+            @php
+                $first_page = "Presenze";
+                $other_pages = ['Registro', 'Voti', 'Note_disciplinari'];
+            @endphp
+            <x-menu-sezione :first_page="$first_page" :other_pages="$other_pages"></x-menu-sezione>
+            
         </div>
     
         <!-- menu items -->
