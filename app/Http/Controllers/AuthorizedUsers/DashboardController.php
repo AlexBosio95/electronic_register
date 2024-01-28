@@ -18,8 +18,11 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $userId = Auth::id();
+        $user = Auth::user();
+        $user_role = $user->role;
         $students = [];
         $classes = [];
+        $page = 'presence';
 
         $teacher = Teacher::where('user_id', $userId)->first();
 
@@ -35,18 +38,18 @@ class DashboardController extends Controller
                     if ($selectedClass) {
                         $students = $selectedClass->students;
                     } else {
-                        return view('teacher.presents', compact('students', 'classes'))->withErrors(['message' => 'Invalid selected class.']);
+                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
                 }
 
-                return view('teacher.presents', compact('students', 'classes'));
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'));
             } else {
-                return view('teacher.presents', compact('students', 'classes'))->withErrors(['message' => 'No classes found for the teacher.']);
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'No classes found for the teacher.']);
             }
         } else {
-            return view('teacher.presents', compact('students', 'classes'))->withErrors(['message' => 'Teacher not found.']);
+            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
 

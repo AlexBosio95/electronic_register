@@ -12,11 +12,9 @@ class MenuSezione extends Component
      * Create a new component instance.
      */
 
-    public $other_pages;
-
-    public function __construct(array $others)
+    public function __construct()
     {
-        $this->other_pages = $others;
+        //
     }
 
     /**

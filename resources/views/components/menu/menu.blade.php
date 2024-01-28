@@ -1,4 +1,4 @@
-@props(['classes'])
+@props(['classes', 'role', 'page'])
 
 <div>
     <div class="w-80 bg-[#1F2937] flex flex-col items-center pt-5 pb-2 space-y-7 h-[720px]">
@@ -8,11 +8,7 @@
 
             <div class="font-QuicksandMedium pl-4 text-gray-400/60 text-xs text-[11px] uppercase">Menu</div>
     
-            @php
-                $other_pages = ["Presenze" => 1, 'Registro'=> 0, 'Voti' => 0, 'Note_disciplinari'=> 0];
-            @endphp
-            <x-menu-sezione :others="$other_pages"></x-menu-sezione>
-            
+            <x-menu-sezione :role="$role" :page="$page"></x-menu-sezione>
         </div>
     
     </div>

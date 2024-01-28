@@ -1,7 +1,7 @@
 <x-app-layout>
 <div class="flex h-screen max-h-[720px] overflow-hidden">
     
-    <x-menu :classes="$classes"></x-menu>
+    <x-menu :classes="$classes" :role="$user_role" :page="$page"></x-menu>
 
     <div class="w-full bg-[#1F2937] m-10 rounded-xl overflow-scroll">
         @if(count($students) > 0)
