@@ -22,7 +22,7 @@ class DashboardController extends Controller
         $user_role = $user->role;
         $students = [];
         $classes = [];
-        $page = 'presence';
+        $page = 'Presenze';
 
         $teacher = Teacher::where('user_id', $userId)->first();
 
