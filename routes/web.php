@@ -30,36 +30,20 @@ Route::get('/', function () {
 
 
 //Rotte che serviranno SOLO agli utenti admin
-Route::middleware(['auth','checkAdmin','verified'])->group(function () {
+Route::middleware(['auth','checkUser','verified'])->group(function () {
     //aggiungere i Controller
     Route::resource('/teachers', TeacherController::class);
     Route::resource('/students', StudentController::class);
     Route::resource('/classes', ClassController::class);
     Route::resource('/subjects', SubjectsController::class);
-});
-
-
-//Rotte che potranno essere usate dai teacher con tutti i metodi,
-// mentre dagli studenti sono con il metodo GET
-Route::middleware(['auth','checkUser','verified'])->group(function () {
-    //aggiungere i Controller
     Route::resource('/marks', MarksController::class);
     Route::resource('/notes', NotesController::class);
     Route::resource('/justifications', JustificationsController::class);
     Route::resource('/plan', PlanController::class);
+    Route::resource('/timetable', TimetableController::class);
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
-
-//Rotte che potranno essere usate dai teacher e dagli student SOLO in GET,
-//solo l'admin può usare tutti i metodi
-Route::middleware(['auth','checkUserTeacherGet','verified'])->group(function () {
-    //aggiungere i Controller
-    Route::resource('/timetable', TimetableController::class);
-});
-
-
-//Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

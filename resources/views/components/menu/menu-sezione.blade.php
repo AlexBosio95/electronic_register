@@ -1,7 +1,7 @@
 @props(['role', 'page'])
 
 @foreach (config('sections') as $elemento => $pagina)
-    @if(in_array($role, $pagina['visibility']))
+    @if($role == "admin" || in_array($role, $pagina['visibility']))
         @if($page != $pagina['section_name'])
             <div class="w-full flex items-center gap-x-1.5 group select-none">
                 <div class="w-1 rounded-xl h-8 bg-transparent transition-colors duration-200 relative overflow-hidden">

@@ -6,8 +6,9 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
-class AdminMiddleware
+class UserMiddleware
 {
     /**
      * Handle an incoming request.
@@ -17,15 +18,20 @@ class AdminMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
+        $routeName = $request->route()->getName();
+        $segments = explode('.', $routeName);
+        $routeName = $segments[0];
+        $metodo = $metodo = $request->method();
+        $role = $user->role;
 
-        // TO DO Modificare il Middleware e controllare per prima cosa se il ruolo dell'utente corrente è nel config chiave visibility
-        // Visto che per certe rotte alcuni utenti hanno solo accesso alcuni metodi controllare anche questo e restituire 403 nei casi richiesti
-
-        // Controlla se l'utente ha il ruolo 'admin'
         if ($user && $user->role === 'admin') {
             return $next($request);
         }
 
+        if (isset(config('sections.'.$routeName.'.visibility')[$role]) && in_array(strtolower($metodo), config('sections.'.$routeName.'.visibility')[$role])){
+            return $next($request);
+        }
+        
         // Se l'utente non è autorizzato, genera un errore 403
         abort(403, 'Accesso non autorizzato');
     }

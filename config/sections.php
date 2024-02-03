@@ -1,54 +1,72 @@
 <?php
 
 return [
-    'presence' => [
+    'dashboard' => [
         'section_name' => 'Presenze',
-        'route_name' => 'presence',
-        'visibility' => ['admin', 'teacher', 'student']
+        'route_name' => 'dashboard',
+        'visibility' => [
+            'teacher' => ['get', 'put', 'post', 'delete'], 
+            'student' => ['get']
+        ]
     ],
     'marks' => [
         'section_name' => 'Voti',
         'route_name' => 'marks',
-        'visibility' => ['admin', 'teacher', 'student']
+        'visibility' => [
+            'teacher' => ['get', 'put', 'post', 'delete'], 
+            'student' => ['get']
+        ]
     ],
     'notes' => [
         'section_name' => 'Note disciplinari',
         'route_name' => 'notes',
-        'visibility' => ['admin', 'teacher', 'student']
+        'visibility' => [
+            'teacher' => ['get', 'put', 'post', 'delete'], 
+            'student' => ['get']
+        ]
     ],
     'justifications' => [
         'section_name' => 'Giustificazioni/Assenze',
         'route_name' => 'justifications',
-        'visibility' => ['admin', 'teacher', 'student']
+        'visibility' => [
+            'teacher' => ['get', 'put', 'post', 'delete'], 
+            'student' => ['get']
+        ]
     ],
     'register' => [
         'section_name' => 'Registro Professori',
         'route_name' => 'register',
-        'visibility' => ['admin', 'teacher', 'student']
+        'visibility' => [
+            'teacher' => ['get', 'put', 'post', 'delete'], 
+            'student' => ['get']
+        ]
     ],
     'teachers' => [
         'section_name' => 'Professori',
         'route_name' => 'teachers',
-        'visibility' => ['admin']
+        'visibility' => []
     ],
     'students' => [
         'section_name' => 'Studenti',
         'route_name' => 'students',
-        'visibility' => ['admin']
+        'visibility' => []
     ],
     'classes' => [
         'section_name' => 'Classi',
         'route_name' => 'classes',
-        'visibility' => ['admin']
+        'visibility' => []
     ],
     'subjects' => [
         'section_name' => 'Materie',
         'route_name' => 'subjects',
-        'visibility' => ['admin']
+        'visibility' => []
     ],
     'timetible' => [
         'section_name' => 'Orario',
         'route_name' => 'timetible',
-        'visibility' => ['admin', 'teacher', 'student']
+        'visibility' => [
+            'teacher' => ['get'], 
+            'student' => ['get']
+        ]
     ]
 ];
