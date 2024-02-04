@@ -3,14 +3,15 @@
 namespace App\View\Components;
 
 use Closure;
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
+use Illuminate\Contracts\View\View;
 
-class Menu extends Component
+class MenuSezione extends Component
 {
     /**
      * Create a new component instance.
      */
+
     public function __construct()
     {
         //
@@ -21,6 +22,6 @@ class Menu extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.menu.menu');
+        return view('components.menu.menu-sezione');
     }
 }
