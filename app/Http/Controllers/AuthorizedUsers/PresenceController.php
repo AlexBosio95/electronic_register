@@ -10,7 +10,7 @@ use App\Models\Teacher;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-class DashboardController extends Controller
+class PresenceController extends Controller
 {
     /**
      * Display a listing of the resource.

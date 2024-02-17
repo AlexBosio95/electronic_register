@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthorizedUsers\ClassController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\AuthorizedUsers\DashboardController;
+use App\Http\Controllers\AuthorizedUsers\PresenceController;
 use App\Http\Controllers\AuthorizedUsers\JustificationsController;
 use App\Http\Controllers\AuthorizedUsers\MarksController;
 use App\Http\Controllers\AuthorizedUsers\NotesController;
@@ -41,7 +41,7 @@ Route::middleware(['auth','checkUser','verified'])->group(function () {
     Route::resource('/justifications', JustificationsController::class);
     Route::resource('/plan', PlanController::class);
     Route::resource('/timetable', TimetableController::class);
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [PresenceController::class, 'index'])->name('dashboard');
 });
 
 

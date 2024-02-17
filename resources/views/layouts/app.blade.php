@@ -29,7 +29,9 @@
 
             <!-- Page Content -->
             <main>
-                {{ $slot }}
+                <div class="flex h-screen max-h-[720px] overflow-hidden">
+                    {{ $slot }}
+                <div>
             </main>
         </div>
     </body>
