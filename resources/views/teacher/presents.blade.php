@@ -31,8 +31,13 @@
                                 <!-- Qui puoi aggiungere la logica per le presenze/assenze degli studenti -->
                                 <!-- Ad esempio, per rappresentare se uno studente è presente o assente -->
                                 @for ($hour = 1; $hour <= 8; $hour++)
-                                    <td class="px-4 py-2 border border-gray-200">
+                                    <td class="px-4 py-2 border border-gray-200 text-center">
                                         <!-- Aggiungi qui la logica per rappresentare la presenza o assenza -->
+                                        <button class="focus:outline-none inline-block align-middle">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 bg-green-500 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+                                            </svg>
+                                        </button>
                                     </td>
                                 @endfor
                             </tr>
