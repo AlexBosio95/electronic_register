@@ -41,7 +41,8 @@ Route::middleware(['auth','checkUser','verified'])->group(function () {
     Route::resource('/justifications', JustificationsController::class);
     Route::resource('/plan', PlanController::class);
     Route::resource('/timetable', TimetableController::class);
-    Route::get('/dashboard', [PresenceController::class, 'index'])->name('dashboard');
+    Route::resource('/dashboard', PresenceController::class, ['names' => 'dashboard']);
+
 });
 
 
