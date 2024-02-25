@@ -18,7 +18,7 @@
                                     <button @click="showModal = true" class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"><span x-text="calendario.DayMonthAndYear"></span></button>
 
                                     <!-- Modal -->
-                                    <div x-data="calendar()" x-show="showModal" class="fixed z-10 inset-0 overflow-y-auto" x-cloak>
+                                    <div x-data="calendario" x-show="showModal" class="fixed z-10 inset-0 overflow-y-auto" x-cloak>
                                         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                                             <!-- Sfondo scuro del modal -->
                                             <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showModal = false">
