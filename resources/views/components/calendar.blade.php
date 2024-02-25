@@ -6,6 +6,7 @@
                 months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
                 weekdays: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
                 currentDate: new Date(),
+                currentDay: new Date().getDate(),
                 currentYear: new Date().getFullYear(),
                 currentMonth: new Date().getMonth(),
                 get days() {
@@ -17,8 +18,8 @@
                     }
                     return days;
                 },
-                get monthAndYear() {
-                    return `${this.months[this.currentMonth]} ${this.currentYear}`;
+                get DayMonthAndYear() {
+                    return `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
                 },
                 previousMonth() {
                     this.currentMonth = this.currentMonth === 0 ? 11 : this.currentMonth - 1;
@@ -27,12 +28,15 @@
                 nextMonth() {
                     this.currentMonth = this.currentMonth === 11 ? 0 : this.currentMonth + 1;
                     this.currentYear = this.currentMonth === 0 ? this.currentYear + 1 : this.currentYear;
+                },
+                setCurrentDay(day){
+                    this.currentDay = day;
                 }
             };
         }
         
         // Invoca la funzione calendar() per inizializzare lo stato del calendario
-        let { showCalendar, months, weekdays, currentDate, currentYear, currentMonth, days, monthAndYear, previousMonth, nextMonth } = calendar();
+        let { showCalendar, months, weekdays, currentDate, currentDay, currentYear, currentMonth, days, DayMonthAndYear, previousMonth, nextMonth, setCurrentDay } = calendar();
     </script>
     
     <!-- Dentro il template del tuo componente -->
@@ -41,13 +45,13 @@
         <div class="container mx-auto p-4">
             <div class="flex justify-between mb-4">
                 <button @click.stop="previousMonth">&lt;</button>
-                <h2 x-text="monthAndYear" class="text-lg font-semibold"></h2>
+                <h2 x-text="DayMonthAndYear" class="text-lg font-semibold"></h2>
                 <button @click.stop="nextMonth">&gt;</button>
             </div>
             <div class="grid grid-cols-7 gap-2">
                 <template x-for="(day, index) in days" :key="index">
                     <div class="p-2 bg-gray-100 border border-gray-200 rounded">
-                        <span x-text="day"></span>
+                        <button @click="setCurrentDay(day)"> <span x-text="day"></span></button>
                     </div>
                 </template>
             </div>

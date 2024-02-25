@@ -10,16 +10,12 @@
                         <!-- Intestazione delle colonne -->
                         <thead>
                             <tr class="bg-gray-800 text-white">
-                                
-
-
-
-
-
+        
                                 <!-- Componente del modal con il calendario -->
-                                <td x-data="{ showModal: false }">
+                                <td x-data="{ showModal: false, calendario: calendar()
+                                 }">
                                     <!-- Pulsante per aprire il modal -->
-                                    <button @click="showModal = true" class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">Mostra Calendario</button>
+                                    <button @click="showModal = true" class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"><span x-text="calendario.DayMonthAndYear"></span></button>
 
                                     <!-- Modal -->
                                     <div x-data="calendar()" x-show="showModal" class="fixed z-10 inset-0 overflow-y-auto" x-cloak>
@@ -49,24 +45,13 @@
                                                     </button>
                                                     <!-- Contenuto del calendario -->
                                                     <div class="mt-5">
-                                                        <x-calendar>
-                                                            
-                                                        </x-calendar>
+                                                        <x-calendar></x-calendar>
                                                     </div>
                                                 </div>                                   
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-
-
-
-
-
-
-
-
-
 
                                 <!-- Colonne per le ore -->
                                 @for ($hour = 1; $hour <= 8; $hour++)
