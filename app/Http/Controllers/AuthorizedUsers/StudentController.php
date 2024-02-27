@@ -4,6 +4,11 @@ namespace App\Http\Controllers\AuthorizedUsers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\AttendStudentRegister;
+use Illuminate\Validation\Rule;
+use App\Models\Teacher;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class StudentController extends Controller
 {
@@ -50,9 +55,35 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $studentId)
     {
-        //
+        $request->validate([
+            'presence' => ['required', Rule::in(['A', 'P'])],
+            'student_id' => ['required', Rule::exists('students', 'id')],
+        ]);
+
+        $existingRecord = AttendStudentRegister::where('student_id', $studentId)
+            ->whereDate('data', now()->toDateString())
+            ->first();
+
+        if ($existingRecord) {
+            $existingRecord->update([
+                'presence' => $request->input('presence'),
+            ]);
+        } else {
+            $userId = Auth::id();
+            $teacher = Teacher::where('user_id', $userId)->first();
+
+            AttendStudentRegister::create([
+                'student_id' => $studentId,
+                'teacher_id' => $teacher->id,
+                'presence' => $request->input('presence'),
+                'note' => 'no note',
+                'data' => now()->toDateString(),
+            ]);
+        }
+
+        return redirect()->route('dashboard');
     }
 
     /**
