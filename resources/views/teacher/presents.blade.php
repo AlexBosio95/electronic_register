@@ -1,8 +1,5 @@
 <x-app-layout>
-<div class="flex h-screen max-h-[720px] overflow-hidden">
-    
     <x-menu :classes="$classes" :role="$user_role" :page="$page"></x-menu>
-
     <div class="w-full bg-[#1F2937] m-10 rounded-xl overflow-scroll">
         @if(count($students) > 0)
             <table class="table text-gray-400 border-separate space-y-6 text-sm w-full">
@@ -45,5 +42,4 @@
             <p>Non ci sono studenti in questa classe</p>
         @endif
     </div>
-</div>
 </x-app-layout>

@@ -20,7 +20,15 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $user = Auth::user();
+        if ($user) {
+            $role = $user->role;
+            if ($user->role === 'admin') {
+                return view('auth.register');
+            }
+        }
+
+        abort(403, 'Accesso non autorizzato');
     }
 
     /**
