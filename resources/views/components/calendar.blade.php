@@ -31,12 +31,16 @@
                 },
                 setCurrentDay(day){
                     this.currentDay = day;
+                    document.getElementById('hiddenDate').value =  `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
+                },
+                updateHiddenDate(date) {
+                    document.getElementById('hiddenDate').value = date;
                 }
             };
         }
         
         // Invoca la funzione calendar() per inizializzare lo stato del calendario
-        let { showCalendar, months, weekdays, currentDate, currentDay, currentYear, currentMonth, days, DayMonthAndYear, previousMonth, nextMonth, setCurrentDay } = calendar();
+        let { showCalendar, months, weekdays, currentDate, currentDay, currentYear, currentMonth, days, DayMonthAndYear, previousMonth, nextMonth, setCurrentDay, updateHiddenDate } = calendar();
     </script>
     
     <!-- Dentro il template del tuo componente -->

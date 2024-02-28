@@ -15,8 +15,8 @@
                                 <td x-data="{ showModal: false, calendario: calendar()
                                  }">
                                     <!-- Pulsante per aprire il modal -->
-                                    <button @click="showModal = true" class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"><span x-text="calendario.DayMonthAndYear"></span></button>
-
+                                    <button @click="updateHiddenDate(calendario.DayMonthAndYear); showModal = true" class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"><span x-text="calendario.DayMonthAndYear"></span></button>
+                                    
                                     <!-- Modal -->
                                     <div x-data="calendario" x-show="showModal" class="fixed z-10 inset-0 overflow-y-auto" x-cloak>
                                         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -99,6 +99,7 @@
                         <form action="{{ route('dashboard.store') }}" method="POST">
                             @csrf
                             <input type="hidden" name="student_id" value="{{ $student->id }}">
+                            <input type="hidden" id="hiddenDate" value="">
                             <div class="flex justify-between">
                                 <!-- Pulsanti per confermare la presenza o l'assenza -->
                                 <button type="submit" @click.stop value="P" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>
