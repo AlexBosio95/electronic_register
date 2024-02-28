@@ -101,8 +101,8 @@
                             <input type="hidden" name="student_id" value="{{ $student->id }}">
                             <div class="flex justify-between">
                                 <!-- Pulsanti per confermare la presenza o l'assenza -->
-                                <button type="submit" @click.stop value="presente" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>
-                                <button type="submit" @click.stop value="assente" class="bg-red-500 text-white px-4 py-2 rounded focus:outline-none">Assente</button>
+                                <button type="submit" @click.stop value="P" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>
+                                <button type="submit" @click.stop value="A" class="bg-red-500 text-white px-4 py-2 rounded focus:outline-none">Assente</button>
                             </div>
                         </form>
                     </div>
