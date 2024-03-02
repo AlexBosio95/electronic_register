@@ -53,10 +53,13 @@
                                     </div>
                                 </td>
 
-                                <!-- Colonne per le ore -->
-                                @for ($hour = 1; $hour <= 8; $hour++)
-                                    <th class="px-4 py-2">{{ $hour }}° ora</th>
-                                @endfor
+                                @if(count($timetable))
+                                    @foreach ($timetable as $hour)
+                                        @if($hour->day_of_week == strftime('%A'))
+                                            <th class="px-4 py-2">{{ $hour->time_start }}</th>
+                                        @endif    
+                                    @endforeach
+                                @endif
                             </tr>
                         </thead>
                         <!-- Righe per gli studenti -->
@@ -66,16 +69,16 @@
                                     <td class="px-4 py-2 border border-gray-200">{{ $student->name}} {{$student->id }}</td>
                                     <!-- Qui puoi aggiungere la logica per le presenze/assenze degli studenti -->
                                     <!-- Ad esempio, per rappresentare se uno studente è presente o assente -->
-                                    @for ($hour = 1; $hour <= 8; $hour++)
-                                        <td class="px-4 py-2 border border-gray-200 text-center">
-                                            <!-- Aggiungi qui la logica per rappresentare la presenza o assenza -->
-                                            <button @click="isOpen = true" class="focus:outline-none inline-block align-middle">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 bg-green-500 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-                                                </svg>
-                                            </button>
-                                        </td>
-                                    @endfor
+                                    @if(count($timetable))
+                                        @foreach ($timetable as $hour)
+                                            @if($hour->day_of_week == strftime('%A'))
+                                                <td class="px-4 py-2 border border-gray-200 text-center">
+                                                    <!-- Aggiungi qui la logica per rappresentare la presenza o assenza -->
+                                                    <x-button-modal></x-button-modal>
+                                                </td>
+                                            @endif    
+                                        @endforeach
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -100,6 +103,7 @@
                             @csrf
                             <input type="hidden" id="student_id" name="student_id" value="{{ $student->id }}">
                             <input type="hidden" id="hiddenDate" name="hiddenDate" value="{{ date('j F Y') }}">
+                            <input type="hidden" id="hiddenHour" name="hiddenDate" value="">
                             <div class="flex justify-between">
                                 <!-- Pulsanti per confermare la presenza o l'assenza -->
                                 <button type="submit" @click.stop value="P" name="attendance" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>

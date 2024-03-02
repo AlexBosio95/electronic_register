@@ -23,6 +23,7 @@ class PresenceController extends Controller
         $user_role = $user->role;
         $students = [];
         $classes = [];
+        $timetable = [];
         $page = 'Presenze';
 
         $teacher = Teacher::where('user_id', $userId)->first();
@@ -40,18 +41,19 @@ class PresenceController extends Controller
                     if ($selectedClass) {
                         $students = $selectedClass->students;
                     } else {
-                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Invalid selected class.']);
+                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
+                    $timetable = $classes->first()->calendar;
                 }
 
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'));
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable'));
             } else {
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'No classes found for the teacher.']);
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable'))->withErrors(['message' => 'No classes found for the teacher.']);
             }
         } else {
-            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Teacher not found.']);
+            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
 
