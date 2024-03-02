@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AuthorizedUsers;
 
 use App\Http\Controllers\Controller;
+use App\Models\AttendStudentRegister;
 use Illuminate\Http\Request;
 use App\Models\StudentRegister;
 use App\Models\Classe;
@@ -34,6 +35,7 @@ class PresenceController extends Controller
 
                 if ($selectedClassId) {
                     $selectedClass = $classes->where('id', $selectedClassId)->first();
+                    $timetable = $selectedClass->calendar;
 
                     if ($selectedClass) {
                         $students = $selectedClass->students;
@@ -67,7 +69,20 @@ class PresenceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $student = $request->input('student_id');
+        $userId = Auth::id();
+        $teacher = Teacher::where('user_id', $userId)->first()->id; 
+        $presence = $request->input('attendance');
+        $date = $request->input('hiddenDate');  
+        $convertedDate = \DateTime::createFromFormat('j F Y', $date)->format('Y-m-d');
+        $record = new AttendStudentRegister();
+        $record->student_id = $student;
+        $record->teacher_id = $teacher;
+        $record->presence = $presence;
+        $record->data = $convertedDate;
+        $record->note = "";
+        $record->save();
+
     }
 
     /**
