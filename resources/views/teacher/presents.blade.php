@@ -6,7 +6,7 @@
             <div class="container mx-auto p-4">
                 <!-- Griglia -->
                 <div class="overflow-x-auto bg-gray-100 rounded-lg shadow-md p-4">
-                    <table class="table-auto w-full">
+                    <table id="timeTable" class="table-auto w-full">
                         <!-- Intestazione delle colonne -->
                         <thead>
                             <tr class="bg-gray-800 text-white">
@@ -66,7 +66,8 @@
                         <tbody>
                             @foreach ($students as $student)
                                 <tr class="bg-white">
-                                    <td class="px-4 py-2 border border-gray-200">{{ $student->name}} {{$student->id }}</td>
+                                    <input type="hidden" value="{{ $student->id }}" class="student-id">
+                                    <td class="px-4 py-2 border border-gray-200">{{ $student->name}}</td>
                                     <!-- Qui puoi aggiungere la logica per le presenze/assenze degli studenti -->
                                     <!-- Ad esempio, per rappresentare se uno studente è presente o assente -->
                                     @if(count($timetable))
@@ -103,7 +104,7 @@
                             @csrf
                             <input type="hidden" id="student_id" name="student_id" value="{{ $student->id }}">
                             <input type="hidden" id="hiddenDate" name="hiddenDate" value="{{ date('j F Y') }}">
-                            <input type="hidden" id="hiddenHour" name="hiddenDate" value="">
+                            <input type="hidden" id="hiddenHour" name="hiddenHour" value="">
                             <div class="flex justify-between">
                                 <!-- Pulsanti per confermare la presenza o l'assenza -->
                                 <button type="submit" @click.stop value="P" name="attendance" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>

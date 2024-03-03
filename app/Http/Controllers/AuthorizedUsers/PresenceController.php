@@ -72,6 +72,7 @@ class PresenceController extends Controller
     public function store(Request $request)
     {
         $student = $request->input('student_id');
+        $hour = $request->input('hiddenHour');
         $userId = Auth::id();
         $teacher = Teacher::where('user_id', $userId)->first()->id; 
         $presence = $request->input('attendance');
@@ -82,6 +83,7 @@ class PresenceController extends Controller
         $record->teacher_id = $teacher;
         $record->presence = $presence;
         $record->data = $convertedDate;
+        $record->hour = $hour;
         $record->note = "";
         $record->save();
 
