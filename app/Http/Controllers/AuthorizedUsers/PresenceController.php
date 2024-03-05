@@ -46,6 +46,10 @@ class PresenceController extends Controller
                 } else {
                     $students = $classes->first()->students;
                     $timetable = $classes->first()->calendar;
+                    
+                    foreach($students as $student){
+                        Log::info($student->id. " " .$student->presences);
+                    }
                 }
 
                 return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable'));

@@ -24,7 +24,7 @@ class Student extends Model
     }
 
     public function presences(){
-        return $this->belongsTo(AttendStudentRegister::class);
+        return $this->hasMany(AttendStudentRegister::class, 'student_id');
     }
 
     public function absences(){

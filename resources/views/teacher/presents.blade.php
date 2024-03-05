@@ -75,7 +75,25 @@
                                             @if($hour->day_of_week == strftime('%A'))
                                                 <td class="px-4 py-2 border border-gray-200 text-center">
                                                     <!-- Aggiungi qui la logica per rappresentare la presenza o assenza -->
-                                                    <x-button-modal></x-button-modal>
+                                                    @php
+                                                        $buttonModalShown = false;
+                                                    @endphp
+                                                    @foreach ($student->presences as $presence)
+                                                        @if($presence->data == date("Y-m-d"))
+                                                            <button @click="getStudentIdAndColumnHeader; isOpen = true" 
+                                                                class="px-4 py-2 rounded focus:outline-none
+                                                                {{ $presence->presence == 'P' ? 'bg-green-500 text-white' : ($presence->presence == 'A' ? 'bg-red-500 text-white' : '') }}">
+                                                                    {{ $presence->presence }}
+                                                            </button>
+                                                            @php
+                                                                $buttonModalShown = true;
+                                                            @endphp
+                                                        @endif    
+                                                    @endforeach
+                                                    @if (!$buttonModalShown)
+                                                        <x-button-modal></x-button-modal>
+                                                    @endif        
+                                                        
                                                 </td>
                                             @endif    
                                         @endforeach
