@@ -90,7 +90,7 @@ class PresenceController extends Controller
         $record->hour = $hour;
         $record->note = "";
         $record->save();
-
+        return redirect()->back()->with('success', 'Dati salvati con successo!');
     }
 
     /**

@@ -64,22 +64,26 @@
                         </thead>
                         <!-- Righe per gli studenti -->
                         <tbody>
-                            @foreach ($students as $student)
+                            @foreach ($students as $s => $student)
                                 <tr class="bg-white">
                                     <input type="hidden" value="{{ $student->id }}" class="student-id">
                                     <td class="px-4 py-2 border border-gray-200">{{ $student->name}}</td>
                                     <!-- Qui puoi aggiungere la logica per le presenze/assenze degli studenti -->
                                     <!-- Ad esempio, per rappresentare se uno studente è presente o assente -->
                                     @if(count($timetable))
-                                        @foreach ($timetable as $hour)
+                                        @php
+                                            $h = -1;
+                                        @endphp
+                                        @foreach ($timetable as $hour)                               
                                             @if($hour->day_of_week == strftime('%A'))
                                                 <td class="px-4 py-2 border border-gray-200 text-center">
                                                     <!-- Aggiungi qui la logica per rappresentare la presenza o assenza -->
                                                     @php
+                                                        $h +=1;
                                                         $buttonModalShown = false;
                                                     @endphp
                                                     @foreach ($student->presences as $presence)
-                                                        @if($presence->data == date("Y-m-d"))
+                                                        @if($presence->data == date("Y-m-d") && config('timetable')[$h] == $presence->hour)
                                                             <button @click="getStudentIdAndColumnHeader; isOpen = true" 
                                                                 class="px-4 py-2 rounded focus:outline-none
                                                                 {{ $presence->presence == 'P' ? 'bg-green-500 text-white' : ($presence->presence == 'A' ? 'bg-red-500 text-white' : '') }}">
@@ -88,12 +92,11 @@
                                                             @php
                                                                 $buttonModalShown = true;
                                                             @endphp
-                                                        @endif    
+                                                        @endif                                                        
                                                     @endforeach
                                                     @if (!$buttonModalShown)
                                                         <x-button-modal></x-button-modal>
-                                                    @endif        
-                                                        
+                                                    @endif                                                    
                                                 </td>
                                             @endif    
                                         @endforeach
@@ -120,7 +123,7 @@
                         <h2 class="text-lg font-semibold mb-4">Seleziona la presenza</h2>
                         <form action="{{ route('dashboard.store') }}" method="POST">
                             @csrf
-                            <input type="hidden" id="student_id" name="student_id" value="{{ $student->id }}">
+                            <input type="hidden" id="student_id" name="student_id" value="">
                             <input type="hidden" id="hiddenDate" name="hiddenDate" value="{{ date('j F Y') }}">
                             <input type="hidden" id="hiddenHour" name="hiddenHour" value="">
                             <div class="flex justify-between">
