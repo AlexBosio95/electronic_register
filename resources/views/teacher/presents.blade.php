@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-menu :classes="$classes" :role="$user_role" :page="$page"></x-menu>
 
-    <div x-data="{ isOpen: false }" class="relative w-full bg-[#1F2937] overflow-scroll border-l border-red-500">
+    <div x-data="{ isOpen: false, isOpenPut: false }" class="relative w-full bg-[#1F2937] overflow-scroll border-l border-red-500">
         @if(count($students) > 0)
             <div class="container mx-auto p-4">
                 <!-- Griglia -->
@@ -84,15 +84,11 @@
                                                     @endphp
                                                     @foreach ($student->presences as $presence)
                                                         @if($presence->data == date("Y-m-d") && config('timetable')[$h] == $presence->hour)
-                                                            <button @click="getStudentIdAndColumnHeader; isOpen = true" 
-                                                                class="px-4 py-2 rounded focus:outline-none
-                                                                {{ $presence->presence == 'P' ? 'bg-green-500 text-white' : ($presence->presence == 'A' ? 'bg-red-500 text-white' : '') }}">
-                                                                    {{ $presence->presence }}
-                                                            </button>
+                                                            <x-button-modifica :presenza="$presence"></x-button-modifica>
                                                             @php
                                                                 $buttonModalShown = true;
                                                             @endphp
-                                                        @endif                                                        
+                                                        @endif                                                       
                                                     @endforeach
                                                     @if (!$buttonModalShown)
                                                         <x-button-modal></x-button-modal>
@@ -135,6 +131,44 @@
                     </div>
                 </div>
             </div>
+
+
+
+            
+
+            
+
+            <!-- Modal -->
+            <div x-show="isOpenPut" @click.away="isOpenPut = false" class="fixed z-10 inset-0 overflow-y-auto">
+                <div class="flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:block sm:p-0">
+                    <div class="fixed inset-0 bg-black opacity-50"></div>
+                    <div class="bg-white p-8 rounded-lg z-50 shadow-md max-w-sm mx-auto relative">
+                        <!-- Pulsante di chiusura del modal -->
+                        <button @click="isOpenPut = false" class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800 focus:outline-none">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                        <!-- Contenuto del modal -->
+                        <h2 class="text-lg font-semibold mb-4">Modifica la presenza</h2>
+                        <form action="{{ route('dashboard.store') }}" method="POSt">
+                            @csrf
+                            <div class="flex justify-between">
+                                <!-- Pulsanti per confermare la presenza o l'assenza -->
+                                <button type="submit" @click.stop value="P" name="attendance" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>
+                                <button type="submit" @click.stop value="A" name="attendance" class="bg-red-500 text-white px-4 py-2 rounded focus:outline-none">Assente</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            
+
+
+
+
+
         @else
             <p>Non ci sono studenti in questa classe</p>
         @endif
