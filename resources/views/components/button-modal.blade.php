@@ -15,7 +15,7 @@
         var columnIndex = this.$el.closest('td').cellIndex;
         var columnHeader = this.$el.closest('table').querySelector('thead tr th:nth-child(' + (columnIndex + 1) + ')').innerText;
         
-        // Mostra un alert con l'ID dello studente e l'intestazione della colonna
+        // Popola i campi hidden con id swtudente e l'ora corrente
         document.getElementById('student_id').value = studentId;
         document.getElementById('hiddenHour').value = columnHeader;
     }
