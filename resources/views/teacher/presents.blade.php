@@ -151,12 +151,13 @@
                         </button>
                         <!-- Contenuto del modal -->
                         <h2 class="text-lg font-semibold mb-4">Modifica la presenza</h2>
-                        <form action="{{ route('dashboard.store') }}" method="POSt">
+                        <form id="form-modifica" action="{{ route('dashboard.update', '0') }}" method="POST">
                             @csrf
+                            @method('PUT')
                             <div class="flex justify-between">
                                 <!-- Pulsanti per confermare la presenza o l'assenza -->
-                                <button type="submit" @click.stop value="P" name="attendance" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>
-                                <button type="submit" @click.stop value="A" name="attendance" class="bg-red-500 text-white px-4 py-2 rounded focus:outline-none">Assente</button>
+                                <button type="submit" @click.stop value="P" name="attendance_mod" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>
+                                <button type="submit" @click.stop value="A" name="attendance_mod" class="bg-red-500 text-white px-4 py-2 rounded focus:outline-none">Assente</button>
                             </div>
                         </form>
                     </div>

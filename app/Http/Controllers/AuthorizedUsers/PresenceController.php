@@ -114,7 +114,11 @@ class PresenceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $presence = $request->input('attendance_mod');
+        $toMod = AttendStudentRegister::findOrFail($id);
+        $toMod->presence = $presence;
+        $toMod->save();
+        return redirect()->back()->with('success', 'Modifica effettuata con successo!');
     }
 
     /**
