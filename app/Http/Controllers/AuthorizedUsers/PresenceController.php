@@ -25,6 +25,15 @@ class PresenceController extends Controller
         $classes = [];
         $timetable = [];
         $page = 'Presenze';
+        $current_date = date("Y-m-d");
+        $current_day = strftime('%A');
+        if($request->input('current_date') !== null && $request->input('current_day') !== null)
+        {
+            $current_date = $request->input('current_date');
+            $current_day = strftime('%A');
+        }
+
+
 
         $teacher = Teacher::where('user_id', $userId)->first();
 
@@ -41,7 +50,7 @@ class PresenceController extends Controller
                     if ($selectedClass) {
                         $students = $selectedClass->students;
                     } else {
-                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable'))->withErrors(['message' => 'Invalid selected class.']);
+                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
@@ -52,12 +61,12 @@ class PresenceController extends Controller
                     }
                 }
 
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable'));
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'));
             } else {
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable'))->withErrors(['message' => 'No classes found for the teacher.']);
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'))->withErrors(['message' => 'No classes found for the teacher.']);
             }
         } else {
-            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable'))->withErrors(['message' => 'Teacher not found.']);
+            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
 
