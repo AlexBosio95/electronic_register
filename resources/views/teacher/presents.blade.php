@@ -47,7 +47,7 @@
                                                     </button>
                                                     <!-- Contenuto del calendario -->
                                                     <div class="mt-5">
-                                                        <x-calendar></x-calendar>
+                                                        <x-calendar :current_date="$current_date" ></x-calendar>
                                                     </div>
                                                     
                                                 </div>                                   
@@ -135,12 +135,6 @@
                 </div>
             </div>
 
-
-
-            
-
-            
-
             <!-- Modal -->
             <div x-show="isOpenPut" @click.away="isOpenPut = false" class="fixed z-10 inset-0 overflow-y-auto">
                 <div class="flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:block sm:p-0">
@@ -167,15 +161,8 @@
                 </div>
             </div>
 
-            
-
-
-
-
-
         @else
             <p>Non ci sono studenti in questa classe</p>
         @endif
-    </div>
-    
+    </div> 
 </x-app-layout>
