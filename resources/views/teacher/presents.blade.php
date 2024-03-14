@@ -59,7 +59,7 @@
                                 @if(count($timetable))
                                     @foreach ($timetable as $hour)
                                         @if($hour->day_of_week == $current_day)
-                                            <th class="px-4 py-2">{{ $hour->time_start }}</th>
+                                            <th class="px-4 py-2">{{ substr($hour->time_start,0,5) }}</th>
                                         @endif    
                                     @endforeach
                                 @endif
