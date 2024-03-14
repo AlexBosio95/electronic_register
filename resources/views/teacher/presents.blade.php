@@ -123,7 +123,7 @@
                         <form action="{{ route('dashboard.store') }}" method="POST">
                             @csrf
                             <input type="hidden" id="student_id" name="student_id" value="">
-                            <input type="hidden" id="hiddenDate" name="hiddenDate" value="{{ date('j F Y') }}">
+                            <input type="hidden" id="hiddenDate" name="hiddenDate" value="{{ date('d F Y', strtotime($current_date)) }}">
                             <input type="hidden" id="hiddenHour" name="hiddenHour" value="">
                             <div class="flex justify-between">
                                 <!-- Pulsanti per confermare la presenza o l'assenza -->

@@ -35,8 +35,6 @@ class PresenceController extends Controller
             $current_day = date("l", strtotime($current_date));
         }
 
-
-
         $teacher = Teacher::where('user_id', $userId)->first();
 
         if ($teacher) {
