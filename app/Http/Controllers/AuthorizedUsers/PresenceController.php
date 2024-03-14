@@ -27,10 +27,12 @@ class PresenceController extends Controller
         $page = 'Presenze';
         $current_date = date("Y-m-d");
         $current_day = strftime('%A');
-        if($request->input('current_date') !== null && $request->input('current_day') !== null)
+        if($request->input('current_date') !== null)
         {
             $current_date = $request->input('current_date');
-            $current_day = strftime('%A');
+            $current_date = \DateTime::createFromFormat('j F Y', $current_date)->format('Y-m-d');
+            Log::info($current_date);
+            $current_day = date("l", strtotime($current_date));
         }
 
 
@@ -57,7 +59,7 @@ class PresenceController extends Controller
                     $timetable = $classes->first()->calendar;
                     
                     foreach($students as $student){
-                        Log::info($student->id. " " .$student->presences);
+                        //Log::info($student->id. " " .$student->presences);
                     }
                 }
 

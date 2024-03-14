@@ -32,9 +32,11 @@
                 setCurrentDay(day){
                     this.currentDay = day;
                     document.getElementById('hiddenDate').value =  `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
+                    document.getElementById('current_date').value =  `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
                 },
                 updateHiddenDate(date) {
                     document.getElementById('hiddenDate').value = date;
+                    document.getElementById('current_date').value = date;
                 }
             };
         }
@@ -59,6 +61,10 @@
                     </div>
                 </template>
             </div>
+            <form action="{{ route('dashboard.index') }}" method="GET">
+                <button class="hover:bg-blue-800 bg-blue-500 text-black font-bold py-2 px-4 rounded absolute top-full mt-2">Cerca</button>
+                <input type="hidden" id="current_date" name="current_date" value="{{ date('j F Y') }}">
+            </form>
         </div>
     </div>
     

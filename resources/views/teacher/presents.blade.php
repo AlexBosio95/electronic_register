@@ -15,8 +15,10 @@
                                 <td x-data="{ showModal: false, calendario: calendar()
                                  }">
                                     <!-- Pulsante per aprire il modal -->
-                                    <button @click="updateHiddenDate(calendario.DayMonthAndYear); showModal = true" class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"><span x-text="calendario.DayMonthAndYear"></span></button>
-                                    
+                                    <!--<button class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">&lt;</button> -->
+                                    <button @click="updateHiddenDate(calendario.DayMonthAndYear); showModal = true" class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"><span x-text="{{ date('d F Y', strtotime(date('Y-m-d'))) == date('d F Y', strtotime($current_date)) ? 'calendario.DayMonthAndYear' : date('d F Y', strtotime($current_date)) }}">{{ date('d F Y', strtotime($current_date)) }}</span>
+                                    </button>
+                                    <!-- <button class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">&gt;</button> -->
                                     <!-- Modal -->
                                     <div x-data="calendario" x-show="showModal" class="fixed z-10 inset-0 overflow-y-auto" x-cloak>
                                         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
@@ -47,6 +49,7 @@
                                                     <div class="mt-5">
                                                         <x-calendar></x-calendar>
                                                     </div>
+                                                    
                                                 </div>                                   
                                             </div>
                                         </div>
