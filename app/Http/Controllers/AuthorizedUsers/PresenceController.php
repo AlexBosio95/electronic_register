@@ -102,15 +102,12 @@ class PresenceController extends Controller
      */
     public function store(Request $request)
     {
-        // Definisci le regole di validazione
         $rules = [
             'student_id' => 'required|integer',
             'hiddenHour' => 'required|regex:/^\d{2}:\d{2}$/',
             'attendance' => 'required|in:P,A',
             'hiddenDate' => ['required', 'regex:/^\d{1,2}\s(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{4}$/i'],
         ];
-
-        // Definisci i messaggi di errore personalizzati
         $messages = [
             'student_id.required' => 'Field Student ID is mandatory',
             'student_id.integer' => 'Field Student ID MUST BE an integer',
@@ -171,7 +168,6 @@ class PresenceController extends Controller
         $rules = [
             'attendance_mod' => 'required|in:P,A'
         ];
-        // Definisci i messaggi di errore personalizzati
         $messages = [
             'attendance_mod.required' => 'Field Attendance is mandatory',
             'attendance_mod.in' => 'Field Attendance MUST BE "P" o "A".'
