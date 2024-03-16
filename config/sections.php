@@ -33,9 +33,9 @@ return [
             'student' => ['get']
         ]
     ],
-    'register' => [
+    'plan' => [
         'section_name' => 'Registro Professori',
-        'route_name' => 'register',
+        'route_name' => 'plan',
         'visibility' => [
             'teacher' => ['get', 'put', 'post', 'delete'], 
             'student' => ['get']

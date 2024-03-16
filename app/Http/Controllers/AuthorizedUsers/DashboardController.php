@@ -9,6 +9,7 @@ use App\Models\Classe;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Models\AttendStudentRegister;
 
 class DashboardController extends Controller
 {
@@ -44,7 +45,17 @@ class DashboardController extends Controller
                     $students = $classes->first()->students;
                 }
 
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'));
+                $currentPresences = [];
+                foreach ($students as $student) {
+                    $existingRecord = AttendStudentRegister::where('student_id', $student->id)
+                        ->whereDate('data', now()->toDateString())
+                        ->first();
+
+                    $currentPresences[$student->id] = $existingRecord ? $existingRecord->presence : null;
+                }
+
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'currentPresences'));
+
             } else {
                 return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'No classes found for the teacher.']);
             }

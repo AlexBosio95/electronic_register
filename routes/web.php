@@ -29,7 +29,7 @@ Route::get('/', function () {
 });
 
 
-//Rotte che serviranno SOLO agli utenti admin
+
 Route::middleware(['auth','checkUser','verified'])->group(function () {
     //aggiungere i Controller
     Route::resource('/teachers', TeacherController::class);
