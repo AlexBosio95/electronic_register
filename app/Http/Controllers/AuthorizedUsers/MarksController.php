@@ -4,15 +4,53 @@ namespace App\Http\Controllers\AuthorizedUsers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\StudentRegister;
+use App\Models\Classe;
+use App\Models\Teacher;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class MarksController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $userId = Auth::id();
+        $user = Auth::user();
+        $user_role = $user->role;
+        $students = [];
+        $classes = [];
+        $page = 'Presenze';
+
+        $teacher = Teacher::where('user_id', $userId)->first();
+
+        if ($teacher) {
+            $classes = $teacher->classes;
+
+            if ($classes->isNotEmpty()) {
+                $selectedClassId = $request->input('selected_class');
+
+                if ($selectedClassId) {
+                    $selectedClass = $classes->where('id', $selectedClassId)->first();
+
+                    if ($selectedClass) {
+                        $students = $selectedClass->students;
+                    } else {
+                        return view('teacher.marks', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Invalid selected class.']);
+                    }
+                } else {
+                    $students = $classes->first()->students;
+                }
+
+                return view('teacher.marks', compact('students', 'classes', 'user_role', 'page'));
+            } else {
+                return view('teacher.marks', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'No classes found for the teacher.']);
+            }
+        } else {
+            return view('teacher.marks', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Teacher not found.']);
+        }
     }
 
     /**
