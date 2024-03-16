@@ -10,6 +10,7 @@ use App\Models\Classe;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class PresenceController extends Controller
 {
@@ -18,20 +19,31 @@ class PresenceController extends Controller
      */
     public function index(Request $request)
     {
-        $userId = Auth::id();
         $user = Auth::user();
+        $userId = $user->id;
         $user_role = $user->role;
         $students = [];
         $classes = [];
         $timetable = [];
         $page = 'Presenze';
+        /*inizializzo current_date e current_day con giorno corrente e data corrente */
         $current_date = date("Y-m-d");
         $current_day = strftime('%A');
         if($request->input('current_date') !== null)
         {
+            /*validazione campo classe*/
+            $rules = [
+                'current_date' => ['regex:/^\d{1,2}\s(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{4}$/i'],
+            ];
+            $messages = [
+                'current_date.regex' => 'Field :attribute MUST BE in this format: day, month in letter in English INGLESE and year.',
+            ];
+            $validator = Validator::make($request->all(), $rules, $messages);
+            if ($validator->fails()) {
+                return back()->withErrors($validator)->withInput();
+            }
             $current_date = $request->input('current_date');
             $current_date = \DateTime::createFromFormat('j F Y', $current_date)->format('Y-m-d');
-            Log::info($current_date);
             $current_day = date("l", strtotime($current_date));
         }
 
@@ -41,24 +53,30 @@ class PresenceController extends Controller
             $classes = $teacher->classes;
 
             if ($classes->isNotEmpty()) {
+                /*validazione campo classe*/
+                $rules = [
+                    'selected_class' => 'integer',
+                ];
+                $messages = [
+                    'selected_class.integer' => 'Field :attribute MUST BE an id, an integer number',
+                ];
+                $validator = Validator::make($request->all(), $rules, $messages);
+                if ($validator->fails()) {
+                    return back()->withErrors($validator)->withInput();
+                }
                 $selectedClassId = $request->input('selected_class');
 
                 if ($selectedClassId) {
-                    $selectedClass = $classes->where('id', $selectedClassId)->first();
-                    $timetable = $selectedClass->calendar;
-
+                    $selectedClass = $classes->where('id', $selectedClassId)->first();                
                     if ($selectedClass) {
                         $students = $selectedClass->students;
+                        $timetable = $selectedClass->calendar;
                     } else {
                         return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
                     $timetable = $classes->first()->calendar;
-                    
-                    foreach($students as $student){
-                        //Log::info($student->id. " " .$student->presences);
-                    }
                 }
 
                 return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'));

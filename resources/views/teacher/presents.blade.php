@@ -2,7 +2,16 @@
     <x-menu :classes="$classes" :role="$user_role" :page="$page"></x-menu>
 
     <div x-data="{ isOpen: false, isOpenPut: false }" class="relative w-full bg-[#1F2937] overflow-scroll border-l border-red-500">
-        @if(count($students) > 0)
+        
+        @if($errors->any())
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @elseif(count($students) > 0)
             <div class="container mx-auto p-4">
                 <!-- Griglia -->
                 <div class="overflow-x-auto bg-gray-100 rounded-lg shadow-md p-4">
@@ -162,7 +171,11 @@
             </div>
 
         @else
-            <p>Non ci sono studenti in questa classe</p>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <ul>
+                    <li>Non ci sono studenti in questa classe</li>
+                </ul>
+            </div>
         @endif
     </div> 
 </x-app-layout>
