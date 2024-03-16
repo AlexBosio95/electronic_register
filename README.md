@@ -1,19 +1,21 @@
-Funzionamento:
+Funzionamento
 
-Il controller PresenceController, funzione index:
-inizializzo il campo current_date e current_day alla data e giorno corrente, mi prendo i dati dello user, il nome della pagina, le classi del professore e chiamo la view teacher.presents.
+La funzione index inizializza il campo current_date e current_day alla data e giorno corrente, mi prendo i dati dello user, il nome della pagina, le classi del professore, gli studenti e chiamo la view teacher.presents.
+Posso poi modificare la data dall'interfaccia e il server a quel punto riceverà il giorno e data che ho indicato io dal calendario e mi restituirà i dati delle presenze di quel giorno.
 Quando atterro sull'interfaccia, avrò i dati delle presenze della classe del giorno corrente. Se voglio cambiare giorno clicco sulla data in alto a sinistra, dal calendario seleziono il giorno che voglio
-(che verrà modificato) e cliccando cerca rifaccio la chiamata.
-Il server a quel punto riceverà il giorno e data che ho indicato io dal calendario e mi restituirà i dati delle presenze di quel giorno.
+(che verrà modificato) e cliccando cerca rifaccio la chiamata. 
+Per inserire una nuova presenza, cliccare sul pulsante più in ogni casella e verrà aggiunta la presenza per quello studente (riga della colonna) per quell'ora (intestazione della colonna). Per selezionare il giorno bisogna impostare il giorno corretto dal calendario, diversamente ci sarà sempre il giorno corrente.
+Per modificarla basta invece cliccare sul pulsante P o A già presente nella cella corrispondente all'alunno e all'ora.
+in entrambi i casi, dopo la modifica, viene visualizzato un messaggio di successo che scoparirà dopo alcuni secondi.
 N.B. se non c'è un orario o non ci sono presenze, chiaramente l'interfaccia conterrà una tabella vuota.
 
-Per inserire una nuova presenza, cliccare sul pulsante più in ogni casella e verrà aggiunta la presenza per quello studente (riga della colonna) per quell'ora (intestazione della colonna).
-Per modificarla basta cliccare sul pulsante P o A già presente nella cella corrispondente all'alunno e all'ora.
-in entrambi i casi, dopo la modifica, viene visualizzato un messaggio di successo che scoparirà dopo alcuni secondi.
-La validazione è stata effettuata col Validator di javascript per le funzioni index, store e update. Al momento nessun altro metodo del controller fa qualcosa (valutare cosa fare).
-In caso di errori, esce un messaggio di alert che indica quale validazione è fallita.
 
 Implementazione:
+
+Il controller utilizzato è il PresenceController. 
+
+La validazione è stata effettuata col Validator di javascript per le funzioni index, store e update. Al momento nessun altro metodo del controller fa qualcosa (valutare cosa fare).
+In caso di errori, esce un messaggio di alert che indica quale validazione è fallita.
 
 Utilizzati 3 componenti principali, calendar, button e button-modifica.
 
