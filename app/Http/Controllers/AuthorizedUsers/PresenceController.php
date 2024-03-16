@@ -165,6 +165,22 @@ class PresenceController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if(!is_numeric($id)){
+            return back()->withErrors("Parameter ID must be of type integer")->withInput();
+        }
+        $rules = [
+            'attendance_mod' => 'required|in:P,A'
+        ];
+        // Definisci i messaggi di errore personalizzati
+        $messages = [
+            'attendance_mod.required' => 'Field Attendance is mandatory',
+            'attendance_mod.in' => 'Field Attendance MUST BE "P" o "A".'
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
         $presence = $request->input('attendance_mod');
         $toMod = AttendStudentRegister::findOrFail($id);
         $toMod->presence = $presence;
