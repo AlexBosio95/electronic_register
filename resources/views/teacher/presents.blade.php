@@ -4,7 +4,7 @@
     <div x-data="{ isOpen: false, isOpenPut: false }" class="relative w-full bg-[#1F2937] overflow-scroll border-l border-red-500">
         
         @if($errors->any())
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -13,6 +13,18 @@
             </div>
         @elseif(count($students) > 0)
             <div class="container mx-auto p-4">
+                @if(session('success'))
+                    <div id="successAlert" x-data="{ showAlert: true }" x-show="showAlert" x-init="setTimeout(() => showAlert = false, 3000)" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-md mb-4 opacity-100 transition duration-2000">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-6 h-6 mr-2">
+                                    <svg class="w-full h-full text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                                <p class="text-sm ml-1">{{ session('success') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 <!-- Griglia -->
                 <div class="overflow-x-auto bg-gray-100 rounded-lg shadow-md p-4">
                     <table id="timeTable" class="table-auto w-full">
