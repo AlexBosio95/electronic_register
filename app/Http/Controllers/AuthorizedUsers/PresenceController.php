@@ -102,6 +102,30 @@ class PresenceController extends Controller
      */
     public function store(Request $request)
     {
+        // Definisci le regole di validazione
+        $rules = [
+            'student_id' => 'required|integer',
+            'hiddenHour' => 'required|regex:/^\d{2}:\d{2}$/',
+            'attendance' => 'required|in:P,A',
+            'hiddenDate' => ['required', 'regex:/^\d{1,2}\s(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{4}$/i'],
+        ];
+
+        // Definisci i messaggi di errore personalizzati
+        $messages = [
+            'student_id.required' => 'Field Student ID is mandatory',
+            'student_id.integer' => 'Field Student ID MUST BE an integer',
+            'hiddenHour.required' => 'Field Hidden Hour is mandatory',
+            'hiddenHour.regex' => 'Field Hidden Hour MUST BE in the format HH:MM.',
+            'attendance.required' => 'Field Attendance is mandatory',
+            'attendance.in' => 'Field Attendance MUST BE "P" o "A".',
+            'hiddenDate.required' => 'Field Hidden Date is mandatory',
+            'hiddenDate.regex' => 'Field Hidden Date MUST BE in the format day, month in letter in English and year.',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
         $student = $request->input('student_id');
         $hour = $request->input('hiddenHour');
         $userId = Auth::id();
