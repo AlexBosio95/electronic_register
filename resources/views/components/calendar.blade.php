@@ -1,6 +1,6 @@
 @props(['current_date'])
 
-<div x-data="{ currentButton: null }" x-show="true" class="absolute z-10 bg-white border text-black border-gray-200 shadow-md mt-2">
+<div x-show="true" class="absolute z-10 bg-white border text-black border-gray-200 shadow-md mt-2">
     <div class="container mx-auto p-4">
         <div class="flex justify-between mb-4">
             <button @click.stop="previousMonth; changeButtonColor(null)">&lt;</button>
@@ -10,7 +10,7 @@
         <div class="grid grid-cols-7 gap-2">
             <template x-for="(day, index) in days" :key="index">
                 <div class="p-2 bg-gray-100 border border-gray-200 rounded text-center">
-                    <button @click="setCurrentDay(day); currentButton = $event.target.parentElement.parentElement; changeButtonColor($event.target.parentElement.parentElement)">
+                    <button @click="setCurrentDay(day); changeButtonColor($event.target.parentElement.parentElement)">
                         <span x-text="day"></span>
                     </button>
                 </div>
@@ -63,23 +63,22 @@
             updateHiddenDate(date) {
                 document.getElementById('hiddenDate').value = date;
                 document.getElementById('current_date').value = date;
+            },
+            changeButtonColor(parentDiv) {
+                // Rimuovo la classe 'bg-blue-500' da tutti gli elementi del div con classe .bg-gray-100 
+                document.querySelectorAll('.bg-gray-100').forEach(function(element) {
+                    element.classList.remove('bg-blue-500');
+                });
+                if(parentDiv != null){
+                    // Aggiungo la classe 'bg-blue-500' all'elemento div padre del bottone corrente
+                parentDiv.classList.add('bg-blue-500');
+                }
             }
         };
     }
-
-    function changeButtonColor(parentDiv) {
-        // Rimuovo la classe 'bg-blue-500' da tutti gli elementi del div con classe .bg-gray-100 
-        document.querySelectorAll('.bg-gray-100').forEach(function(element) {
-            element.classList.remove('bg-blue-500');
-        });
-        if(parentDiv != null){
-            // Aggiungo la classe 'bg-blue-500' all'elemento div padre del bottone corrente
-        parentDiv.classList.add('bg-blue-500');
-        }
-    }
     
     // Invoca la funzione calendar() per inizializzare lo stato del calendario
-    let { showCalendar, months, weekdays, currentDate, currentDay, currentYear, currentMonth, days, DayMonthAndYear, previousMonth, nextMonth, setCurrentDay, updateHiddenDate } = calendar();
+    let { showCalendar, months, weekdays, currentDate, currentDay, currentYear, currentMonth, days, DayMonthAndYear, previousMonth, nextMonth, setCurrentDay, updateHiddenDate, changeButtonColor } = calendar();
 </script>
 
     
