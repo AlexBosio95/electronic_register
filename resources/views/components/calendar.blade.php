@@ -10,7 +10,7 @@
         </div>
         <div class="grid grid-cols-7 gap-2">
             <template x-for="(day, index) in days" :key="index">
-                <div class="p-2 bg-gray-100 border border-gray-200 rounded">
+                <div class="p-2 bg-gray-100 border border-gray-200 rounded text-center">
                     <button @click="setCurrentDay(day)"> <span x-text="day"></span></button>
                 </div>
             </template>
