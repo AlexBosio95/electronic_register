@@ -22,7 +22,7 @@ class MarksController extends Controller
         $user_role = $user->role;
         $students = [];
         $classes = [];
-        $page = 'Presenze';
+        $page = 'Voti';
 
         $teacher = Teacher::where('user_id', $userId)->first();
 
