@@ -11,7 +11,7 @@
         @if($page != $pagina['section_name'])
             <a class="w-full flex items-center gap-x-1.5 group select-none focus:outline-none" 
 
-                @if (in_array($pagina['route_name'], $dashboardRoutes))
+                @if (in_array($pagina['route_name'], $exceptionRoutes))
                     href="{{route($pagina['route_name'])}}"
                 @else
                     href="{{route($pagina['route_name'] . '.index')}}"
@@ -34,7 +34,7 @@
         @else
             <a class="w-full flex items-center gap-x-1.5 group select-none focus:outline-none" 
                 
-                @if(in_array($pagina['route_name'], $dashboardRoutes))
+                @if(in_array($pagina['route_name'], $exceptionRoutes))
                     href="{{route($pagina['route_name'])}}"
                 @else
                     href="{{route($pagina['route_name'] . '.index')}}"
