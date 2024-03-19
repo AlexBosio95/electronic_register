@@ -3,7 +3,7 @@
 @foreach (config('sections') as $elemento => $pagina)
 
     @php
-        $dashboardRoutes = ['dashboard', 'register'];
+        $exceptionRoutes = ['dashboard', 'register'];
     @endphp
 
     @if($role == "admin" || isset(config('sections.'.$pagina['route_name'].'.visibility')[$role]))
