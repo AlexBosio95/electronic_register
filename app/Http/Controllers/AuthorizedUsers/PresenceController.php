@@ -71,12 +71,55 @@ class PresenceController extends Controller
                     if ($selectedClass) {
                         $students = $selectedClass->students;
                         $timetable = $selectedClass->calendar;
+                        Log::info($timetable);
+                        Log::info($students);
+                        
                     } else {
                         return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
                     $timetable = $classes->first()->calendar;
+
+
+                    $dayTimetable = json_decode($timetable, true);
+                    // Filtra gli elementi dell'array in base al giorno corrente
+                    $dayTimetable = array_filter($dayTimetable, function($item) use ($current_day) {
+                         return strtolower($item['day_of_week']) === strtolower($current_day);
+                    });
+                    $dayTimetable = array_values($dayTimetable);
+                    //Log::info($dayTimetable);
+                    foreach($students as $student){
+                        $dayPresence = json_decode($student->presences, true);
+                        //Filtra gli elementi dell'array in base al giorno corrente
+                        $dayPresences = array_filter($dayPresence, function($item) use ($current_date) {
+                            return $item['data'] === $current_date;
+                        });
+                        
+                        $values = array_values($dayPresences);
+                        foreach($dayTimetable as $t){
+                            $trovato = false;
+                            foreach($values as $v){
+                                if($t['time_start'] ==  $v['hour']){
+                                    $res[$student->id][] = $v['hour'];  
+                                    
+                                    $trovato = true;
+                                } else {
+                                    if ($trovato){
+                                        break;
+                                    }   
+                                }  
+                            }
+                            if(!$trovato){
+                                $res[$student->id][] = '';
+                            }
+                        } 
+                    }
+                    Log::info($res);
+                    //array_map();
+                    //Log::info($dayTimetable);
+                
+                    
                 }
 
                 return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'));
