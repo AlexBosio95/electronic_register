@@ -25,6 +25,7 @@ class PresenceController extends Controller
         $students = [];
         $classes = [];
         $timetable = [];
+        $res = [];
         $page = 'Presenze';
         /*inizializzo current_date e current_day con giorno corrente e data corrente */
         $current_date = date("Y-m-d");
@@ -71,11 +72,46 @@ class PresenceController extends Controller
                     if ($selectedClass) {
                         $students = $selectedClass->students;
                         $timetable = $selectedClass->calendar;
-                        Log::info($timetable);
-                        Log::info($students);
+                        
+                        //replicata logica di costruzione matrice anche qua
+                        $dayTimetable = json_decode($timetable, true);
+                        // Filtra gli elementi dell'array in base al giorno corrente
+                        $dayTimetable = array_filter($dayTimetable, function($item) use ($current_day) {
+                            return strtolower($item['day_of_week']) === strtolower($current_day);
+                        });
+                        $dayTimetable = array_values($dayTimetable);
+                        //Log::info($dayTimetable);
+                        foreach($students as $student){
+                            $dayPresence = json_decode($student->presences, true);
+                            //Filtra gli elementi dell'array in base al giorno corrente
+                            $dayPresences = array_filter($dayPresence, function($item) use ($current_date) {
+                                return $item['data'] === $current_date;
+                            });
+                            
+                            $values = array_values($dayPresences);
+                            foreach($dayTimetable as $t){
+                                $trovato = false;
+                                foreach($values as $v){
+                                    if($t['time_start'] ==  $v['hour']){
+                                        $res[$student->id][] = [$v['presence'], $v['id']];  
+                                        
+                                        $trovato = true;
+                                    } else {
+                                        if ($trovato){
+                                            break;
+                                        }   
+                                    }  
+                                }
+                                if(!$trovato){
+                                    $res[$student->id][] = '';
+                                }
+                            } 
+                        }    
+                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'));
+
                         
                     } else {
-                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'))->withErrors(['message' => 'Invalid selected class.']);
+                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
@@ -101,7 +137,7 @@ class PresenceController extends Controller
                             $trovato = false;
                             foreach($values as $v){
                                 if($t['time_start'] ==  $v['hour']){
-                                    $res[$student->id][] = $v['hour'];  
+                                    $res[$student->id][] = [$v['presence'], $v['id']];  
                                     
                                     $trovato = true;
                                 } else {
@@ -115,19 +151,14 @@ class PresenceController extends Controller
                             }
                         } 
                     }
-                    Log::info($res);
-                    //array_map();
-                    //Log::info($dayTimetable);
-                
-                    
                 }
 
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'));
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'));
             } else {
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'))->withErrors(['message' => 'No classes found for the teacher.']);
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'))->withErrors(['message' => 'No classes found for the teacher.']);
             }
         } else {
-            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable','current_date','current_day'))->withErrors(['message' => 'Teacher not found.']);
+            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
 

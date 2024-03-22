@@ -1,10 +1,10 @@
 <div>
-    <button @click="getStudentIdAndColumnHeaderMod({{ $presenza->id }}); isOpenPut = true" 
+    <button @click="getStudentIdAndColumnHeaderMod({{ $presenza[1] }}); isOpenPut = true" 
         class="px-4 py-2 rounded focus:outline-none
-        {{ $presenza->presence == 'P' ? 'bg-green-500 text-white' : ($presenza->presence == 'A' ? 'bg-red-500 text-white' : '') }}">
-            {{ $presenza->presence }}
+        {{ $presenza[0]== 'P' ? 'bg-green-500 text-white' : ($presenza[0] == 'A' ? 'bg-red-500 text-white' : '') }}">
+            {{ $presenza[0] }}
     </button>
-    <input type="hidden" id="idPresenza" name="idPresenza" value="{{ $presenza->id }}">
+    <input type="hidden" id="idPresenza" name="idPresenza" value="{{ $presenza[1] }}">
 </div>
 
 <script>

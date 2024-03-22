@@ -92,34 +92,17 @@
                                 <tr class="bg-white">
                                     <input type="hidden" value="{{ $student->id }}" class="student-id">
                                     <td class="px-4 py-2 border border-gray-200">{{ $student->name}}</td>
-                                    <!-- Qui puoi aggiungere la logica per le presenze/assenze degli studenti -->
-                                    <!-- Ad esempio, per rappresentare se uno studente è presente o assente -->
-                                    @if(count($timetable))
-                                        @php
-                                            $h = -1;
-                                        @endphp
-                                        @foreach ($timetable as $hour)                               
-                                            @if($hour->day_of_week == $current_day)
-                                                <td class="px-4 py-2 border border-gray-200 text-center">
-                                                    <!-- Aggiungi qui la logica per rappresentare la presenza o assenza -->
-                                                    @php
-                                                        $h +=1;
-                                                        $buttonModalShown = false;
-                                                    @endphp
-                                                    @foreach ($student->presences as $presence)
-                                                        @if($presence->data == $current_date && config('timetable')[$h] == $presence->hour)
-                                                            <x-button-modifica :presenza="$presence"></x-button-modifica>
-                                                            @php
-                                                                $buttonModalShown = true;
-                                                            @endphp
-                                                        @endif                                                       
-                                                    @endforeach
-                                                    @if (!$buttonModalShown)
-                                                        <x-button-modal></x-button-modal>
-                                                    @endif                                                    
-                                                </td>
-                                            @endif    
-                                        @endforeach
+                                    <!--Riga con le presenze/assenze-->
+                                    @if(count($timetable))                                        
+                                        @for ($i = 0; $i< count($res[$student->id]); $i++)                                   
+                                            <td class="px-4 py-2 border border-gray-200 text-center">
+                                                @if(empty($res[$student->id][$i][0]))
+                                                    <x-button-modal></x-button-modal>
+                                                @else
+                                                    <x-button-modifica :presenza="$res[$student->id][$i]"></x-button-modifica>    
+                                                @endif
+                                            </td>     
+                                        @endfor
                                     @endif
                                 </tr>
                             @endforeach
