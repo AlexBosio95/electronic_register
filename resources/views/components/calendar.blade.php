@@ -66,11 +66,12 @@
             },
             changeButtonColor(parentDiv) {
                 // Rimuovo la classe 'bg-blue-500' da tutti gli elementi del div con classe .bg-gray-100 
-                document.querySelectorAll('.bg-gray-100').forEach(function(element) {
+                document.querySelectorAll('.bg-blue-500').forEach(function(element) {
                     element.classList.remove('bg-blue-500');
                 });
                 if(parentDiv != null){
                     // Aggiungo la classe 'bg-blue-500' all'elemento div padre del bottone corrente
+                parentDiv.classList.remove('bg-gray-100');
                 parentDiv.classList.add('bg-blue-500');
                 }
             }
