@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AuthorizedUsers;
 
+use App\Http\Controllers\AuthorizedUsers\ControllerTraits\WithPresenceTrait;
 use App\Http\Controllers\Controller;
 use App\Models\AttendStudentRegister;
 use Illuminate\Http\Request;
@@ -12,8 +13,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+
 class PresenceController extends Controller
 {
+    use WithPresenceTrait;    
+    
+   
+    
     /**
      * Display a listing of the resource.
      */
@@ -73,86 +79,18 @@ class PresenceController extends Controller
                         $students = $selectedClass->students;
                         $timetable = $selectedClass->calendar;
                         
-                        //replicata logica di costruzione matrice anche qua
-                        $dayTimetable = json_decode($timetable, true);
-                        // Filtra gli elementi dell'array in base al giorno corrente
-                        $dayTimetable = array_filter($dayTimetable, function($item) use ($current_day) {
-                            return strtolower($item['day_of_week']) === strtolower($current_day);
-                        });
-                        $dayTimetable = array_values($dayTimetable);
-                        //Log::info($dayTimetable);
-                        foreach($students as $student){
-                            $dayPresence = json_decode($student->presences, true);
-                            //Filtra gli elementi dell'array in base al giorno corrente
-                            $dayPresences = array_filter($dayPresence, function($item) use ($current_date) {
-                                return $item['data'] === $current_date;
-                            });
-                            
-                            $values = array_values($dayPresences);
-                            foreach($dayTimetable as $t){
-                                $trovato = false;
-                                foreach($values as $v){
-                                    if($t['time_start'] ==  $v['hour']){
-                                        $res[$student->id][] = [$v['presence'], $v['id']];  
-                                        
-                                        $trovato = true;
-                                    } else {
-                                        if ($trovato){
-                                            break;
-                                        }   
-                                    }  
-                                }
-                                if(!$trovato){
-                                    $res[$student->id][] = '';
-                                }
-                            } 
-                        }    
-                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'));
-
-                        
+                        //costruzione matrice per la griglia delle presenze
+                        $res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
                     } else {
                         return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
                     $timetable = $classes->first()->calendar;
-
-
-                    $dayTimetable = json_decode($timetable, true);
-                    // Filtra gli elementi dell'array in base al giorno corrente
-                    $dayTimetable = array_filter($dayTimetable, function($item) use ($current_day) {
-                         return strtolower($item['day_of_week']) === strtolower($current_day);
-                    });
-                    $dayTimetable = array_values($dayTimetable);
-                    //Log::info($dayTimetable);
-                    foreach($students as $student){
-                        $dayPresence = json_decode($student->presences, true);
-                        //Filtra gli elementi dell'array in base al giorno corrente
-                        $dayPresences = array_filter($dayPresence, function($item) use ($current_date) {
-                            return $item['data'] === $current_date;
-                        });
-                        
-                        $values = array_values($dayPresences);
-                        foreach($dayTimetable as $t){
-                            $trovato = false;
-                            foreach($values as $v){
-                                if($t['time_start'] ==  $v['hour']){
-                                    $res[$student->id][] = [$v['presence'], $v['id']];  
-                                    
-                                    $trovato = true;
-                                } else {
-                                    if ($trovato){
-                                        break;
-                                    }   
-                                }  
-                            }
-                            if(!$trovato){
-                                $res[$student->id][] = '';
-                            }
-                        } 
-                    }
+                    
+                    //costruzione matrice per la griglia delle presenze
+                    $res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
                 }
-
                 return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'));
             } else {
                 return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'))->withErrors(['message' => 'No classes found for the teacher.']);
