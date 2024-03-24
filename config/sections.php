@@ -61,9 +61,9 @@ return [
         'route_name' => 'subjects',
         'visibility' => []
     ],
-    'timetible' => [
+    'timetable' => [
         'section_name' => 'Orario',
-        'route_name' => 'timetible',
+        'route_name' => 'timetable',
         'visibility' => [
             'teacher' => ['get'], 
             'student' => ['get']
