@@ -18,7 +18,7 @@
         </div>
         <form action="{{ route('dashboard.index') }}" method="GET">
             @csrf
-            <button class="hover:bg-blue-800 bg-blue-500 text-black font-bold py-2 px-4 rounded absolute top-full mt-2">Cerca</button>
+            <button class="hover:bg-blue-800 bg-green-500 text-black font-bold py-2 px-4 rounded absolute top-full mt-2">Cerca</button>
             <input type="hidden" id="current_date" name="current_date" value="{{ date('d F Y', strtotime($current_date)) }}">
         </form>
     </div>
@@ -45,7 +45,32 @@
                 return days;
             },
             get DayMonthAndYear() {
-                return `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
+                // Ottieni la data corrente nel formato "giorno mese anno"
+                const currentDateJavascript = `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
+                
+                // Confronta current_date con la data corrente calcolata
+                const CurrentDatePhp = "{{ date('d F Y', strtotime($current_date)) }}"; // Utilizza la sintassi Blade per ottenere il valore di $current_date
+                const CurrentDate = "{{ date('d F Y', strtotime(date('Y-m-d')))  }}";
+                console.log("Data javascript",currentDateJavascript);
+                console.log("Data php",CurrentDatePhp);
+                console.log("Data corrente ", CurrentDate);
+                if (CurrentDatePhp == CurrentDate && CurrentDate == currentDateJavascript && currentDateJavascript == CurrentDatePhp) {
+                    // Se $current_date è uguale alla data corrente calcolata, restituisci la data calcolata
+                    console.log("Data tra una delle tre",CurrentDatePhp);
+                    return CurrentDatePhp;
+                } else if (CurrentDatePhp == CurrentDate && CurrentDatePhp != currentDateJavascript && CurrentDate != currentDateJavascript) {
+                    // Altrimenti, restituisci il valore di $current_date
+                    console.log("Data javascript",currentDateJavascript);
+                    return currentDateJavascript;
+                } else if (CurrentDatePhp != CurrentDate && CurrentDatePhp != currentDateJavascript && CurrentDate != currentDateJavascript){
+                    console.log("Data PHP",CurrentDatePhp);
+                    return currentDateJavascript;
+                } else if (CurrentDatePhp != CurrentDate && CurrentDatePhp != currentDateJavascript){
+                    console.log("Data PHP",CurrentDatePhp);
+                    return CurrentDatePhp;
+                } else {
+                    return currentDateJavascript;
+                }
             },
             previousMonth() {
                 this.currentMonth = this.currentMonth === 0 ? 11 : this.currentMonth - 1;

@@ -37,7 +37,7 @@
                                  }">
                                     <!-- Pulsante per aprire il modal -->
                                     <!--<button class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">&lt;</button> -->
-                                    <button @click="updateHiddenDate(calendario.DayMonthAndYear); showModal = true" class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"><span x-text="{{ date('d F Y', strtotime(date('Y-m-d'))) == date('d F Y', strtotime($current_date)) ? 'calendario.DayMonthAndYear' : date('d F Y', strtotime($current_date)) }}">{{ date('d F Y', strtotime($current_date)) }}</span>
+                                    <button @click="updateHiddenDate(calendario.DayMonthAndYear); showModal = true" class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded"><span x-text="calendario.DayMonthAndYear"></span>
                                     </button>
                                     <!-- <button class="hover:bg-blue-800 text-white font-bold py-2 px-4 rounded">&gt;</button> -->
                                     <!-- Modal -->
