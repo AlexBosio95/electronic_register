@@ -8,10 +8,12 @@ use App\Models\AttendStudentRegister;
 use Illuminate\Http\Request;
 use App\Models\StudentRegister;
 use App\Models\Classe;
+use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 
 class PresenceController extends Controller
@@ -26,6 +28,9 @@ class PresenceController extends Controller
     public function index(Request $request)
     {
         $user = Auth::user();
+        if (!$user){
+            abort(401, 'Unauthorized');
+        }
         $userId = $user->id;
         $user_role = $user->role;
         $students = [];
@@ -93,7 +98,6 @@ class PresenceController extends Controller
                     //costruzione matrice per la griglia delle presenze
                     $res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
                     if ($res === false){
-                        //$res = [];
                         return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid Timetable']);                            
                     }
                 }
@@ -120,6 +124,8 @@ class PresenceController extends Controller
      */
     public function store(Request $request)
     {
+
+        //Validazione dati
         $rules = [
             'student_id' => 'required|integer',
             'hiddenHour' => 'required|regex:/^\d{2}:\d{2}$/',
@@ -147,7 +153,36 @@ class PresenceController extends Controller
         $teacher = Teacher::where('user_id', $userId)->first()->id; 
         $presence = $request->input('attendance');
         $date = $request->input('hiddenDate');  
-        $convertedDate = \DateTime::createFromFormat('j F Y', $date)->format('Y-m-d');
+        $convertedDate = \DateTime::createFromFormat('j F Y', $date)->format('Y-m-d');     
+
+
+        try {
+            $stud = Student::findOrFail($student);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return back()->withErrors('Studente non trovato')->withInput();
+        }
+        $checkTeacherStudent = DB::table('teacher_classes')
+                                    ->where('class_id', $stud->class_id)
+                                    ->where('teacher_id', $teacher)
+                                    ->get();
+        if ($checkTeacherStudent->isEmpty()){
+            return redirect()->back()->withErrors(['message' => 'Non è uno studente di quel prof']);
+        }                       
+        // Cerca un record con le stesse proprietà
+        $checkExistingRecord = AttendStudentRegister::where([
+            'student_id' => $student,
+            'teacher_id' => $teacher,
+            'presence' => $presence,
+            'data' => $convertedDate,
+            'hour' => $hour,
+        ])->first();
+
+        // Se esiste già un record corrispondente, ritorna un errore
+        if ($checkExistingRecord) {
+            return redirect()->back()->withErrors(['message' => 'Record già esistente']);
+        }
+
+        // Altrimenti, crea un nuovo record e lo salva nel database
         $record = new AttendStudentRegister();
         $record->student_id = $student;
         $record->teacher_id = $teacher;
@@ -196,10 +231,15 @@ class PresenceController extends Controller
         }
 
         $presence = $request->input('attendance_mod');
-        $toMod = AttendStudentRegister::findOrFail($id);
+        try{
+            $toMod = AttendStudentRegister::findOrFail($id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            return back()->withErrors('Record della presenza non trovato')->withInput();
+        }
+        
         $toMod->presence = $presence;
         $toMod->save();
-        return redirect()->back()->with('success', 'Modifica effettuata con successo!');
+        return redirect()->back()->with('success', 'Dati modificati con successo!');
     }
 
     /**
