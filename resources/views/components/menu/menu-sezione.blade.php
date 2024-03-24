@@ -3,7 +3,7 @@
 @foreach (config('sections') as $elemento => $pagina)
 
     @php
-        $exceptionRoutes = ['dashboard', 'register'];
+        $exceptionRoutes = ['dashboard'];
     @endphp
 
     @if($role == "admin" || isset(config('sections.'.$pagina['route_name'].'.visibility')[$role]))
@@ -12,7 +12,7 @@
             <a class="w-full flex items-center gap-x-1.5 group select-none focus:outline-none" 
 
                 @if (in_array($pagina['route_name'], $exceptionRoutes))
-                    href="{{route($pagina['route_name'])}}"
+                    href="{{route($pagina['route_name'].'.index')}}"
                 @else
                     href="{{route($pagina['route_name'] . '.index')}}"
                 @endif >
@@ -35,7 +35,7 @@
             <a class="w-full flex items-center gap-x-1.5 group select-none focus:outline-none" 
                 
                 @if(in_array($pagina['route_name'], $exceptionRoutes))
-                    href="{{route($pagina['route_name'])}}"
+                    href="{{route($pagina['route_name'].'.index')}}"
                 @else
                     href="{{route($pagina['route_name'] . '.index')}}"
                 @endif>
