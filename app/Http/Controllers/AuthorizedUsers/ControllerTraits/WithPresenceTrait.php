@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\AuthorizedUsers\ControllerTraits;
 
+use Illuminate\Support\Facades\Log;
+
 trait WithPresenceTrait
 {
 
@@ -14,7 +16,9 @@ trait WithPresenceTrait
                 return strtolower($item['day_of_week']) === strtolower($current_day);
         });
         $dayTimetable = array_values($dayTimetable);
-        //Log::info($dayTimetable);
+        if (empty($dayTimetable)){
+            return false;
+        }
         foreach($students as $student){
             $dayPresence = json_decode($student->presences, true);
             //Filtra gli elementi dell'array in base al giorno corrente

@@ -78,18 +78,24 @@ class PresenceController extends Controller
                     if ($selectedClass) {
                         $students = $selectedClass->students;
                         $timetable = $selectedClass->calendar;
-                        
                         //costruzione matrice per la griglia delle presenze
                         $res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
+                        if ($res === false){
+                            $res = [];
+                            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid Timetable']);                            
+                        }
                     } else {
                         return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
                     $timetable = $classes->first()->calendar;
-                    
                     //costruzione matrice per la griglia delle presenze
                     $res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
+                    if ($res === false){
+                        //$res = [];
+                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid Timetable']);                            
+                    }
                 }
                 return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'));
             } else {
