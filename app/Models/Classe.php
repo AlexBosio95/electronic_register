@@ -25,10 +25,10 @@ class Classe extends Model
     }
 
     public function calendar(){
-        return $this->belongsTo(SchoolCalendar::class);
+        return $this->hasMany(SchoolCalendar::class, 'class_id');
     }
 
     public function oldcalendar(){
-        return $this->belongsTo(SchoolCalendarOld::class);
+        return $this->hasMany(SchoolCalendarOld::class, 'class_id');
     }
 }

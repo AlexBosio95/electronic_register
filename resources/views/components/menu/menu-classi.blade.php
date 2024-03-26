@@ -2,7 +2,7 @@
 
 <div>
     <div class="py-2 ps-2">
-        <form action="{{ route('dashboard') }}" method="get">
+        <form action="{{ route('dashboard.index') }}" method="get">
             @csrf
             <div class="flex">
                 @if(count($classes) > 0)

@@ -24,6 +24,6 @@ class SchoolCalendar extends Model
 
     public function classe()
     {
-        return $this->hasMany(Classe::class, 'class_id');
+        return $this->belongsTo(Classe::class);
     }
 }

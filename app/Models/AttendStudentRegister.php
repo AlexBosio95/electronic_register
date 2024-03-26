@@ -13,10 +13,10 @@ class AttendStudentRegister extends Model
     public $fillable = ['student_id', 'teacher_id', 'data', 'presence', 'note'];
 
     public function teachers(){
-        $this->hasMany(Teacher::class);
+        return $this->hasMany(Teacher::class, 'teacher_id');
     }
 
     public function students(){
-        $this->hasMany(Student::class);
+        return $this->belongsTo(Student::class);
     }
 }
