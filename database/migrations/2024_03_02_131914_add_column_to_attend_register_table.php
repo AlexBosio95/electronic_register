@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('attend_student_register', function (Blueprint $table) {
-            $table->time('hour')->after('data');
+            $table->time('hour')->default('00:00:00')->after('data');
         });
     }
 
