@@ -1,4 +1,4 @@
-@props(['role', 'page'])
+@props(['role', 'page', 'selectedClassId'])
 
 @foreach (config('sections') as $elemento => $pagina)
 

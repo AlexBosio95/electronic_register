@@ -37,6 +37,7 @@ class PresenceController extends Controller
         $classes = [];
         $timetable = [];
         $res = [];
+        $selectedClass = 0;
         $page = 'Presenze';
         /*inizializzo current_date e current_day con giorno corrente e data corrente */
         $current_date = date("Y-m-d");
@@ -84,29 +85,32 @@ class PresenceController extends Controller
                         $students = $selectedClass->students;
                         $timetable = $selectedClass->calendar;
                         //costruzione matrice per la griglia delle presenze
+                        Log::info($selectedClassId);
                         $res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
                         if ($res === false){
                             $res = [];
-                            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid Timetable']);                            
+                            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day', 'selectedClassId'))->withErrors(['message' => 'Invalid Timetable']);                            
                         }
                     } else {
-                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid selected class.']);
+                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day', 'selectedClassId'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
                     $timetable = $classes->first()->calendar;
+                    $selectedClassId = $classes->first()->id;
+                    Log::info($selectedClassId);
                     //costruzione matrice per la griglia delle presenze
                     $res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
                     if ($res === false){
-                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid Timetable']);                            
+                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day', 'selectedClassId'))->withErrors(['message' => 'Invalid Timetable']);                            
                     }
                 }
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'));
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day', 'selectedClassId'));
             } else {
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'))->withErrors(['message' => 'No classes found for the teacher.']);
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day', 'selectedClassId'))->withErrors(['message' => 'No classes found for the teacher.']);
             }
         } else {
-            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'))->withErrors(['message' => 'Teacher not found.']);
+            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day', 'selectedClassId'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
 

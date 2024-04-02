@@ -1,4 +1,4 @@
-@props(['classes'])
+@props(['classes','selectedClassId'])
 
 <div>
     <div class="py-2 ps-2">
@@ -8,7 +8,7 @@
                 @if(count($classes) > 0)
                     <select name="selected_class" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         @foreach ($classes as $class)
-                            <option value="{{$class->id}}">{{$class->name}}</option>
+                            <option value="{{$class->id}}" @if($class->id == $selectedClassId) selected @endif>{{$class->name}}</option>
                         @endforeach
                     </select>
                     <button class="ms-2 middle none center rounded-lg bg-slate-700 py-2 px-2 font-sans text-xs font-bold uppercase text-white shadow-md shadow-black-500/20 transition-all hover:shadow-lg hover:shadow-black-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" data-ripple-light="true" type="submit">
