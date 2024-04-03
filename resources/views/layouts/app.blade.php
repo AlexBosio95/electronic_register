@@ -29,9 +29,11 @@
 
             <!-- Page Content -->
             <main>
-                <div class="flex h-screen max-h-[720px] overflow-hidden">
-                    {{ $slot }}
-                <div>
+                <div id="app"> <!-- Qui viene montata l'applicazione Vue -->
+                    @if (isset($slot))
+                        {{ $slot }}
+                    @endif
+                </div>
             </main>
         </div>
     </body>

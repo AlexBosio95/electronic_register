@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\StudentRegister;
 use App\Models\Classe;
 use App\Models\Teacher;
+use App\Models\GradesStudentRegister;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MarksController extends Controller
 {
@@ -29,6 +31,10 @@ class MarksController extends Controller
         if ($teacher) {
             $classes = $teacher->classes;
 
+            $grades = GradesStudentRegister::where('teacher_id', $teacher->id)
+                                            ->where('type', 'mark')
+                                            ->get();
+
             if ($classes->isNotEmpty()) {
                 $selectedClassId = $request->input('selected_class');
 
@@ -44,7 +50,7 @@ class MarksController extends Controller
                     $students = $classes->first()->students;
                 }
 
-                return view('teacher.marks', compact('students', 'classes', 'user_role', 'page'));
+                return view('teacher.marks', compact('students', 'classes', 'user_role', 'page', 'grades'));
             } else {
                 return view('teacher.marks', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'No classes found for the teacher.']);
             }
