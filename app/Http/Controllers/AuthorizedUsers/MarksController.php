@@ -106,4 +106,37 @@ class MarksController extends Controller
     {
         //
     }
+
+    /**
+     * Recupera i voti per quella classe
+     */
+
+    public function getGrades()
+    {
+        // $userId = Auth::id();
+        // $teacher = Teacher::where('user_id', $userId)->first();
+
+        // if (!$teacher) {
+        //     return response()->json(['error' => 'Teacher not found'], 404);
+        // }
+
+        // $classes = $teacher->classes;
+
+        // if ($classes->isEmpty()) {
+        //     return response()->json(['error' => 'No classes found for the teacher'], 404);
+        // }
+
+        // $selectedClass = $classes->first(); // Prendi la prima classe dell'insegnante
+
+        // $students = $selectedClass->students;
+
+        // if ($students->isEmpty()) {
+        //     return response()->json(['error' => 'No students found for the class'], 404);
+        // }
+
+        $grades = GradesStudentRegister::where('type', 'mark')->get();
+
+        return response()->json($grades);
+    }
+
 }
