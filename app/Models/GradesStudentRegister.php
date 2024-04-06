@@ -11,7 +11,7 @@ class GradesStudentRegister extends Model
 
     public $table = "grade_student_register";
 
-    public $fillable = ['subject_id', 'student_id', 'teacher_id', 'data', 'note'];
+    public $fillable = ['subject_id', 'student_id', 'teacher_id', 'data', 'note', 'type'];
 
     public function teachers(){
         $this->hasMany(Teacher::class);
