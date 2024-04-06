@@ -21,3 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('/grades', [MarksController::class, 'getGrades']);
+Route::delete('/marks/{id}', [MarksController::class, 'destroy']);
+Route::get('/grade-options', [MarksController::class, 'getGradesOption']);
+Route::get('/subject-options', [MarksController::class, 'getSubjectsOption']);
+Route::post('/marks', [MarksController::class, 'store']);
