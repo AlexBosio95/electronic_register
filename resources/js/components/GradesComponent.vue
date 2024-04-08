@@ -5,19 +5,26 @@
             Voto aggiunto con successo.
         </div>
 
-        <button @click="toggleAddMode" class="mb-4 sm:mt-0 mr-2 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-            <p class="text-sm font-medium leading-none text-white">Add Mark</p>
-        </button>
+        <div class="flex mb-4">
+            <button @click="toggleAddMode" class="mb-4 sm:mt-0 mr-2 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
+                <p class="text-sm font-medium leading-none text-white">Add Mark</p>
+            </button>
 
-        <button @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-            <p class="text-sm font-medium leading-none text-white">Edit Mark</p>
-        </button>
+            <button @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
+                <p class="text-sm font-medium leading-none text-white">Edit Mark</p>
+            </button>
+
+            <select v-model="selectedSubject" @change="getGrade" class="ml-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500">
+                <option v-for="subject in subjectOptions" :key="subject.id" :value="subject.id">{{ subject.name }}</option>
+            </select>
+        </div>
+
 
         <table class="w-full text-left text-sm text-white bg-[#1F2937] border-none rounded-xl" v-if="!addGradeFormMode">
             <thead class="bg-white/10">
                 <tr class="">
-                    <th scope="col" class="px-6 py-4 font-medium">Student</th>
-                    <th scope="col" class="px-6 py-4 font-medium">Marks</th>
+                    <th scope="col" class="px-6 py-4 font-medium">Studente</th>
+                    <th scope="col" class="px-6 py-4 font-medium">Voti</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-white/10">
@@ -46,7 +53,12 @@
             </tbody>
         </table>
 
-        <FormAddGradesComponent :students="students" :addGradeFormMode="addGradeFormMode" @votoCreato="handleVotoCreato"/>
+        <FormAddGradesComponent 
+        :subjectOptions="subjectOptions"
+        :students="students" 
+        :addGradeFormMode="addGradeFormMode"
+        :selectedSubject="selectedSubject" 
+        @votoCreato="handleVotoCreato"/>
     </div>
 </template>
 
@@ -61,7 +73,9 @@ export default {
             addGradeFormMode: false,
             gradesValue: [],
             subjets: [],
-            mostraSuccesso: false
+            mostraSuccesso: false,
+            subjectOptions: [],
+            selectedSubject: null,
         };
         
     },
@@ -112,19 +126,37 @@ export default {
                 this.mostraSuccesso = false;
             }, 3200);
         },
+        getSubjectOptions(){
+            axios.get('/api/subject-options')
+                .then(response => {
+                    this.subjectOptions = response.data;
+                })
+                .catch(error => {
+                    console.error('Errore nel recupero delle opzioni di materia:', error);
+                });
+        },
+        getGrade(){
+            const subjectParam = this.selectedSubject ? `&subject=${this.selectedSubject}` : '';
+            // Recupera i voti tramite una richiesta HTTP
+            fetch(`/api/grades?${subjectParam}`)
+            .then(response => response.json())
+            .then(data => {
+                this.grades = data;
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Si è verificato un errore:', error);
+                alert('Si è verificato un errore durante il recupero dei voti.');
+            });
+        }
     },
     mounted() {
-        // Recupera i voti tramite una richiesta HTTP
-        fetch('/api/grades')
-        .then(response => response.json())
-        .then(data => {
-            this.grades = data;
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Si è verificato un errore:', error);
-            alert('Si è verificato un errore durante il recupero dei voti.');
-        });
+        this.getSubjectOptions();
+        if (this.subjectOptions.length > 0) {
+            this.selectedSubject = this.subjectOptions[0].id;
+            // Effettua la chiamata HTTP per recuperare i voti
+            this.getGrades();
+        }
     }
 };
 </script>

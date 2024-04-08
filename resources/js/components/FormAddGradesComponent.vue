@@ -18,7 +18,7 @@
 
             <div class="mb-5">
                 <label for="subject" class="mb-3 block text-base font-medium text-white">Materia</label>
-                <select v-model="selectedSubject" name="subject" id="subject" class="w-full appearance-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
+                <select v-model="selectedSubjectMark" name="subject" id="subject" class="w-full appearance-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md">
                     <option v-for="subjectOption in subjectOptions" :key="subjectOption.id" :value="subjectOption.id">{{subjectOption.name}}</option>
                 </select>
             </div>
@@ -37,31 +37,22 @@
 export default {
     props: {
             students: Array,
-            addGradeFormMode: Boolean
+            addGradeFormMode: Boolean,
+            selectedSubject: Number,
+            subjectOptions: Array
     },
     data() {
         return {
             selectedStudent: null,
             selectedGrade: null,
-            selectedSubject: null,
             gradeOptions: [],
-            subjectOptions: []
+            selectedSubjectMark: null
         };
     },
     mounted() {
-        this.getGradeOptions();
-        this.getSubjectOptions()
+        this.getGradeOptions()
     },
     methods:{
-        getSubjectOptions(){
-            axios.get('/api/subject-options')
-                .then(response => {
-                    this.subjectOptions = response.data;
-                })
-                .catch(error => {
-                    console.error('Errore nel recupero delle opzioni di materia:', error);
-                });
-        },
         getGradeOptions(){
             axios.get('/api/grade-options')
                 .then(response => {
@@ -77,7 +68,7 @@ export default {
             const data = {
                 student: this.selectedStudent,
                 grade: this.selectedGrade,
-                subject: this.selectedSubject
+                subject: this.selectedSubjectMark
             };
 
             const options = {
@@ -92,7 +83,7 @@ export default {
                 console.log('Voto creato con successo:', response.data);
                 this.selectedStudent = null;
                 this.selectedGrade = null;
-                this.selectedSubject = null;
+                this.selectedSubjectMark = null;
                 this.$emit('votoCreato');
             })
             .catch(error => {
