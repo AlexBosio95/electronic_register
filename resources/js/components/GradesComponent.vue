@@ -5,22 +5,24 @@
             Voto aggiunto con successo.
         </div>
 
-        <div class="flex mb-4">
-            <button @click="toggleAddMode" class="mb-4 sm:mt-0 mr-2 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-                <p class="text-sm font-medium leading-none text-white">Add Mark</p>
-            </button>
+        <div class="flex mb-4 justify-between">
+            <div>
+                <button @click="toggleAddMode" class="mb-4 sm:mt-0 mr-2 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
+                    <p class="text-sm font-medium leading-none text-white">Add Mark</p>
+                </button>
 
-            <button @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-                <p class="text-sm font-medium leading-none text-white">Edit Mark</p>
-            </button>
+                <button v-if="!addGradeFormMode" @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
+                    <p class="text-sm font-medium leading-none text-white">Edit Mark</p>
+                </button>
+            </div>
 
-            <select v-model="selectedSubject" @change="getGrade" class="ml-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500">
+            <select v-if="!addGradeFormMode" v-model="selectedSubject" @change="getGrade" class="ml-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 max-h-10">
                 <option v-for="subject in subjectOptions" :key="subject.id" :value="subject.id">{{ subject.name }}</option>
             </select>
         </div>
 
 
-        <table class="w-full text-left text-sm text-white bg-[#1F2937] border-none rounded-xl" v-if="!addGradeFormMode">
+        <table class="w-full min-w-[900px] text-left text-sm text-white bg-[#1F2937] border-none rounded-xl" v-if="!addGradeFormMode">
             <thead class="bg-white/10">
                 <tr class="">
                     <th scope="col" class="px-6 py-4 font-medium">Studente</th>
@@ -43,10 +45,17 @@
                     </th>
                     <td class="px-6 py-4 min-w-80">
                         <div class="flex gap-2">
-                            <span v-for="grade in filteredGrades(student.id)" :key="grade.id" class="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-xs font-semibold text-blue-300">
-                                {{ grade.note }}
-                                <span v-if="editMode" @click="deleteGrade(grade.id)" class="delete-button cursor-pointer">x</span>
-                            </span>
+                            <template v-if="filteredGrades(student.id).length === 0">
+                                <span>Nessun voto</span>
+                            </template>
+                            <template v-else>
+                                <span v-for="grade in filteredGrades(student.id)" :key="grade.id" class="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-xs font-semibold text-blue-300">
+                                    {{ grade.note }}
+                                    <svg v-if="editMode" @click="deleteGrade(grade.id)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </span>
+                            </template>
                         </div>
                     </td>
                 </tr>
