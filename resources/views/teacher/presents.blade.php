@@ -1,5 +1,5 @@
 <x-app-layout>
-    <x-menu :classes="$classes" :role="$user_role" :page="$page"></x-menu>
+    <main-component :classes="{{ $classes }}" :role="{{ $user_role }}" :page="{{ $page }}"></main-component>
 
     <div x-data="{ isOpen: false, isOpenPut: false }" class="relative w-full bg-[#1F2937] overflow-scroll border-l border-red-500">
         @if($errors->any())
