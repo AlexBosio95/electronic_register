@@ -8,11 +8,11 @@
         <div class="flex mb-4 justify-between">
             <div>
                 <button @click="toggleAddMode" class="mb-4 sm:mt-0 mr-2 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-                    <p class="text-sm font-medium leading-none text-white">Add Mark</p>
+                    <p class="text-sm font-medium leading-none text-white">Nuovo voto</p>
                 </button>
 
                 <button v-if="!addGradeFormMode" @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-                    <p class="text-sm font-medium leading-none text-white">Edit Mark</p>
+                    <p class="text-sm font-medium leading-none text-white">Modifica voti</p>
                 </button>
             </div>
 
@@ -49,7 +49,7 @@
                                 <span>Nessun voto</span>
                             </template>
                             <template v-else>
-                                <span v-for="grade in filteredGrades(student.id)" :key="grade.id" class="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-xs font-semibold text-blue-300">
+                                <span v-for="grade in filteredGrades(student.id)" :key="grade.id" :class="getGradeColor(grade.note)" class="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-s font-semibold text-blue-300">
                                     {{ grade.note }}
                                     <svg v-if="editMode" @click="deleteGrade(grade.id)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -134,6 +134,9 @@ export default {
             setTimeout(() => {
                 this.mostraSuccesso = false;
             }, 3200);
+            setTimeout(() => {
+                this.getGrade();
+            }, 400);
         },
         getSubjectOptions(){
             axios.get('/api/subject-options')
@@ -157,7 +160,24 @@ export default {
                 console.error('Si è verificato un errore:', error);
                 alert('Si è verificato un errore durante il recupero dei voti.');
             });
+        },
+        getGradeColor(grade) {
+        switch (grade) {
+            case 'insufficiente':
+                return 'text-red-500';
+            case 'sufficiente':
+                return 'text-orange-500';
+            case 'Buono':
+            case 'buono':
+                return 'text-yellow-500';
+            case 'distinto':
+                return 'text-green-700';
+            case 'ottimo':
+                return 'text-green-300';
+            default:
+                return '';
         }
+    }
     },
     mounted() {
         this.getSubjectOptions();
