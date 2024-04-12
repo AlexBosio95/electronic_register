@@ -177,8 +177,7 @@ class MarksController extends Controller
                                             ->where('subject_id', $subjectId)
                                             ->get();
         } else {
-            // Se non viene fornita una query string per la materia, restituisci tutti i voti
-            $grades = GradesStudentRegister::where('type', 'mark')->get();
+            $grades = [];
         }
     
         return response()->json($grades);

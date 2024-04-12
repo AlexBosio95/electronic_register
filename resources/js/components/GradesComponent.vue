@@ -7,12 +7,16 @@
 
         <div class="flex mb-4 justify-between">
             <div>
-                <button @click="toggleAddMode" class="mb-4 sm:mt-0 mr-2 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-                    <p class="text-sm font-medium leading-none text-white">Nuovo voto</p>
+                <button @click="toggleAddMode" class="mb-4 sm:mt-0 mr-2 inline-flex items-start justify-start px-5 py-2 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                    </svg>
                 </button>
 
-                <button v-if="!addGradeFormMode" @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-                    <p class="text-sm font-medium leading-none text-white">Modifica voti</p>
+                <button v-if="!addGradeFormMode" @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-5 py-2 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+                        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+                    </svg>
                 </button>
             </div>
 
@@ -35,7 +39,7 @@
                         <div class="relative h-10 w-10">
                             <img
                                 class="h-full w-full rounded-full object-cover object-center"
-                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                :src="'images/default.jpg'"
                                 alt="" />
                         </div>
                         <div>
@@ -131,9 +135,11 @@ export default {
         handleVotoCreato() {
             this.addGradeFormMode = false;
             this.mostraSuccesso = true;
+
             setTimeout(() => {
                 this.mostraSuccesso = false;
             }, 3200);
+
             setTimeout(() => {
                 this.getGrade();
             }, 400);
@@ -149,7 +155,6 @@ export default {
         },
         getGrade(){
             const subjectParam = this.selectedSubject ? `&subject=${this.selectedSubject}` : '';
-            // Recupera i voti tramite una richiesta HTTP
             fetch(`/api/grades?${subjectParam}`)
             .then(response => response.json())
             .then(data => {

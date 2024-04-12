@@ -81,7 +81,7 @@ export default {
             const options = {
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken // Includi il token CSRF nell'header
+                    'X-CSRF-TOKEN': csrfToken 
                 }
             };
 
@@ -109,7 +109,6 @@ export default {
                     this.mostraErrore = false;
                 }, 2200);
             }
-            
         }
     }
 }
