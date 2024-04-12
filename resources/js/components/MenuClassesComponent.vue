@@ -37,7 +37,7 @@
             type: String,
             required: true
         },
-        role: {
+        user_role: {
             type: String,
             required: true
         },
