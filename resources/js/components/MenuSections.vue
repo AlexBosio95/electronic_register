@@ -2,7 +2,7 @@
   
   <div v-for="(pagina, key) in sections" :key="key">
     <a
-      v-if="shouldDisplay()"
+      v-if="shouldDisplay(pagina)"
       :href="generateRoute(pagina)"
       class="w-full flex items-center gap-x-1.5 group select-none focus:outline-none"
       @mouseover="isHovered[key] = true"
@@ -66,15 +66,12 @@ export default {
       generateRoute(pagina) {
         return `${pagina.route_name}`;
       },
-      shouldDisplay() {
-        if (this.user_role === "admin")
+      shouldDisplay(pagina) {
+        if (this.user_role === "admin" || (pagina.visibility && pagina.visibility[this.role] && pagina.visibility[this.role].length > 0)) 
           return true;
         else
           return false;
         
-      },
-      created() {
-        console.log("User Role:", this.user_role);
       }
     }
 };
