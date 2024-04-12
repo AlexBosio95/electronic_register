@@ -67,8 +67,10 @@ export default {
         return `${pagina.route_name}`;
       },
       shouldDisplay() {
-        
+        if (this.user_role === "admin")
           return true;
+        else
+          return false;
         
       },
       created() {
