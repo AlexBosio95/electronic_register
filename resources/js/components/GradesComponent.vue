@@ -5,19 +5,32 @@
             Voto aggiunto con successo.
         </div>
 
-        <button @click="toggleAddMode" class="mb-4 sm:mt-0 mr-2 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-            <p class="text-sm font-medium leading-none text-white">Add Mark</p>
-        </button>
+        <div class="flex mb-4 justify-between">
+            <div>
+                <button @click="toggleAddMode" class="mb-4 sm:mt-0 mr-2 inline-flex items-start justify-start px-5 py-2 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+                        <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                    </svg>
+                </button>
 
-        <button @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-6 py-3 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
-            <p class="text-sm font-medium leading-none text-white">Edit Mark</p>
-        </button>
+                <button v-if="!addGradeFormMode" @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-5 py-2 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
+                        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+                    </svg>
+                </button>
+            </div>
 
-        <table class="w-full text-left text-sm text-white bg-[#1F2937] border-none rounded-xl" v-if="!addGradeFormMode">
+            <select v-if="!addGradeFormMode" v-model="selectedSubject" @change="getGrade" class="ml-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-60 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-red-500 dark:focus:border-red-500 max-h-10">
+                <option v-for="subject in subjectOptions" :key="subject.id" :value="subject.id">{{ subject.name }}</option>
+            </select>
+        </div>
+
+
+        <table class="w-full min-w-[900px] text-left text-sm text-white bg-[#1F2937] border-none rounded-xl" v-if="!addGradeFormMode">
             <thead class="bg-white/10">
                 <tr class="">
-                    <th scope="col" class="px-6 py-4 font-medium">Student</th>
-                    <th scope="col" class="px-6 py-4 font-medium">Marks</th>
+                    <th scope="col" class="px-6 py-4 font-medium">Studente</th>
+                    <th scope="col" class="px-6 py-4 font-medium">Voti</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-white/10">
@@ -26,7 +39,7 @@
                         <div class="relative h-10 w-10">
                             <img
                                 class="h-full w-full rounded-full object-cover object-center"
-                                src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                :src="'images/default.jpg'"
                                 alt="" />
                         </div>
                         <div>
@@ -36,17 +49,29 @@
                     </th>
                     <td class="px-6 py-4 min-w-80">
                         <div class="flex gap-2">
-                            <span v-for="grade in filteredGrades(student.id)" :key="grade.id" class="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-xs font-semibold text-blue-300">
-                                {{ grade.note }}
-                                <span v-if="editMode" @click="deleteGrade(grade.id)" class="delete-button cursor-pointer">x</span>
-                            </span>
+                            <template v-if="filteredGrades(student.id).length === 0">
+                                <span>Nessun voto</span>
+                            </template>
+                            <template v-else>
+                                <span v-for="grade in filteredGrades(student.id)" :key="grade.id" :class="getGradeColor(grade.note)" class="inline-flex items-center gap-1 rounded-full bg-white/10 px-2 py-1 text-s font-semibold text-blue-300">
+                                    {{ grade.note }}
+                                    <svg v-if="editMode" @click="deleteGrade(grade.id)" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                    </svg>
+                                </span>
+                            </template>
                         </div>
                     </td>
                 </tr>
             </tbody>
         </table>
 
-        <FormAddGradesComponent :students="students" :addGradeFormMode="addGradeFormMode" @votoCreato="handleVotoCreato"/>
+        <FormAddGradesComponent 
+        :subjectOptions="subjectOptions"
+        :students="students" 
+        :addGradeFormMode="addGradeFormMode"
+        :selectedSubject="selectedSubject" 
+        @votoCreato="handleVotoCreato"/>
     </div>
 </template>
 
@@ -61,7 +86,9 @@ export default {
             addGradeFormMode: false,
             gradesValue: [],
             subjets: [],
-            mostraSuccesso: false
+            mostraSuccesso: false,
+            subjectOptions: [],
+            selectedSubject: null,
         };
         
     },
@@ -108,23 +135,62 @@ export default {
         handleVotoCreato() {
             this.addGradeFormMode = false;
             this.mostraSuccesso = true;
+
             setTimeout(() => {
                 this.mostraSuccesso = false;
             }, 3200);
+
+            setTimeout(() => {
+                this.getGrade();
+            }, 400);
         },
+        getSubjectOptions(){
+            axios.get('/api/subject-options')
+                .then(response => {
+                    this.subjectOptions = response.data;
+                })
+                .catch(error => {
+                    console.error('Errore nel recupero delle opzioni di materia:', error);
+                });
+        },
+        getGrade(){
+            const subjectParam = this.selectedSubject ? `&subject=${this.selectedSubject}` : '';
+            fetch(`/api/grades?${subjectParam}`)
+            .then(response => response.json())
+            .then(data => {
+                this.grades = data;
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Si è verificato un errore:', error);
+                alert('Si è verificato un errore durante il recupero dei voti.');
+            });
+        },
+        getGradeColor(grade) {
+        switch (grade) {
+            case 'insufficiente':
+                return 'text-red-500';
+            case 'sufficiente':
+                return 'text-orange-500';
+            case 'Buono':
+            case 'buono':
+                return 'text-yellow-500';
+            case 'distinto':
+                return 'text-green-700';
+            case 'ottimo':
+                return 'text-green-300';
+            default:
+                return '';
+        }
+    }
     },
     mounted() {
-        // Recupera i voti tramite una richiesta HTTP
-        fetch('/api/grades')
-        .then(response => response.json())
-        .then(data => {
-            this.grades = data;
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Si è verificato un errore:', error);
-            alert('Si è verificato un errore durante il recupero dei voti.');
-        });
+        this.getSubjectOptions();
+        if (this.subjectOptions.length > 0) {
+            this.selectedSubject = this.subjectOptions[0].id;
+            // Effettua la chiamata HTTP per recuperare i voti
+            this.getGrades();
+        }
     }
 };
 </script>
