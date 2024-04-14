@@ -54,8 +54,8 @@
     data() {
         return {
             isOpen: false,
-            selectedClass: 'Seleziona la tua classe' ,
-            selectedClassId: null
+            selectedClass: this.classes[0]['name'] ,
+            selectedClassId: this.classes[0]['id']
         }
     },
     methods: {
@@ -65,6 +65,7 @@
         selectClass(classe){
             this.selectedClass = classe.name;
             this.selectedClassId = classe.id;
+            console.log(this.classes);
             this.isOpen = !this.isOpen;
         }
     }

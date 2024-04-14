@@ -19,12 +19,14 @@
 <script>
 import MenuClassesComponent from './MenuClassesComponent.vue';
 import MenuSections from './MenuSections.vue';
+import PresentsComponent from './PresentsComponent.vue';
 
 
 export default {
     components:{
         MenuClassesComponent,
-        MenuSections
+        MenuSections,
+        PresentsComponent
     },
     props: {
         classes: {
