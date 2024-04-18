@@ -48,6 +48,10 @@
         sections: {
             type: Object,
             required: true
+        },
+        selectedClassId: {
+            type: Number,
+            required: true
         }
 
     },

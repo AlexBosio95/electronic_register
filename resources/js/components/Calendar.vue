@@ -71,6 +71,10 @@
           page: {
               type: String,
               required: true
+          },
+          dayMonthAndYear: {
+              type: String,
+              requeired: true
           }
       },
       data() {
