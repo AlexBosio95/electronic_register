@@ -88,14 +88,12 @@ export default {
             if (this.selectedStudent !== null && this.selectedGrade !== null && this.selectedSubjectMark !== null) {
                 axios.post('/marks', data, options)
                 .then(response => {
-                    console.log('Voto creato con successo:', response.data);
+                    this.$emit('votoCreato', this.selectedSubjectMark);
                     this.selectedStudent = null;
                     this.selectedGrade = null;
                     this.selectedSubjectMark = null;
-                    this.$emit('votoCreato');
                 })
                 .catch(error => {
-                    console.error('Errore durante la creazione del voto:', error);
                     this.errorMessage = "Errore durante la creazione del voto";
                     this.mostraErrore = true;
                     setTimeout(() => {
