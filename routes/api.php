@@ -25,3 +25,4 @@ Route::delete('/marks/{id}', [MarksController::class, 'destroy']);
 Route::get('/grade-options', [MarksController::class, 'getGradesOption']);
 Route::get('/subject-options', [MarksController::class, 'getSubjectsOption']);
 Route::post('/marks', [MarksController::class, 'store']);
+Route::get('/students', [MarksController::class, 'getStudentsByClass']);

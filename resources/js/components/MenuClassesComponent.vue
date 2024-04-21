@@ -25,16 +25,15 @@
             </div>  
         </div>
     </div>
-              
         
     
-  </template>
-  
-  <script>
-  export default {
+</template>
+
+<script>
+export default {
     props: {
         classes: {
-            type: String,
+            type: Array,
             required: true
         },
         user_role: {
@@ -47,10 +46,6 @@
         },
         sections: {
             type: Object,
-            required: true
-        },
-        selectedClassId: {
-            type: Number,
             required: true
         }
 
@@ -70,9 +65,9 @@
             this.selectedClass = classe.name;
             this.selectedClassId = classe.id;
             console.log(this.classes);
+            this.$emit('class-selected', classe);
             this.isOpen = !this.isOpen;
         }
     }
-  }
-  </script>
-  
+}
+</script>

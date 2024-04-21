@@ -1,17 +1,31 @@
 <template>
-   <div class="flex">
+<div class="flex">
     <div class="w-60 bg-[#1F2937] flex flex-col items-center pt-5 pb-2 space-y-7 h-[720px]">
         <!-- menu items -->
         <div class="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-sm cursor-pointer">
             <calendar></calendar>
-            <menu-classes-component :classes="classes" :user_role="user_role" :page="page" :sections="sections"></menu-classes-component>
+            <menu-classes-component 
+                v-model="selectedClass" 
+                @class-selected="updateSelectedClass" 
+                :classes="classes" 
+                :user_role="user_role" 
+                :page="page" 
+                :sections="sections">
+            </menu-classes-component>
             <div class="font-QuicksandMedium pl-4 text-gray-400/60 text-xs text-[11px] uppercase">Menu</div>
-            <menu-sections :classes="classes" :user_role="user_role" :page="page" :sections="sections"></menu-sections>
+            <menu-sections 
+                :classes="classes" 
+                :user_role="user_role" 
+                :page="page" 
+                :sections="sections">
+            </menu-sections>
         </div>
     </div>
     <!-- Componenti Vue -->
     <div class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
-        
+        <div class="py-5 px-10">
+            <GradesComponent :students="studentsByClass" :classes="classes"/>
+        </div>
     </div>
 </div>
 
@@ -19,6 +33,7 @@
 
 <script>
 import Calendar from './Calendar.vue';
+import GradesComponent from './GradesComponent.vue';
 import MenuClassesComponent from './MenuClassesComponent.vue';
 import MenuSections from './MenuSections.vue';
 import PresentsComponent from './PresentsComponent.vue';
@@ -29,11 +44,12 @@ export default {
         MenuClassesComponent,
         MenuSections,
         PresentsComponent,
-        Calendar
+        Calendar,
+        GradesComponent
     },
     props: {
         classes: {
-            type: String,
+            type: Array,
             required: true
         },
         user_role: {
@@ -116,8 +132,31 @@ export default {
                         student: ['get']
                     }
                 }
-            }
+            },
+            selectedClass: null,
+            studentsByClass: []
         }
+    },
+    methods:{
+        getStudentsByClass(){
+            const classParam = this.selectedClass ? `&class=${this.selectedClass}` : '';
+            fetch(`/api/students?${classParam}`)
+            .then(response => response.json())
+            .then(data => {
+                this.studentsByClass = data;
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Si è verificato un errore:', error);
+                alert('Si è verificato un errore durante il recupero dei voti.');
+            });
+        },
+        updateSelectedClass(selectedClass) {
+            this.selectedClass = selectedClass.name;
+        }
+    },
+    watch:{
+        selectedClass: 'getStudentsByClass'
     }
 }
 </script>

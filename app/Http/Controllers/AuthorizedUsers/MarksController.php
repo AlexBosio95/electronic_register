@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\GradeOption;
 use App\Models\Subject;
+use App\Models\Student;
 
 class MarksController extends Controller
 {
@@ -201,6 +202,27 @@ class MarksController extends Controller
     {
         $subjectOption = Subject::all();
         return response()->json($subjectOption);
+    }
+
+    /**
+     * Recupera gli studenti di quella classe
+     */
+
+    public function getStudentsByClass(Request $request)
+    {
+        if ($request->has('class')) {
+            $classeName = $request->input('class');
+            $classe = Classe::where('name', $classeName)->first();
+            
+            if ($classe) {
+                $students = Student::where('class_id', $classe->id)->get();
+                return response()->json($students);
+            } else {
+                return response()->json(['message' => 'Classe non trovata'], 404);
+            }
+        } else {
+            return response()->json(['message' => 'Parametro "class" mancante'], 400);
+        }
     }
 
 }
