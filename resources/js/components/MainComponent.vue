@@ -34,7 +34,7 @@
     </div>
     <div v-else-if="page == 'Presenze' " class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
         <div class="py-5 px-10">
-            <attendance-component :students="studentsByClass" :classes="classes"/>
+            <attendance-component :students="studentsByClass" :current_class="selectedClass" :current_date="dateSelected"/>
         </div>
     </div>
 </div>
@@ -144,7 +144,8 @@ export default {
                 }
             },
             selectedClass: null,
-            studentsByClass: []
+            studentsByClass: [],
+            dateSelected: null
         }
     },
     methods:{
@@ -154,7 +155,7 @@ export default {
             .then(response => response.json())
             .then(data => {
                 this.studentsByClass = data;
-                console.log(data);
+                //console.log(data);
             })
             .catch(error => {
                 console.error('Si è verificato un errore:', error);

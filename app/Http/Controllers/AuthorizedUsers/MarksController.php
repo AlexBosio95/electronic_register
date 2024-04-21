@@ -210,7 +210,7 @@ class MarksController extends Controller
 
     public function getStudentsByClass(Request $request)
     {
-        Log::info($request);
+        //Log::info($request);
         if ($request->has('class')) {
             $classeId = $request->input('class');
             $classe = Classe::where('id', $classeId)->first();

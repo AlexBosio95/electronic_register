@@ -78,7 +78,7 @@ class PresenceController extends Controller
                 }
                 $selectedClassId = $request->input('selected_class');
                 
-                Log::info($selectedClassId);    
+                //Log::info($selectedClassId);    
 
                 if ($selectedClassId) {
                     $selectedClass = $classes->where('id', $selectedClassId)->first();                
@@ -250,5 +250,32 @@ class PresenceController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getTimetable(string $id, string $dateParam)
+    {
+        //Log::info($id);
+        $dayOfWeek = date("l", strtotime($dateParam));
+        //Log::info($dayOfWeek);
+        try{
+            $selectedClass = Classe::findOrFail($id);
+            Log::info($selectedClass->id);    
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            Log::info($e);
+        }
+             
+        if ($selectedClass) {
+            $timetable = $selectedClass->calendar();
+            $filteredTimetable = $timetable->where('day_of_week', $dayOfWeek)->get();
+            if(empty($filteredTimetable)){
+                return response()->json(['message' => 'La classe non ha un orario associato'], 404);
+            }
+            //costruzione matrice per la griglia delle presenze
+            //$res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
+            //Log::info($filteredTimetable);
+            return response()->json($filteredTimetable);
+        } else {
+            return response()->json(['message' => 'Orario non trovato'], 404);
+        }
     }
 }
