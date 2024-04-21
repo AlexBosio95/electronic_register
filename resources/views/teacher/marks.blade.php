@@ -3,8 +3,11 @@
         
         <x-menu :classes="$classes" :role="$user_role" :page="$page"></x-menu>
 
-        <h2>View dei voti</h2>
-        
+        <div class="py-5 px-10">
+
+            <!-- Includi il componente Vue qui -->
+            <grades-component :students="{{ json_encode($students) }}"></grades-component>
+
+        </div>
     </div>
 </x-app-layout>
-    

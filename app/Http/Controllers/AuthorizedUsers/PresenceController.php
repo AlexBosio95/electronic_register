@@ -77,6 +77,8 @@ class PresenceController extends Controller
                     return back()->withErrors($validator)->withInput();
                 }
                 $selectedClassId = $request->input('selected_class');
+                
+                Log::info($selectedClassId);    
 
                 if ($selectedClassId) {
                     $selectedClass = $classes->where('id', $selectedClassId)->first();                

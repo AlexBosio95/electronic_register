@@ -4,24 +4,34 @@
     <div class="py-2 ps-2">
         <form action="{{ route('dashboard.index') }}" method="get">
             @csrf
-            <div class="flex">
-                @if(count($classes) > 0)
-                    <select name="selected_class" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <div x-data="{ isOpenMenu: false }" class="relative inline-block text-left">
+                <!-- Bottone principale del dropdown -->
+                <button @click="isOpenMenu = !isOpenMenu" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+                    Seleziona una classe
+                    <!-- Icona della freccia giù -->
+                    <svg class="-mr-1 ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+            
+                <!-- Dropdown menu -->
+                <div x-show="isOpenMenu" class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                        <!-- Opzioni del dropdown -->
                         @foreach ($classes as $class)
-                            <option value="{{$class->id}}">{{$class->name}}</option>
+                            <button @click="isOpenMenu = false" type="button" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">
+                                {{ $class->name }}
+                            </button>
                         @endforeach
-                    </select>
-                    <button class="ms-2 middle none center rounded-lg bg-slate-700 py-2 px-2 font-sans text-xs font-bold uppercase text-white shadow-md shadow-black-500/20 transition-all hover:shadow-lg hover:shadow-black-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none" data-ripple-light="true" type="submit">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                        </svg>
-                    </button>
-                @else
-                    <select name="selected_class" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option value="0">Nessuna classe disponibile</option>
-                    </select>
-                @endif
+                        @if(count($classes) == 0)
+                            <button type="button" class="block px-4 py-2 text-sm text-gray-700 cursor-not-allowed" role="menuitem">
+                                Nessuna classe disponibile
+                            </button>
+                        @endif
+                    </div>
+                </div>
             </div>
+            
         </form>
     </div>
 </div>

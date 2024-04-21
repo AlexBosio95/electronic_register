@@ -1,7 +1,8 @@
 <x-app-layout>
-    <x-menu :classes="$classes" :role="$user_role" :page="$page"></x-menu>
+    <main-component :classes="{{ $classes }}" :user_role="{{ json_encode($user_role) }}" :page="{{ json_encode($page) }}"></main-component>
 
-    <div x-data="{ isOpen: false, isOpenPut: false }" class="relative w-full bg-[#1F2937] overflow-scroll border-l border-red-500">
+
+    {{-- <div x-data="{ isOpen: false, isOpenPut: false }" class="relative w-full bg-[#1F2937] overflow-scroll border-l border-red-500">
         @if($errors->any())
         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <ul class="flex items-center justify-between">
@@ -178,5 +179,5 @@
                 </ul>
             </div>
         @endif
-    </div> 
+    </div> --}} 
 </x-app-layout>
