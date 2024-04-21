@@ -71,10 +71,6 @@
           page: {
               type: String,
               required: true
-          },
-          dayMonthAndYear: {
-              type: String,
-              requeired: true
           }
       },
       data() {
@@ -126,6 +122,7 @@
             parentDiv.classList.remove('bg-gray-100');
             parentDiv.classList.add('bg-blue-500');
             }
+            this.$emit('date-selected', this.dayMonthAndYear);
         },
         setCurrentDay(day){
             this.currentDay = day;

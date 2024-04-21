@@ -10,7 +10,7 @@
   export default {
       props: {
           classes: {
-              type: String,
+              type: Array,
               required: true
           },
           user_role: {
