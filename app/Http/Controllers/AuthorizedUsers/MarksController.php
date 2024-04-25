@@ -211,11 +211,11 @@ class MarksController extends Controller
     public function getStudentsByClass(Request $request)
     {
         if ($request->has('class')) {
-            $classeName = $request->input('class');
-            $classe = Classe::where('name', $classeName)->first();
+            $classeId = $request->input('class');
+            $classe = Classe::find($classeId);
             
             if ($classe) {
-                $students = Student::where('class_id', $classe->id)->get();
+                $students = Student::where('class_id', $classeId)->get();
                 return response()->json($students);
             } else {
                 return response()->json(['message' => 'Classe non trovata'], 404);

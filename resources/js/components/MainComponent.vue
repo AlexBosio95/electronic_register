@@ -133,13 +133,13 @@ export default {
                     }
                 }
             },
-            selectedClass: null,
+            selectedClassId: null,
             studentsByClass: []
         }
     },
     methods:{
         getStudentsByClass(){
-            const classParam = this.selectedClass ? `&class=${this.selectedClass}` : '';
+            const classParam = this.selectedClassId ? `&class=${this.selectedClassId}` : '';
             fetch(`/api/students?${classParam}`)
             .then(response => response.json())
             .then(data => {
@@ -152,11 +152,11 @@ export default {
             });
         },
         updateSelectedClass(selectedClass) {
-            this.selectedClass = selectedClass.name;
+            this.selectedClassId = selectedClass.id;
         }
     },
     watch:{
-        selectedClass: 'getStudentsByClass'
+        selectedClassId: 'getStudentsByClass'
     }
 }
 </script>
