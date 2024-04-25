@@ -259,7 +259,7 @@ class PresenceController extends Controller
         //Log::info($dayOfWeek);
         try{
             $selectedClass = Classe::findOrFail($id);
-            Log::info($selectedClass->id);    
+            //Log::info($selectedClass->id);    
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             Log::info($e);
         }
@@ -273,9 +273,51 @@ class PresenceController extends Controller
             //costruzione matrice per la griglia delle presenze
             //$res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
             //Log::info($filteredTimetable);
-            return response()->json($filteredTimetable);
+            $matrice = $this->getPresences($filteredTimetable ,$selectedClass, $dateParam);
+            if(empty($matrice)){
+                return response()->json(['message' => 'La classe non ha un orario associato'], 404);
+            }
+            $resp = [
+                'timetable' => $filteredTimetable,
+                'presences' => $matrice
+            ];
+            return response()->json($resp);
         } else {
             return response()->json(['message' => 'Orario non trovato'], 404);
         }
+    }
+
+    public function getPresences($timetable, $selectedClass, $current_date){
+
+        $students = $selectedClass->students;
+        $current_date = \DateTime::createFromFormat('j F Y', $current_date)->format('Y-m-d');
+        
+        foreach($students as $student){
+            $dayPresence = json_decode($student->presences, true);
+            //Filtra gli elementi dell'array in base al giorno corrente
+            $dayPresences = array_filter($dayPresence, function($item) use ($current_date) {
+                return $item['data'] === $current_date;
+            });
+            
+            $values = array_values($dayPresences);
+            foreach($timetable as $t){
+                $trovato = false;
+                foreach($values as $v){
+                    if($t['time_start'] ==  $v['hour']){
+                        //$res[$student->id][] = [$v['presence'], $v['id']];  
+                        $res[$student->id][] = $v['presence'];
+                        $trovato = true;
+                    } else {
+                        if ($trovato){
+                            break;
+                        }   
+                    }  
+                }
+                if(!$trovato){
+                    $res[$student->id][] = '';
+                }
+            } 
+        }
+        return $res;
     }
 }

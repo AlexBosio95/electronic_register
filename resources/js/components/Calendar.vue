@@ -61,16 +61,13 @@
   export default {
       props: {
           classes: {
-              type: String,
-              required: true
+              type: String
           },
           user_role: {
-              type: String,
-              required: true
+              type: String
           },
           page: {
-              type: String,
-              required: true
+              type: String
           }
       },
       data() {
@@ -122,6 +119,7 @@
             parentDiv.classList.remove('bg-gray-100');
             parentDiv.classList.add('bg-blue-500');
             }
+            this.showCalendar = false;
             this.$emit('date-selected', this.dayMonthAndYear);
         },
         setCurrentDay(day){

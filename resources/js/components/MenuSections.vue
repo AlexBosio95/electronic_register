@@ -76,7 +76,7 @@ export default {
         return `${pagina.route_name}`;
       },
       shouldDisplay(pagina) {
-        if (this.user_role === "admin" || (pagina.visibility && pagina.visibility[this.role] && pagina.visibility[this.role].length > 0)) 
+        if (this.user_role === "admin" || (pagina.visibility && pagina.visibility[this.user_role] && pagina.visibility[this.user_role].length > 0)) 
           return true;
         else
           return false;
