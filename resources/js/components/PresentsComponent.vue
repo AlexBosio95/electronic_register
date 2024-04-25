@@ -2,9 +2,6 @@
 
 
     <div v-if="students.length > 0">
-
-
-
         <div class="container mx-auto p-4">
             <!-- Griglia -->
             <div class="overflow-x-auto bg-gray-100 rounded-lg shadow-md p-4">
@@ -27,9 +24,9 @@
                             
                             
                             <td v-for="index in presences[student.id].length" :key="index - 1" class="px-4 py-2 border border-gray-200 text-center"> 
-                                
-                                <tr v-if=" presences[student.id][index - 1]  !== '' ">{{  presences[student.id][index - 1] }}</tr>
-                                <tr v-else> </tr>
+                                <!-- Faccio un Componente bottone che prende in input la presenza e se vuota mette il più, altrimenti la P o la A
+                                    Poi da lì in qualche modo triggero l'apertura del modal-->
+                                    <button-modal :presenza="presences[student.id][index - 1]" :student="student.id"></button-modal>                              
                             </td>    
                         </tr>
                         
@@ -37,18 +34,16 @@
                 </table>
             </div>
         </div>    
-
-
-
     </div>
-    
-    
 </template>
   
 <script>
-  
-  
+import ButtonModal from './ButtonModal.vue';
+
   export default {
+    components:{
+        ButtonModal
+    },
     props: {
         classes: {
             type: Array
