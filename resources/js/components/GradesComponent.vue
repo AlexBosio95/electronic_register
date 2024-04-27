@@ -53,7 +53,7 @@
                                 <span>Nessun voto</span>
                             </template>
                             <template v-else>
-                                <span v-for="grade in filteredGrades(student.id)" :key="grade.id" :class="{ 'shake': editMode, [getGradeColor(grade.note)]: true }" class="inline-flex items-center rounded-lg px-4 py-1 text-s font-semibold text-white uppercase relative">
+                                <span v-for="grade in filteredGrades(student.id)" :key="grade.id" :class="{ 'shake': editMode}" class="inline-flex items-center rounded-lg px-8 py-1 text-s font-semibold text-white uppercase relative bg-white/10">
                                     {{grade.note}}
                                     <span class="absolute top-8 left-0 text-white/70 text-xs">{{ grade.data }}</span>
 
@@ -169,23 +169,6 @@ export default {
                 console.error('Si è verificato un errore:', error);
                 alert('Si è verificato un errore durante il recupero dei voti.');
             });
-        },
-        getGradeColor(grade) {
-        switch (grade) {
-            case 'insufficiente':
-                return 'bg-red-600';
-            case 'sufficiente':
-                return 'bg-orange-600';
-            case 'Buono':
-            case 'buono':
-                return 'bg-yellow-500';
-            case 'distinto':
-                return 'bg-green-500';
-            case 'ottimo':
-                return 'bg-green-800';
-            default:
-                return 'bg-white/10';
-            }
         }
     },
     mounted() {
