@@ -54,30 +54,28 @@
         </div>
     </div>
 </template>
-  
+
 <script>
-  
-  
-  export default {
-      props: {
-          classes: {
-              type: String,
-              required: true
-          },
-          user_role: {
-              type: String,
-              required: true
-          },
-          page: {
-              type: String,
-              required: true
-          },
-          dayMonthAndYear: {
-              type: String,
-              requeired: true
-          }
-      },
-      data() {
+export default {
+    props: {
+        classes: {
+            type: String,
+            required: true
+        },
+        user_role: {
+            type: String,
+            required: true
+        },
+        page: {
+            type: String,
+            required: true
+        },
+        dayMonthAndYear: {
+            type: String,
+            requeired: true
+        }
+    },
+    data() {
         const currentDate = new Date();
         return {
             showCalendar: false,
@@ -88,10 +86,12 @@
             currentYear: currentDate.getFullYear(),
             currentMonth: currentDate.getMonth() 
         };
-      },
-      computed: {
+    },
+    computed: {
         dayMonthAndYear() {
-            return `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
+            const $day = `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
+            this.$emit('current-date', $day);
+            return $day;
         },
         days() {
             const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1).getDay();
@@ -102,8 +102,8 @@
             }
             return days;
         }
-      },
-      methods: {
+    },
+    methods: {
         SetdayMonthAndYear() {
             // Ottieni la data corrente nel formato "giorno mese anno"
             this.dayMonthAndYear = `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
@@ -127,11 +127,10 @@
             parentDiv.classList.add('bg-blue-500');
             }
         },
-        setCurrentDay(day){
+        setCurrentDay(day) {
             this.currentDay = day;
         }
-        
-      }
-  };
-  
-  </script>
+    }
+};
+    
+</script>

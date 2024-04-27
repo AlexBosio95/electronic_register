@@ -3,7 +3,7 @@
     <div class="w-60 bg-[#1F2937] flex flex-col items-center pt-5 pb-2 space-y-7 h-[720px]">
         <!-- menu items -->
         <div class="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-sm cursor-pointer">
-            <calendar></calendar>
+            <calendar v-model="selectedDay" @current-date="updateSelectedDay"></calendar>
             <menu-classes-component 
                 v-model="selectedClass" 
                 @class-selected="updateSelectedClass" 
@@ -24,7 +24,11 @@
     <!-- Componenti Vue -->
     <div class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
         <div class="py-5 px-10">
-            <GradesComponent :students="studentsByClass" :classes="classes"/>
+            <GradesComponent 
+                :students="studentsByClass" 
+                :classes="classes"
+                :selectedDay="selectedDay"
+            />
         </div>
     </div>
 </div>
@@ -134,7 +138,8 @@ export default {
                 }
             },
             selectedClassId: null,
-            studentsByClass: []
+            studentsByClass: [],
+            selectedDay: null
         }
     },
     methods:{
@@ -153,6 +158,9 @@ export default {
         },
         updateSelectedClass(selectedClass) {
             this.selectedClassId = selectedClass.id;
+        },
+        updateSelectedDay(date) {
+            this.selectedDay = date;
         }
     },
     watch:{

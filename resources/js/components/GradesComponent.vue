@@ -1,7 +1,7 @@
 <template>
     <div class="relative w-full">
-        <div v-if="mostraSuccesso" class="absolute bg-green-100 text-green-700 px-5 py-2 rounded-md ml-80">
-            Voto aggiunto con successo.
+        <div v-if="mostraSuccesso" class="absolute bg-green-200 text-green-700 py-2 rounded-md inset-x-80 top-10 text-center font-semibold">
+            Voto aggiunto con successo
         </div>
 
         <div class="flex mb-4 justify-between">
@@ -72,7 +72,8 @@
         :subjectOptions="subjectOptions"
         :students="students" 
         :addGradeFormMode="addGradeFormMode"
-        :selectedSubject="selectedSubject" 
+        :selectedSubject="selectedSubject"
+        :selectedDay="selectedDay" 
         @votoCreato="handleVotoCreato"/>
     </div>
 </template>
@@ -98,7 +99,9 @@ export default {
         students: {
             type: Array,
             default: () => []
-        }
+        },
+        selectedDay: String,
+        classes: Array
     },
     methods: {
         toggleEditMode() {

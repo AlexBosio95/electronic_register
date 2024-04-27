@@ -82,6 +82,7 @@ class MarksController extends Controller
                 'student' => 'required|exists:students,id',
                 'grade' => 'required|exists:grade_options,id',
                 'subject' => 'required|exists:subjects,id',
+                'date' => 'required'
             ]);
         } catch (\Exception $e) {
             // Log dell'eccezione di validazione
@@ -101,13 +102,18 @@ class MarksController extends Controller
         $gradeName = GradeOption::findOrFail($validatedData['grade'])->name;
 
         try {
+            $data = $validatedData['date'];
+            $formattedDate = date('Y-m-d', strtotime($data));
+
+            \Log::info($formattedDate);
+
             $mark = GradesStudentRegister::create([
                 'student_id' => $validatedData['student'],
                 'teacher_id' => $teacher->id,
                 'note' => $gradeName,
                 'subject_id' => $validatedData['subject'],
                 'type' => 'mark',
-                'data' => now(),
+                'data' => $formattedDate,
             ]);
         } catch (\Exception $e) {
             // Log dell'eccezione durante la creazione del marchio
