@@ -59,7 +59,7 @@ export default {
     },
     props: {
         classes: {
-            type: Array,
+            type: Object,
             required: true
         },
         user_role: {

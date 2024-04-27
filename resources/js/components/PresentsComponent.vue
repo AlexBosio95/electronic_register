@@ -26,7 +26,7 @@
                             <td v-for="index in presences[student.id].length" :key="index - 1" class="px-4 py-2 border border-gray-200 text-center"> 
                                 <!-- Faccio un Componente bottone che prende in input la presenza e se vuota mette il più, altrimenti la P o la A
                                     Poi da lì in qualche modo triggero l'apertura del modal-->
-                                    <button-modal :presenza="presences[student.id][index - 1]" :student="student.id"></button-modal>                              
+                                <button-modal :presenza="presences[student.id][index - 1][0]" :student="student.id" :hourPresence="timetable[index -1]['time_start']" :current_date="current_date" :presences="presences" :index="index - 1"></button-modal>                              
                             </td>    
                         </tr>
                         
@@ -46,7 +46,7 @@ import ButtonModal from './ButtonModal.vue';
     },
     props: {
         classes: {
-            type: Array
+            type: Object
         },
         students: {
             type: Array,
@@ -57,8 +57,7 @@ import ButtonModal from './ButtonModal.vue';
         },
         current_date: {
             type: String
-        },
-
+        }
     },
     data() {
         return {
@@ -86,7 +85,8 @@ import ButtonModal from './ButtonModal.vue';
         }      
     },
     watch: {
-        current_class: "getTimetable"
+        current_class: "getTimetable",
+        current_date: "getTimetable"
     }
   };
   

@@ -61,7 +61,7 @@
   export default {
       props: {
           classes: {
-              type: String
+              type: Object
           },
           user_role: {
               type: String

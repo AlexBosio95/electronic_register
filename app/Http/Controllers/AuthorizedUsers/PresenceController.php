@@ -126,7 +126,7 @@ class PresenceController extends Controller
      */
     public function store(Request $request)
     {
-
+        Log::info($request);
         //Validazione dati
         $rules = [
             'student_id' => 'required|integer',
@@ -193,7 +193,18 @@ class PresenceController extends Controller
         $record->hour = $hour;
         $record->note = "";
         $record->save();
-        return redirect()->back()->with('success', 'Dati salvati con successo!');
+        
+        $newRecordId = $record->id;
+
+        // Costruisci un array con i dati da restituire come JSON
+        $responseData = [
+            'success' => true,
+            'message' => 'Dati salvati con successo!',
+            'recordId' => $newRecordId,
+        ];
+
+        // Restituisci i dati come una risposta JSON
+        return response()->json($responseData);
     }
 
     /**
@@ -231,17 +242,20 @@ class PresenceController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
         $presence = $request->input('attendance_mod');
         try{
             $toMod = AttendStudentRegister::findOrFail($id);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return back()->withErrors('Record della presenza non trovato')->withInput();
         }
-        
         $toMod->presence = $presence;
         $toMod->save();
-        return redirect()->back()->with('success', 'Dati modificati con successo!');
+        // Costruisci un array con i dati da restituire come JSON
+        $responseData = [
+            'success' => true,
+            'message' => 'Dati salvati con successo!'
+        ];
+        return $responseData;
     }
 
     /**
@@ -304,8 +318,8 @@ class PresenceController extends Controller
                 $trovato = false;
                 foreach($values as $v){
                     if($t['time_start'] ==  $v['hour']){
-                        //$res[$student->id][] = [$v['presence'], $v['id']];  
-                        $res[$student->id][] = $v['presence'];
+                        $res[$student->id][] = [$v['presence'], $v['id']];  
+                        //$res[$student->id][] = $v['presence'];
                         $trovato = true;
                     } else {
                         if ($trovato){
@@ -314,7 +328,7 @@ class PresenceController extends Controller
                     }  
                 }
                 if(!$trovato){
-                    $res[$student->id][] = '';
+                    $res[$student->id][] = ['',''];
                 }
             } 
         }

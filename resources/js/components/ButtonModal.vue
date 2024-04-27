@@ -20,7 +20,14 @@
             {{ presenza }}
         </button>
     </div>
-    <modal-manage-attendance v-if="isOpenModal" :student="student" @closeModal="closeModal"></modal-manage-attendance>
+    <modal-manage-attendance v-if="isOpenModal" 
+    :student="student" 
+    :hourPresence="hourPresence" 
+    :current_date="current_date"
+    :presences="presences"
+    :index="index"
+    @closeModal="closeModal"
+    ></modal-manage-attendance>
 
     
 </template>
@@ -38,7 +45,19 @@ import ModalManageAttendance from './ModalManageAttendance.vue';
             type: String
         },
         student:{
+            type: Number
+        },
+        hourPresence: {
             type: String
+        },
+        current_date: {
+            type: String
+        },
+        presences: {
+            type: Object
+        },
+        index: {
+            type: Number
         }
     },
     data() {

@@ -14,10 +14,8 @@
                 </button>
                 <!-- Contenuto del modal -->
                 <h2 class="text-lg font-semibold mb-4">Seleziona la presenza</h2>
-                
-                    <button type="submit" @click.stop value="P" name="attendance" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>
-                    <button type="submit" @click.stop value="A" name="attendance" class="bg-red-500 text-white px-4 py-2 rounded focus:outline-none">Assente</button>
-                    
+                    <button  @click="getPresence('P')" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>
+                    <button  @click="getPresence('A')" class="bg-red-500 text-white px-4 py-2 rounded focus:outline-none">Assente</button>                    
             </div>
         </div>
     </div>
@@ -46,16 +44,108 @@
   export default {
     props: {
         student:{
+            type: Number
+        },
+        hourPresence: {
             type: String
+        },
+        current_date: {
+            type: String
+        },
+        presences: {
+            type: Object
+        },
+        index: {
+            type: Number
         }
     },
     data() {
         return {
-                
+            
         };
     },
     methods: {
-        
+        getPresence(presenza){
+            if(presenza != 'A' && presenza != 'P')
+            {
+                console.log("Inserito un valore sbagliato");
+            }
+            this.current_presence = presenza;
+            //console.log(this.current_presence);
+            //console.log(this.student);
+            //console.log(this.hourPresence);
+            //console.log(this.index);
+            //console.log(this.presences[this.student][this.index][0]);
+            
+            //Al momento attuale si fa solo una insert, prossima cosa da fare
+            //è decidere se un update o una insert
+            if(this.presences[this.student][this.index][0] == '' && this.presences[this.student][this.index][1] == ''){
+                this.buildApiInsert();
+            }
+            else
+            {
+                this.buildApiUpdate();
+            }
+            
+            this.$emit('closeModal');
+        },
+        buildApiInsert(){
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const options = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken 
+                }
+            };
+            
+            const data = {
+                student_id: this.student,
+                hiddenHour: this.hourPresence.slice(0, 5),
+                attendance: this.current_presence,
+                hiddenDate: this.current_date
+            }
+
+            axios.post('/dashboard', data, options)
+                .then(response => {
+                    console.log("TUTTO OK");
+                    this.presences[this.student][this.index][0] = this.current_presence;
+                    this.presences[this.student][this.index][1] = response.data.recordId;
+                })
+                .catch(error => {
+                    /* this.errorMessage = "Errore durante l'inserimento della presenza";
+                    this.mostraErrore = true;
+                    setTimeout(() => {
+                        this.mostraErrore = false;
+                    }, 2200); */
+                });
+        },  
+        buildApiUpdate() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = `dashboard/${this.presences[this.student][this.index][1]}`;
+            const data = {
+                attendance_mod: this.current_presence,
+            };
+
+            fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Errore durante la richiesta PUT');
+                }
+                this.presences[this.student][this.index][0] = this.current_presence;
+            })
+            .catch(error => {
+                console.log('Errore durante la richiesta PUT:', error.message);
+                // Gestisci l'errore qui, ad esempio mostrando un messaggio all'utente
+            });
+            
+        }
     }
   };
   
