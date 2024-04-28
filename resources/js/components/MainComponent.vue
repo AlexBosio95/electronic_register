@@ -165,6 +165,9 @@ export default {
     },
     watch:{
         selectedClassId: 'getStudentsByClass'
+    },
+    mounted(){
+        this.getStudentsByClass();
     }
 }
 </script>

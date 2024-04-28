@@ -53,7 +53,7 @@ export default {
     data() {
         return {
             isOpen: false,
-            selectedClass: this.classes[0]['name'] ,
+            selectedClass: this.classes[0]['name'],
             selectedClassId: this.classes[0]['id']
         }
     },
@@ -68,6 +68,9 @@ export default {
             this.$emit('class-selected', classe);
             this.isOpen = !this.isOpen;
         }
+    },
+    mounted(){
+        this.$emit('class-selected', this.classes[0]);
     }
 }
 </script>
