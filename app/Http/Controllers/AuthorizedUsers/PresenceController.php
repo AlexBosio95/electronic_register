@@ -263,7 +263,17 @@ class PresenceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+            $pres = AttendStudentRegister::findOrFail($id);   
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            Log::info($e);
+        }
+        $pres->delete();
+        $responseData = [
+            'success' => true,
+            'message' => 'Dati salvati con successo!'
+        ];
+        return $responseData;
     }
 
     public function getTimetable(string $id, string $dateParam)

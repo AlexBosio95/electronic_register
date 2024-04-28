@@ -13,7 +13,7 @@
                         <tr v-if="timetable.length > 0" class="bg-gray-800 text-white">
                             <th class="px-4 py-2"></th> 
                             <th v-for="hour in timetable" :key="hour.id" class="px-4 py-2">
-                                {{ hour.time_start }}
+                                {{ (hour.time_start).slice(0, 5) }}
                             </th>    
                         </tr>
                     </thead>
@@ -24,13 +24,13 @@
                             <input type="hidden" v-model="student.id">
                             <td  class="px-4 py-2 border border-gray-200">{{ student.name }}</td>
                             
-                            <template  v-if="!!presences[student.id]" >
-                                <td v-for="index in presences[student.id].length" :key="index - 1" class="px-4 py-2 border border-gray-200 text-center"> 
-                                    <!-- Faccio un Componente bottone che prende in input la presenza e se vuota mette il più, altrimenti la P o la A
-                                    Poi da lì in qualche modo triggero l'apertura del modal-->
-                                    <button-modal :presenza="presences[student.id][index - 1][0]" :student="student.id" :hourPresence="timetable[index -1]['time_start']" :current_date="current_date" :presences="presences" :index="index - 1"></button-modal>                              
-                                </td>  
-                            </template>
+                            
+                            <td v-for="index in presences[student.id].length" :key="index - 1" class="px-4 py-2 border border-gray-200 text-center"> 
+                                <!-- Faccio un Componente bottone che prende in input la presenza e se vuota mette il più, altrimenti la P o la A
+                                Poi da lì in qualche modo triggero l'apertura del modal-->
+                                <button-modal :presenza="presences[student.id][index - 1][0]" :student="student.id" :hourPresence="timetable[index -1]['time_start']" :current_date="current_date" :presences="presences" :index="index - 1"></button-modal>                              
+                            </td>  
+                            
                               
                         </tr>
                         
@@ -90,8 +90,8 @@ import ButtonModal from './ButtonModal.vue';
                 }
                 this.timetable = data['timetable'];
                 this.presences = data['presences'];
-                console.log(this.timetable);
-                console.log(this.presences);
+                //console.log(this.timetable);
+                //console.log(this.presences);
                 this.mostraTable = true;
             })
             .catch(error => {

@@ -1,7 +1,5 @@
 <template>
 
-
-
     <div class="fixed z-10 inset-0 overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-black opacity-50"></div>
@@ -15,29 +13,14 @@
                 <!-- Contenuto del modal -->
                 <h2 class="text-lg font-semibold mb-4">Seleziona la presenza</h2>
                 <div class="flex justify-between">
-                    <button @click="getPresence('P')" class="bg-green-500 text-white px-4 py-2 rounded-full focus:outline-none flex-1 mr-2" >Presente</button>
+                    <button @click="getPresence('P')" class="bg-green-500 text-white px-4 py-2 rounded-full focus:outline-none flex-1 ml-2" >Presente</button>
                     <button @click="getPresence('A')" class="bg-red-500 text-white px-4 py-2 rounded-full focus:outline-none flex-1 ml-2">Assente</button>
+                    <button v-if="this.presences[this.student][this.index][0] != '' && this.presences[this.student][this.index][1] != ''" @click="getPresence('DEL')" class="bg-gray-800 text-white px-4 py-2 rounded-full focus:outline-none flex-1 ml-2">Elimina</button>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+ 
 </template>
   
 <script>
@@ -69,10 +52,10 @@
     },
     methods: {
         getPresence(presenza){
-            if(presenza != 'A' && presenza != 'P')
+            /* if(presenza != 'A' && presenza != 'P' && presenza != 'DEL')
             {
                 console.log("Inserito un valore sbagliato");
-            }
+            } */
             this.current_presence = presenza;
             //console.log(this.current_presence);
             //console.log(this.student);
@@ -82,14 +65,19 @@
             
             //Al momento attuale si fa solo una insert, prossima cosa da fare
             //è decidere se un update o una insert
-            if(this.presences[this.student][this.index][0] == '' && this.presences[this.student][this.index][1] == ''){
+
+            if (presenza == 'DEL')
+            {
+                this.deleteApi();
+            }
+            else if(this.presences[this.student][this.index][0] == '' && this.presences[this.student][this.index][1] == '' && (presenza == 'A' || presenza == 'P'))
+            {
                 this.buildApiInsert();
             }
             else
             {
                 this.buildApiUpdate();
             }
-            
             this.$emit('closeModal');
         },
         buildApiInsert(){
@@ -110,7 +98,7 @@
 
             axios.post('/dashboard', data, options)
                 .then(response => {
-                    console.log("TUTTO OK");
+                    //console.log("TUTTO OK");
                     this.presences[this.student][this.index][0] = this.current_presence;
                     this.presences[this.student][this.index][1] = response.data.recordId;
                 })
@@ -148,6 +136,34 @@
                 // Gestisci l'errore qui, ad esempio mostrando un messaggio all'utente
             });
             
+        },
+        deleteApi() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const url = `dashboard/${this.presences[this.student][this.index][1]}`;
+
+            fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Errore durante la richiesta di DELETE');
+                }
+                this.presences[this.student][this.index][0] = '';
+                this.presences[this.student][this.index][1] = '';
+                return;
+            })
+            .catch(error => {
+                console.log('Errore durante la richiesta PUT:', error.message);
+                // Gestisci l'errore qui, ad esempio mostrando un messaggio all'utente
+            });
+
+
+
+
         }
     }
   };
