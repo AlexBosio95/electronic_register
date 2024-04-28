@@ -16,8 +16,8 @@
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <!-- Titolo del modal -->
                         <div class="sm:flex sm:items-start">
-                            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                                <h3 class="text-lg font-medium leading-6 text-gray-900" id="modal-headline">
+                            <div class="relative w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                <h3 class="text-lg text-center font-medium leading-6 text-gray-900" id="modal-headline">
                                     Calendario
                                 </h3>
                             </div>
@@ -29,7 +29,7 @@
                         </button>
                         <!-- Contenuto del calendario -->
                         <div class="mt-5">
-                            <div x-show="true" class="absolute z-10 bg-white border text-black border-gray-200 shadow-md mt-2">
+                            <div x-show="true" class="relative z-10 bg-white border text-black border-gray-200 shadow-md mt-2">
                                 <div class="container mx-auto p-4">
                                     <div class="flex justify-between mb-4">
                                         <button @click="previousMonth(); changeButtonColor(null)">&lt;</button>
