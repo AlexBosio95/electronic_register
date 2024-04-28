@@ -14,11 +14,14 @@
                 </button>
                 <!-- Contenuto del modal -->
                 <h2 class="text-lg font-semibold mb-4">Seleziona la presenza</h2>
-                    <button  @click="getPresence('P')" class="bg-green-500 text-white px-4 py-2 rounded focus:outline-none">Presente</button>
-                    <button  @click="getPresence('A')" class="bg-red-500 text-white px-4 py-2 rounded focus:outline-none">Assente</button>                    
+                <div class="flex justify-between">
+                    <button @click="getPresence('P')" class="bg-green-500 text-white px-4 py-2 rounded-full focus:outline-none flex-1 mr-2" >Presente</button>
+                    <button @click="getPresence('A')" class="bg-red-500 text-white px-4 py-2 rounded-full focus:outline-none flex-1 ml-2">Assente</button>
+                </div>
             </div>
         </div>
     </div>
+
 
 
 

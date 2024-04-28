@@ -280,21 +280,24 @@ class PresenceController extends Controller
              
         if ($selectedClass) {
             $timetable = $selectedClass->calendar();
+            //Log::info($timetable->pluck('time_start')->implode(', '));
             $filteredTimetable = $timetable->where('day_of_week', $dayOfWeek)->get();
-            if(empty($filteredTimetable)){
-                return response()->json(['message' => 'La classe non ha un orario associato'], 404);
+            //Log::info(empty($filteredTimetable));
+            if($filteredTimetable->isEmpty()){
+                return response()->json(['message' => 'La classe non ha un orario associato']);
             }
             //costruzione matrice per la griglia delle presenze
             //$res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
-            //Log::info($filteredTimetable);
+            
             $matrice = $this->getPresences($filteredTimetable ,$selectedClass, $dateParam);
-            if(empty($matrice)){
-                return response()->json(['message' => 'La classe non ha un orario associato'], 404);
-            }
+            /* if(empty($matrice)){
+                return response()->json(['message' => 'Gli studenti non hanno presenze/assenze da mostrare']);
+            } */
             $resp = [
                 'timetable' => $filteredTimetable,
                 'presences' => $matrice
             ];
+            //Log::info($resp);
             return response()->json($resp);
         } else {
             return response()->json(['message' => 'Orario non trovato'], 404);
@@ -305,7 +308,7 @@ class PresenceController extends Controller
 
         $students = $selectedClass->students;
         $current_date = \DateTime::createFromFormat('j F Y', $current_date)->format('Y-m-d');
-        
+        $res = [];
         foreach($students as $student){
             $dayPresence = json_decode($student->presences, true);
             //Filtra gli elementi dell'array in base al giorno corrente
@@ -332,6 +335,7 @@ class PresenceController extends Controller
                 }
             } 
         }
+        //Log::info($res);
         return $res;
     }
 }

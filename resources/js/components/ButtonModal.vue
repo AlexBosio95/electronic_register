@@ -1,5 +1,5 @@
 <template>
-
+    
     <div v-if="presenza == ''">
         <button @click="isOpenModal = true" 
             class="focus:outline-none inline-block align-middle">

@@ -143,7 +143,7 @@ export default {
                     }
                 }
             },
-            selectedClass: null,
+            selectedClass: this.classes[0]['id'],
             studentsByClass: [],
             dateSelected: null
         }
@@ -171,6 +171,18 @@ export default {
     },
     watch:{
         selectedClass: 'getStudentsByClass'
+    },
+    beforeMount() {
+        const months= ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        const currentDate = new Date();
+        const currentDay= currentDate.getDate();
+        const currentYear= currentDate.getFullYear();
+        const currentMonth= currentDate.getMonth();
+        this.dateSelected = `${currentDay} ${months[currentMonth]} ${currentYear}`;
+        //this.getStudentsByClass();
+    },
+    mounted() {
+        this.getStudentsByClass();
     }
 }
 </script>

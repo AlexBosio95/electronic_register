@@ -39,7 +39,7 @@
                                     <div class="grid grid-cols-7 gap-2">
                                         <template v-for="(day, index) in days" :key="index">
                                             <div class="p-2 bg-gray-100 border border-gray-200 rounded text-center">
-                                                <button @click="setCurrentDay(day); changeButtonColor($event.target.parentElement.parentElement)">
+                                                <button @click="setCurrentDay(day); changeButtonColor($event.target.parentElement.parentElement); ">
                                                     <span>{{ day }}</span>
                                                 </button>
                                             </div>
