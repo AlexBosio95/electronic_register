@@ -29,7 +29,7 @@
                         </button>
                         <!-- Contenuto del calendario -->
                         <div class="mt-5">
-                            <div x-show="true" class="relative z-10 bg-white border text-black border-gray-200 shadow-md mt-2">
+                            <div class="relative z-10 bg-white border text-black border-gray-200 shadow-md mt-2">
                                 <div class="container mx-auto p-4">
                                     <div class="flex justify-between mb-4">
                                         <button @click="previousMonth(); changeButtonColor(null)">&lt;</button>
