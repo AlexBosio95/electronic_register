@@ -75,7 +75,7 @@ import ButtonModal from './ButtonModal.vue';
     methods: {
         getTimetable(){
             this.current_error = "";
-            this.mostraTable = false;   
+            this.mostraTable = false;
             //console.log(this.current_date);
             const classParam = this.current_class ? this.current_class : '';
             const dateParam = this.current_date ? this.current_date : '';
@@ -98,11 +98,17 @@ import ButtonModal from './ButtonModal.vue';
                 console.error(error);
                 
             });
+        },
+        setErrorEmptyStudents(){
+            if(this.students.length <= 0){
+                this.current_error = "La classe non ha studenti associati";
+            }
         }      
     },
     watch: {
         current_class: "getTimetable",
-        current_date: "getTimetable"
+        current_date: "getTimetable",
+        students: "setErrorEmptyStudents"
     },
     beforeMount(){
         this.getTimetable();
