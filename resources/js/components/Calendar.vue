@@ -2,7 +2,7 @@
     <div class="py-2 ps-2">
         <button @click="showCalendar = !showCalendar" class="inline-flex justify-center w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-gray-100"><span>{{ dayMonthAndYear }}</span></button>
         <!-- Modal -->
-        <div v-if="showCalendar === true" class="fixed z-10 inset-0 overflow-y-auto" x-cloak>
+        <div v-if="showCalendar === true" class="fixed z-10 inset-0 overflow-y-auto" >
             <div class="flex items-center justify-center h-5/6 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <!-- Sfondo scuro del modal -->
                 <div class="fixed inset-0 transition-opacity" aria-hidden="true" @click="showModal = false">

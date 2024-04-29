@@ -14,7 +14,7 @@
                 <button v-else type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm cursor-not-allowed opacity-50">
                 Nessuna classe disponibile
                 </button>
-                <div v-show="isOpen && classes.length > 0" class="mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <div v-show="isOpen && classes.length > 0" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                     <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                         <!-- Utilizza un v-for per creare un pulsante per ogni classe -->
                         <button v-for="classItem in classes" :key="classItem.id" @click="selectClass(classItem)" type="button" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">

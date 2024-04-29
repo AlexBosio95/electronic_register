@@ -83,7 +83,7 @@ import ButtonModal from './ButtonModal.vue';
             .then(response => response.json())
             .then(data => {
                 if (!!data['message']){
-                    console.log(data['message']);
+                    //console.log(data['message']);
                     this.current_error = data['message'];
                     this.mostraTable = true;
                     return;
