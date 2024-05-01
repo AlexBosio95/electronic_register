@@ -89,9 +89,7 @@ export default {
     },
     computed: {
         dayMonthAndYear() {
-            const $day = `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
-            this.$emit('current-date', $day);
-            return $day;
+            return `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
         },
         days() {
             const firstDayOfMonth = new Date(this.currentYear, this.currentMonth, 1).getDay();
@@ -129,6 +127,8 @@ export default {
         },
         setCurrentDay(day) {
             this.currentDay = day;
+            this.showCalendar = false;
+            this.$emit('date-selected', this.dayMonthAndYear);
         }
     }
 };
