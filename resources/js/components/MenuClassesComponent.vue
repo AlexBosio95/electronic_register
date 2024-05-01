@@ -68,9 +68,6 @@ export default {
             this.$emit('class-selected', classe);
             this.isOpen = !this.isOpen;
         }
-    },
-    mounted(){
-        this.$emit('class-selected', this.classes[0]);
     }
 }
 </script>
