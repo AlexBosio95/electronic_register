@@ -3,7 +3,12 @@
     <div class="w-60 bg-[#1F2937] flex flex-col items-center pt-5 pb-2 space-y-7 h-[720px]">
         <!-- menu items -->
         <div class="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-sm cursor-pointer">
-            <calendar v-model="selectedDay" @current-date="updateSelectedDay"></calendar>
+            <calendar
+                v-model="dateSelected"
+                @date-selected="updateDateSelected"
+            >
+
+            </calendar>
             <menu-classes-component 
                 v-model="selectedClass" 
                 @class-selected="updateSelectedClass" 
@@ -137,14 +142,14 @@ export default {
                     }
                 }
             },
-            selectedClassId: null,
+            selectedClass: this.classes[0]['id'],
             studentsByClass: [],
-            selectedDay: null
+            dateSelected: null
         }
     },
     methods:{
         getStudentsByClass(){
-            const classParam = this.selectedClassId ? `&class=${this.selectedClassId}` : '';
+            const classParam = this.selectedClass ? `&class=${this.selectedClass}` : '';
             fetch(`/api/students?${classParam}`)
             .then(response => response.json())
             .then(data => {
@@ -157,16 +162,25 @@ export default {
             });
         },
         updateSelectedClass(selectedClass) {
-            this.selectedClassId = selectedClass.id;
+            this.selectedClass = selectedClass.id;
         },
-        updateSelectedDay(date) {
-            this.selectedDay = date;
+        updateDateSelected(dateSelected){
+            this.dateSelected = dateSelected;
         }
     },
     watch:{
-        selectedClassId: 'getStudentsByClass'
+        selectedClass: 'getStudentsByClass'
     },
-    mounted(){
+    beforeMount() {
+        const months= ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        const currentDate = new Date();
+        const currentDay= currentDate.getDate();
+        const currentYear= currentDate.getFullYear();
+        const currentMonth= currentDate.getMonth();
+        this.dateSelected = `${currentDay} ${months[currentMonth]} ${currentYear}`;
+        //this.getStudentsByClass();
+    },
+    mounted() {
         this.getStudentsByClass();
     }
 }
