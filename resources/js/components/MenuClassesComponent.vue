@@ -64,7 +64,6 @@ export default {
         selectClass(classe){
             this.selectedClass = classe.name;
             this.selectedClassId = classe.id;
-            console.log(classe.id);
             this.$emit('class-selected', classe);
             this.isOpen = !this.isOpen;
         }
