@@ -47,18 +47,18 @@ class MarksController extends Controller
                     if ($selectedClass) {
                         $students = $selectedClass->students;
                     } else {
-                        return view('teacher.marks', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Invalid selected class.']);
+                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Invalid selected class.']);
                     }
                 } else {
                     $students = $classes->first()->students;
                 }
 
-                return view('teacher.marks', compact('students', 'classes', 'user_role', 'page', 'grades'));
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'grades'));
             } else {
-                return view('teacher.marks', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'No classes found for the teacher.']);
+                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'No classes found for the teacher.']);
             }
         } else {
-            return view('teacher.marks', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Teacher not found.']);
+            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
 
