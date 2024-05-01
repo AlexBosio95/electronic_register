@@ -54,12 +54,10 @@
         </div>
     </div>
 </template>
-  
+
 <script>
-  
-  
-  export default {
-      props: {
+export default {
+    props: {
           classes: {
               type: Object
           },
@@ -69,8 +67,8 @@
           page: {
               type: String
           }
-      },
-      data() {
+    },
+    data() {
         const currentDate = new Date();
         return {
             showCalendar: false,
@@ -81,8 +79,8 @@
             currentYear: currentDate.getFullYear(),
             currentMonth: currentDate.getMonth() 
         };
-      },
-      computed: {
+    },
+    computed: {
         dayMonthAndYear() {
             return `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
         },
@@ -95,8 +93,8 @@
             }
             return days;
         }
-      },
-      methods: {
+    },
+    methods: {
         SetdayMonthAndYear() {
             // Ottieni la data corrente nel formato "giorno mese anno"
             this.dayMonthAndYear = `${this.currentDay} ${this.months[this.currentMonth]} ${this.currentYear}`;
@@ -121,13 +119,12 @@
             }
             
         },
-        setCurrentDay(day){
+        setCurrentDay(day) {
             this.currentDay = day;
             this.showCalendar = false;
             this.$emit('date-selected', this.dayMonthAndYear);
         }
-        
-      }
-  };
-  
-  </script>
+    }
+};
+    
+</script>
