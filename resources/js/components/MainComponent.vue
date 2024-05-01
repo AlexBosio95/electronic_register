@@ -3,7 +3,12 @@
     <div class="w-60 bg-[#1F2937] flex flex-col items-center pt-5 pb-2 space-y-7 h-[720px]">
         <!-- menu items -->
         <div class="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-sm cursor-pointer">
-            <calendar></calendar>
+            <calendar
+                v-model="dateSelected"
+                @date-selected="updateDateSelected"
+            >
+
+            </calendar>
             <menu-classes-component 
                 v-model="selectedClass" 
                 @class-selected="updateSelectedClass" 
@@ -22,9 +27,14 @@
         </div>
     </div>
     <!-- Componenti Vue -->
-    <div class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
+    <div v-if="page == 'Voti' " class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
         <div class="py-5 px-10">
             <GradesComponent :students="studentsByClass" :classes="classes"/>
+        </div>
+    </div>
+    <div v-else-if="page == 'Presenze' " class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
+        <div class="py-5 px-10">
+            <attendance-component :students="studentsByClass" :current_class="selectedClass" :current_date="dateSelected"/>
         </div>
     </div>
 </div>
@@ -49,7 +59,7 @@ export default {
     },
     props: {
         classes: {
-            type: Array,
+            type: Object,
             required: true
         },
         user_role: {
@@ -133,8 +143,9 @@ export default {
                     }
                 }
             },
-            selectedClass: null,
-            studentsByClass: []
+            selectedClass: this.classes[0]['id'],
+            studentsByClass: [],
+            dateSelected: null
         }
     },
     methods:{
@@ -144,7 +155,7 @@ export default {
             .then(response => response.json())
             .then(data => {
                 this.studentsByClass = data;
-                console.log(data);
+                //console.log(data);
             })
             .catch(error => {
                 console.error('Si è verificato un errore:', error);
@@ -152,11 +163,26 @@ export default {
             });
         },
         updateSelectedClass(selectedClass) {
-            this.selectedClass = selectedClass.name;
+            this.selectedClass = selectedClass.id;
+        },
+        updateDateSelected(dateSelected){
+            this.dateSelected = dateSelected;
         }
     },
     watch:{
         selectedClass: 'getStudentsByClass'
+    },
+    beforeMount() {
+        const months= ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        const currentDate = new Date();
+        const currentDay= currentDate.getDate();
+        const currentYear= currentDate.getFullYear();
+        const currentMonth= currentDate.getMonth();
+        this.dateSelected = `${currentDay} ${months[currentMonth]} ${currentYear}`;
+        //this.getStudentsByClass();
+    },
+    mounted() {
+        this.getStudentsByClass();
     }
 }
 </script>

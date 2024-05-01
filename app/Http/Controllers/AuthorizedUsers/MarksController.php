@@ -85,7 +85,7 @@ class MarksController extends Controller
             ]);
         } catch (\Exception $e) {
             // Log dell'eccezione di validazione
-            \Log::error('Validation error:', ['message' => $e->getMessage()]);
+            Log::error('Validation error:', ['message' => $e->getMessage()]);
             return response()->json(['error' => 'Validation error'], 422);
         }
 
@@ -94,7 +94,7 @@ class MarksController extends Controller
 
         if (!$teacher) {
             // Log errore se l'insegnante non è trovato
-            \Log::error('Teacher not found');
+            Log::error('Teacher not found');
             return response()->json(['error' => 'Teacher not found'], 404);
         }
 
@@ -111,7 +111,7 @@ class MarksController extends Controller
             ]);
         } catch (\Exception $e) {
             // Log dell'eccezione durante la creazione del marchio
-            \Log::error('Error creating mark:', ['message' => $e->getMessage()]);
+            Log::error('Error creating mark:', ['message' => $e->getMessage()]);
             return response()->json(['error' => 'Error creating mark'], 500);
         }
 
@@ -210,9 +210,10 @@ class MarksController extends Controller
 
     public function getStudentsByClass(Request $request)
     {
+        //Log::info($request);
         if ($request->has('class')) {
-            $classeName = $request->input('class');
-            $classe = Classe::where('name', $classeName)->first();
+            $classeId = $request->input('class');
+            $classe = Classe::where('id', $classeId)->first();
             
             if ($classe) {
                 $students = Student::where('class_id', $classe->id)->get();
