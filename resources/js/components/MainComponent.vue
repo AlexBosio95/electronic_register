@@ -32,7 +32,7 @@
             <GradesComponent 
                 :students="studentsByClass" 
                 :classes="classes"
-                :selectedDay="selectedDay"
+                :selectedDay="dateSelected"
             />
         </div>
     </div>
