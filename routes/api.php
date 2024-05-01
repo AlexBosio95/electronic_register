@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthorizedUsers\MarksController;
+use App\Http\Controllers\AuthorizedUsers\PresenceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,5 @@ Route::get('/grade-options', [MarksController::class, 'getGradesOption']);
 Route::get('/subject-options', [MarksController::class, 'getSubjectsOption']);
 Route::post('/marks', [MarksController::class, 'store']);
 Route::get('/students', [MarksController::class, 'getStudentsByClass']);
+Route::get('/timetable/{classId}/{dateParam}', [PresenceController::class, 'getTimetable']);
+Route::post('/presences', [PresenceController::class, 'getPresences']);
