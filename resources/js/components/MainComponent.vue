@@ -29,7 +29,11 @@
     <!-- Componenti Vue -->
     <div v-if="page == 'Voti' " class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
         <div class="py-5 px-10">
-            <GradesComponent :students="studentsByClass" :classes="classes"/>
+            <GradesComponent 
+                :students="studentsByClass" 
+                :classes="classes"
+                :selectedDay="dateSelected"
+            />
         </div>
     </div>
     <div v-else-if="page == 'Presenze' " class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">

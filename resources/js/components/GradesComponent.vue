@@ -1,7 +1,7 @@
 <template>
     <div class="relative w-full">
-        <div v-if="mostraSuccesso" class="absolute bg-green-100 text-green-700 px-5 py-2 rounded-md ml-80">
-            Voto aggiunto con successo.
+        <div v-if="mostraSuccesso" class="absolute bg-green-200 text-green-700 py-2 rounded-md inset-x-80 top-10 text-center font-semibold">
+            Voto aggiunto con successo
         </div>
 
         <div class="flex mb-4 justify-between">
@@ -15,8 +15,8 @@
 
                 <button v-if="!addGradeFormMode" @click="toggleEditMode" class="mb-4 sm:mt-0 inline-flex items-start justify-start px-5 py-2 bg-red-600 hover:bg-red-800 focus:outline-none rounded">
                     <span class="text-white mr-2 text-sm font-semibold">Elimina voti</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
-                        <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-white">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                     </svg>
                 </button>
             </div>
@@ -53,7 +53,7 @@
                                 <span>Nessun voto</span>
                             </template>
                             <template v-else>
-                                <span v-for="grade in filteredGrades(student.id)" :key="grade.id" :class="{ 'shake': editMode, [getGradeColor(grade.note)]: true }" class="inline-flex items-center rounded-lg px-4 py-1 text-s font-semibold text-white uppercase relative">
+                                <span v-for="grade in filteredGrades(student.id)" :key="grade.id" :class="{ 'shake': editMode}" class="inline-flex items-center rounded-lg px-8 py-1 text-s font-semibold text-white uppercase relative bg-white/10">
                                     {{grade.note}}
                                     <span class="absolute top-8 left-0 text-white/70 text-xs">{{ grade.data }}</span>
 
@@ -72,7 +72,8 @@
         :subjectOptions="subjectOptions"
         :students="students" 
         :addGradeFormMode="addGradeFormMode"
-        :selectedSubject="selectedSubject" 
+        :selectedSubject="selectedSubject"
+        :selectedDay="selectedDay" 
         @votoCreato="handleVotoCreato"/>
     </div>
 </template>
@@ -98,7 +99,9 @@ export default {
         students: {
             type: Array,
             default: () => []
-        }
+        },
+        selectedDay: String,
+        classes: Array
     },
     methods: {
         toggleEditMode() {
@@ -166,23 +169,6 @@ export default {
                 console.error('Si è verificato un errore:', error);
                 alert('Si è verificato un errore durante il recupero dei voti.');
             });
-        },
-        getGradeColor(grade) {
-        switch (grade) {
-            case 'insufficiente':
-                return 'bg-red-600';
-            case 'sufficiente':
-                return 'bg-orange-600';
-            case 'Buono':
-            case 'buono':
-                return 'bg-yellow-500';
-            case 'distinto':
-                return 'bg-green-500';
-            case 'ottimo':
-                return 'bg-green-800';
-            default:
-                return 'bg-white/10';
-            }
         }
     },
     mounted() {
@@ -199,7 +185,7 @@ export default {
 <style scoped>
 
     .shake {
-    animation: shake 0.5s infinite alternate;
+        animation: shake 0.5s infinite alternate;
     }
 
     @keyframes shake {
