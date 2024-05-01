@@ -78,7 +78,7 @@ class PresenceController extends Controller
                 }
                 $selectedClassId = $request->input('selected_class');
                 
-                Log::info($selectedClassId);    
+                //Log::info($selectedClassId);    
 
                 if ($selectedClassId) {
                     $selectedClass = $classes->where('id', $selectedClassId)->first();                
@@ -126,7 +126,7 @@ class PresenceController extends Controller
      */
     public function store(Request $request)
     {
-
+        Log::info($request);
         //Validazione dati
         $rules = [
             'student_id' => 'required|integer',
@@ -193,7 +193,18 @@ class PresenceController extends Controller
         $record->hour = $hour;
         $record->note = "";
         $record->save();
-        return redirect()->back()->with('success', 'Dati salvati con successo!');
+        
+        $newRecordId = $record->id;
+
+        // Costruisci un array con i dati da restituire come JSON
+        $responseData = [
+            'success' => true,
+            'message' => 'Dati salvati con successo!',
+            'recordId' => $newRecordId,
+        ];
+
+        // Restituisci i dati come una risposta JSON
+        return response()->json($responseData);
     }
 
     /**
@@ -231,17 +242,20 @@ class PresenceController extends Controller
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
         $presence = $request->input('attendance_mod');
         try{
             $toMod = AttendStudentRegister::findOrFail($id);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             return back()->withErrors('Record della presenza non trovato')->withInput();
         }
-        
         $toMod->presence = $presence;
         $toMod->save();
-        return redirect()->back()->with('success', 'Dati modificati con successo!');
+        // Costruisci un array con i dati da restituire come JSON
+        $responseData = [
+            'success' => true,
+            'message' => 'Dati salvati con successo!'
+        ];
+        return $responseData;
     }
 
     /**
@@ -249,6 +263,89 @@ class PresenceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try{
+            $pres = AttendStudentRegister::findOrFail($id);   
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            Log::info($e);
+        }
+        $pres->delete();
+        $responseData = [
+            'success' => true,
+            'message' => 'Dati salvati con successo!'
+        ];
+        return $responseData;
+    }
+
+    public function getTimetable(string $id, string $dateParam)
+    {
+        //Log::info($id);
+        $dayOfWeek = date("l", strtotime($dateParam));
+        //Log::info($dayOfWeek);
+        try{
+            $selectedClass = Classe::findOrFail($id);
+            //Log::info($selectedClass->id);    
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+            Log::info($e);
+        }
+             
+        if ($selectedClass) {
+            $timetable = $selectedClass->calendar();
+            //Log::info($timetable->pluck('time_start')->implode(', '));
+            $filteredTimetable = $timetable->where('day_of_week', $dayOfWeek)->get();
+            //Log::info(empty($filteredTimetable));
+            if($filteredTimetable->isEmpty()){
+                return response()->json(['message' => 'La classe non ha un orario associato']);
+            }
+            //costruzione matrice per la griglia delle presenze
+            //$res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
+            
+            $matrice = $this->getPresences($filteredTimetable ,$selectedClass, $dateParam);
+            /* if(empty($matrice)){
+                return response()->json(['message' => 'Gli studenti non hanno presenze/assenze da mostrare']);
+            } */
+            $resp = [
+                'timetable' => $filteredTimetable,
+                'presences' => $matrice
+            ];
+            //Log::info($resp);
+            return response()->json($resp);
+        } else {
+            return response()->json(['message' => 'Orario non trovato'], 404);
+        }
+    }
+
+    public function getPresences($timetable, $selectedClass, $current_date){
+
+        $students = $selectedClass->students;
+        $current_date = \DateTime::createFromFormat('j F Y', $current_date)->format('Y-m-d');
+        $res = [];
+        foreach($students as $student){
+            $dayPresence = json_decode($student->presences, true);
+            //Filtra gli elementi dell'array in base al giorno corrente
+            $dayPresences = array_filter($dayPresence, function($item) use ($current_date) {
+                return $item['data'] === $current_date;
+            });
+            
+            $values = array_values($dayPresences);
+            foreach($timetable as $t){
+                $trovato = false;
+                foreach($values as $v){
+                    if($t['time_start'] ==  $v['hour']){
+                        $res[$student->id][] = [$v['presence'], $v['id']];  
+                        //$res[$student->id][] = $v['presence'];
+                        $trovato = true;
+                    } else {
+                        if ($trovato){
+                            break;
+                        }   
+                    }  
+                }
+                if(!$trovato){
+                    $res[$student->id][] = ['',''];
+                }
+            } 
+        }
+        //Log::info($res);
+        return $res;
     }
 }

@@ -11,6 +11,8 @@ import MainComponent from './components/MainComponent.vue';
 import MenuSections from './components/MenuSections.vue';
 import PresentsComponent from './components/PresentsComponent.vue';
 import Calendar from './components/Calendar.vue';
+import ButtonModal from './components/ButtonModal.vue';
+import ModalManageAttendance from './components/ModalManageAttendance.vue';
 
 const app = createApp({});
 
@@ -20,6 +22,8 @@ app.component('main-component', MainComponent);
 app.component('menu-sections', MenuSections);
 app.component('attendance-component', PresentsComponent);
 app.component('calendar', Calendar);
+app.component('button-modal', ButtonModal);
+app.component('manage-attendance', ModalManageAttendance);
 
 app.mount('#app');
 

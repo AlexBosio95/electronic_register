@@ -50,7 +50,7 @@
 export default {
     props: {
         classes: {
-            type: String,
+            type: Object,
             required: true
         },
         user_role: {
