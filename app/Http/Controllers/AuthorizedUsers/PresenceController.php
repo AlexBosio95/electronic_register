@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 
-class PresenceController extends Controller
+class PresenceController extends CommonController
 {
     use WithPresenceTrait;    
     
@@ -27,7 +27,7 @@ class PresenceController extends Controller
      */
     public function index(Request $request)
     {
-        $user = Auth::user();
+        /* $user = Auth::user();
         if (!$user){
             abort(401, 'Unauthorized');
         }
@@ -38,12 +38,11 @@ class PresenceController extends Controller
         $timetable = [];
         $res = [];
         $page = 'Presenze';
-        /*inizializzo current_date e current_day con giorno corrente e data corrente */
         $current_date = date("Y-m-d");
         $current_day = strftime('%A');
         if($request->input('current_date') !== null)
         {
-            /*validazione campo classe*/
+           
             $rules = [
                 'current_date' => ['regex:/^\d{1,2}\s(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{4}$/i'],
             ];
@@ -65,7 +64,7 @@ class PresenceController extends Controller
             $classes = $teacher->classes;
 
             if ($classes->isNotEmpty()) {
-                /*validazione campo classe*/
+                
                 $rules = [
                     'selected_class' => 'integer',
                 ];
@@ -109,7 +108,8 @@ class PresenceController extends Controller
             }
         } else {
             return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'))->withErrors(['message' => 'Teacher not found.']);
-        }
+        } */
+        return $this->commonIndex($request, 'Presenze');
     }
 
 

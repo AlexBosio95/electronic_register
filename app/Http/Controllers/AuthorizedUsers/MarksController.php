@@ -15,14 +15,14 @@ use App\Models\GradeOption;
 use App\Models\Subject;
 use App\Models\Student;
 
-class MarksController extends Controller
+class MarksController extends CommonController
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $userId = Auth::id();
+        /* $userId = Auth::id();
         $user = Auth::user();
         $user_role = $user->role;
         $students = [];
@@ -59,7 +59,8 @@ class MarksController extends Controller
             }
         } else {
             return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Teacher not found.']);
-        }
+        } */
+        return $this->commonIndex($request, 'Voti');
     }
 
     /**
