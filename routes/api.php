@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthorizedUsers\ApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthorizedUsers\MarksController;
@@ -21,11 +22,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/grades', [MarksController::class, 'getGrades']);
+Route::get('/grades', [ApiController::class, 'getGrades']);
 Route::delete('/marks/{id}', [MarksController::class, 'destroy']);
-Route::get('/grade-options', [MarksController::class, 'getGradesOption']);
-Route::get('/subject-options', [MarksController::class, 'getSubjectsOption']);
+Route::get('/grade-options', [ApiController::class, 'getGradesOption']);
+Route::get('/subject-options', [ApiController::class, 'getSubjectsOption']);
 Route::post('/marks', [MarksController::class, 'store']);
-Route::get('/students', [MarksController::class, 'getStudentsByClass']);
-Route::get('/timetable/{classId}/{dateParam}', [PresenceController::class, 'getTimetable']);
-Route::post('/presences', [PresenceController::class, 'getPresences']);
+Route::get('/students', [ApiController::class, 'getStudentsByClass']);
+Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
+Route::post('/presences', [ApiController::class, 'getPresences']);
