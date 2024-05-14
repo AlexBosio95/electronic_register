@@ -22,11 +22,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/grades', [ApiController::class, 'getGrades']);
-Route::delete('/marks/{id}', [MarksController::class, 'destroy']);
-Route::get('/grade-options', [ApiController::class, 'getGradesOption']);
-Route::get('/subject-options', [ApiController::class, 'getSubjectsOption']);
-Route::post('/marks', [MarksController::class, 'store']);
-Route::get('/students', [ApiController::class, 'getStudentsByClass']);
-Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
-Route::post('/presences', [ApiController::class, 'getPresences']);
+//Route::middleware('checkApi')->group(function () {
+    Route::get('/grades', [ApiController::class, 'getGrades']);
+    Route::delete('/marks/{id}', [MarksController::class, 'destroy']);
+    Route::get('/grade-options', [ApiController::class, 'getGradesOption']);
+    Route::get('/subject-options', [ApiController::class, 'getSubjectsOption']);
+    Route::post('/marks', [MarksController::class, 'store']);
+    Route::get('/students', [ApiController::class, 'getStudentsByClass']);
+    Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
+    Route::post('/presences', [ApiController::class, 'getPresences']);
+//});
