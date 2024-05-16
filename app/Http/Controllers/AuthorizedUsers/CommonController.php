@@ -36,13 +36,12 @@ class CommonController extends Controller
                 } 
             }      
         }
-        Log::info($sections);
 
         if ($teacher) {
             $classes = $teacher->classes;
-            return view('teacher.presents', compact('classes', 'user_role', 'page', 'sections'));       
+            return view('teacher.presents', compact('classes', 'user_role', 'page', 'sections', 'userId'));       
         } else {
-            return view('teacher.presents', compact('classes', 'user_role', 'page', 'sections'))->withErrors(['message' => 'Teacher not found.']);
+            return view('teacher.presents', compact('classes', 'user_role', 'page', 'sections', 'userId'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
 }

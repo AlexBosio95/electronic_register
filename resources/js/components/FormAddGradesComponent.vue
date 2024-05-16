@@ -90,7 +90,7 @@ export default {
             };
 
             if (this.selectedStudent !== null && this.selectedGrade !== null && this.selectedSubjectMark !== null) {
-                axios.post('/marks', data, options)
+                axios.post('/api/marks', data, options)
                 .then(response => {
                     this.$emit('votoCreato', this.selectedSubjectMark);
                     this.selectedStudent = null;

@@ -19,6 +19,6 @@
     @endif
 
     @if(count($classes) > 0)
-        <main-component :classes="{{ $classes }}" :user_role="{{ json_encode($user_role) }}" :page="{{ json_encode($page) }}" :sections="{{ json_encode($sections) }}"></main-component>
+        <main-component :classes="{{ $classes }}" :user_role="{{ json_encode($user_role) }}" :page="{{ json_encode($page) }}" :sections="{{ json_encode($sections) }}" :current_user="{{ json_encode($userId) }}"></main-component>
     @endif
 </x-app-layout>

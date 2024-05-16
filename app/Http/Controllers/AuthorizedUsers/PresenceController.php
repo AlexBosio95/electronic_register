@@ -51,6 +51,7 @@ class PresenceController extends CommonController
             'hiddenHour' => 'required|regex:/^\d{2}:\d{2}$/',
             'attendance' => 'required|in:P,A',
             'hiddenDate' => ['required', 'regex:/^\d{1,2}\s(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{4}$/i'],
+            'current_user' => 'required|integer'
         ];
         $messages = [
             'student_id.required' => 'Field Student ID is mandatory',
@@ -61,6 +62,7 @@ class PresenceController extends CommonController
             'attendance.in' => 'Field Attendance MUST BE "P" o "A".',
             'hiddenDate.required' => 'Field Hidden Date is mandatory',
             'hiddenDate.regex' => 'Field Hidden Date MUST BE in the format day, month in letter in English and year.',
+            'current_user.regex' => 'Field Id must be integer'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
@@ -69,7 +71,7 @@ class PresenceController extends CommonController
 
         $student = $request->input('student_id');
         $hour = $request->input('hiddenHour');
-        $userId = Auth::id();
+        $userId = $request->input('current_user');
         $teacher = Teacher::where('user_id', $userId)->first()->id; 
         $presence = $request->input('attendance');
         $date = $request->input('hiddenDate');  

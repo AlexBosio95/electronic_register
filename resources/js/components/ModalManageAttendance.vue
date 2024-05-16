@@ -43,6 +43,9 @@
         },
         index: {
             type: Number
+        },
+        current_user: {
+            type: Number
         }
     },
     data() {
@@ -80,27 +83,37 @@
             }
             this.$emit('closeModal');
         },
-        buildApiInsert(){
+        buildApiInsert() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const options = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken 
-                }
-            };
-            
+            console.log(this.current_user);
             const data = {
                 student_id: this.student,
                 hiddenHour: this.hourPresence.slice(0, 5),
                 attendance: this.current_presence,
-                hiddenDate: this.current_date
-            }
+                hiddenDate: this.current_date,
+                current_user: this.current_user
+            };
 
-            axios.post('/dashboard', data, options)
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify(data)
+            };
+
+            fetch('/api/dashboard', options)
                 .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(responseData => {
                     //console.log("TUTTO OK");
                     this.presences[this.student][this.index][0] = this.current_presence;
-                    this.presences[this.student][this.index][1] = response.data.recordId;
+                    this.presences[this.student][this.index][1] = responseData.recordId;
                 })
                 .catch(error => {
                     /* this.errorMessage = "Errore durante l'inserimento della presenza";
@@ -109,10 +122,10 @@
                         this.mostraErrore = false;
                     }, 2200); */
                 });
-        },  
+        },
         buildApiUpdate() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const url = `dashboard/${this.presences[this.student][this.index][1]}`;
+            const url = `/api/dashboard/${this.presences[this.student][this.index][1]}`;
             const data = {
                 attendance_mod: this.current_presence,
             };
@@ -139,7 +152,7 @@
         },
         deleteApi() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            const url = `dashboard/${this.presences[this.student][this.index][1]}`;
+            const url = `/api/dashboard/${this.presences[this.student][this.index][1]}`;
 
             fetch(url, {
                 method: 'DELETE',

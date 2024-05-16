@@ -70,8 +70,11 @@ export default {
             required: true
         },
         sections: {
-            type: Array,
+            type: Object,
             required: true
+        },
+        current_user: {
+            type: Number
         }
     },
     data() {
@@ -118,7 +121,8 @@ export default {
                 props = {
                     students: this.studentsByClass,
                     current_class: this.selectedClass,
-                    current_date: this.dateSelected
+                    current_date: this.dateSelected,
+                    current_user: this.current_user
                 };
                 break;
             default:
