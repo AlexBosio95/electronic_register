@@ -3,8 +3,11 @@
 use App\Http\Controllers\AuthorizedUsers\ApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use App\Http\Controllers\AuthorizedUsers\MarksController;
 use App\Http\Controllers\AuthorizedUsers\PresenceController;
+use Illuminate\Support\Facades\Log;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +35,34 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('/subject-options', [ApiController::class, 'getSubjectsOption']);
     Route::get('/grades', [ApiController::class, 'getGrades']);
     Route::get('/students', [ApiController::class, 'getStudentsByClass']);
-    Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
+    //Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
     Route::post('/presences', [ApiController::class, 'getPresences']);
 //});
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
+});
+
+
+
+
+Route::post('/login', function (Request $request) {
+    $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
+
+    Log::info($request);
+    $user = User::where('email', $request->email)->first();
+
+    if (! $user || ! Hash::check($request->password, $user->password)) {
+        return response()->json([
+            'message' => 'Invalid login details'
+        ], 401);
+    }
+
+    $token = $user->createToken('auth-token')->plainTextToken;
+
+    return response()->json(['token' => $token]);
+});
