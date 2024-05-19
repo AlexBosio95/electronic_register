@@ -47,9 +47,7 @@ class MarksController extends CommonController
                 'date' => 'required',
                 'user' => 'required'
             ]);
-            Log::info('Validation successful', ['validatedData' => $validatedData]);
         } catch (\Exception $e) {
-            // Log dell'eccezione di validazione
             Log::error('Validation error:', ['message' => $e->getMessage()]);
             return response()->json(['error' => 'Validation error'], 422);
         }
@@ -64,7 +62,6 @@ class MarksController extends CommonController
         $teacher = Teacher::where('user_id', $userId)->first();
 
         if (!$teacher) {
-            // Log errore se l'insegnante non è trovato
             Log::error('Teacher not found', ['userId' => $userId]);
             return response()->json(['error' => 'Teacher not found'], 404);
         }
