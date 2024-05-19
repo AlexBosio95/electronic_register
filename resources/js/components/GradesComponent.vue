@@ -73,7 +73,8 @@
         :students="students" 
         :addGradeFormMode="addGradeFormMode"
         :selectedSubject="selectedSubject"
-        :selectedDay="selectedDay" 
+        :selectedDay="selectedDay"
+        :current_user="current_user" 
         @votoCreato="handleVotoCreato"/>
     </div>
 </template>
@@ -101,7 +102,10 @@ export default {
             default: () => []
         },
         selectedDay: String,
-        classes: Array
+        classes: Array,
+        current_user: {
+            type: Number
+        }
     },
     methods: {
         toggleEditMode() {

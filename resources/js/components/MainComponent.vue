@@ -113,7 +113,8 @@ export default {
                 props = {
                     students: this.studentsByClass,
                     classes: this.classes,
-                    selectedDay: this.dateSelected
+                    selectedDay: this.dateSelected,
+                    current_user: this.current_user
                 };
                 break;
             case 'Presenze':

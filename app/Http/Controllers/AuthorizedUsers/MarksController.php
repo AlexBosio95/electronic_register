@@ -44,7 +44,8 @@ class MarksController extends CommonController
                 'student' => 'required|exists:students,id',
                 'grade' => 'required|exists:grade_options,id',
                 'subject' => 'required|exists:subjects,id',
-                'date' => 'required'
+                'date' => 'required',
+                'user' => 'required'
             ]);
             Log::info('Validation successful', ['validatedData' => $validatedData]);
         } catch (\Exception $e) {
@@ -53,13 +54,7 @@ class MarksController extends CommonController
             return response()->json(['error' => 'Validation error'], 422);
         }
 
-        try {
-            $userId = Auth::id();
-            Log::info('User ID retrieved', ['userId' => $userId]);
-        } catch (\Exception $e) {
-            Log::error('User error:', ['message' => $e->getMessage()]);
-            return response()->json(['error' => 'User error'], 500);
-        }
+        $userId = $validatedData['user'];
 
         if (!$userId) {
             Log::error('User ID is null');
