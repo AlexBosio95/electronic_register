@@ -38,7 +38,6 @@ class MarksController extends CommonController
      */
     public function store(Request $request)
     {
-
         try {
             // Validazione dei dati
             $validatedData = $request->validate([
@@ -47,28 +46,49 @@ class MarksController extends CommonController
                 'subject' => 'required|exists:subjects,id',
                 'date' => 'required'
             ]);
+            Log::info('Validation successful', ['validatedData' => $validatedData]);
         } catch (\Exception $e) {
             // Log dell'eccezione di validazione
             Log::error('Validation error:', ['message' => $e->getMessage()]);
             return response()->json(['error' => 'Validation error'], 422);
         }
 
-        $userId = Auth::id();
+        try {
+            $userId = Auth::id();
+            Log::info('User ID retrieved', ['userId' => $userId]);
+        } catch (\Exception $e) {
+            Log::error('User error:', ['message' => $e->getMessage()]);
+            return response()->json(['error' => 'User error'], 500);
+        }
+
+        if (!$userId) {
+            Log::error('User ID is null');
+            return response()->json(['error' => 'User ID is null'], 500);
+        }
+
         $teacher = Teacher::where('user_id', $userId)->first();
 
         if (!$teacher) {
             // Log errore se l'insegnante non è trovato
-            Log::error('Teacher not found');
+            Log::error('Teacher not found', ['userId' => $userId]);
             return response()->json(['error' => 'Teacher not found'], 404);
         }
 
-        $gradeName = GradeOption::findOrFail($validatedData['grade'])->name;
+        Log::info('Teacher found', ['teacher' => $teacher]);
+
+        try {
+            $gradeOption = GradeOption::findOrFail($validatedData['grade']);
+            $gradeName = $gradeOption->name;
+            Log::info('Grade option found', ['gradeName' => $gradeName]);
+        } catch (\Exception $e) {
+            Log::error('Grade option error:', ['message' => $e->getMessage()]);
+            return response()->json(['error' => 'Grade option error'], 500);
+        }
 
         try {
             $data = $validatedData['date'];
             $formattedDate = date('Y-m-d', strtotime($data));
-
-            Log::info($formattedDate);
+            Log::info('Date formatted', ['formattedDate' => $formattedDate]);
 
             $mark = GradesStudentRegister::create([
                 'student_id' => $validatedData['student'],
@@ -78,6 +98,7 @@ class MarksController extends CommonController
                 'type' => 'mark',
                 'data' => $formattedDate,
             ]);
+            Log::info('Grade record created', ['mark' => $mark]);
         } catch (\Exception $e) {
             // Log dell'eccezione durante la creazione del marchio
             Log::error('Error creating mark:', ['message' => $e->getMessage()]);
@@ -87,6 +108,7 @@ class MarksController extends CommonController
         // Risposta con il marchio creato
         return response()->json($mark, 201);
     }
+
 
 
     /**
