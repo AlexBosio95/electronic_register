@@ -47,7 +47,8 @@ export default {
             addGradeFormMode: Boolean,
             selectedSubject: Number,
             subjectOptions: Array,
-            selectedDay: String
+            selectedDay: String,
+            current_user: Number
     },
     data() {
         return {
@@ -79,7 +80,8 @@ export default {
                 student: this.selectedStudent,
                 grade: this.selectedGrade,
                 subject: this.selectedSubjectMark,
-                date: this.selectedDay
+                date: this.selectedDay,
+                user: this.current_user
             };
 
             const options = {
