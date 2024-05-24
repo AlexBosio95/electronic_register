@@ -44,4 +44,25 @@ class CommonController extends Controller
             return view('teacher.presents', compact('classes', 'user_role', 'page', 'sections', 'userId'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
+
+
+    public function getApiKey(){
+        $user = Auth::user();
+        if(!$user){
+            abort(401, 'Unauthorized');
+        }  
+        if(!empty($user->api_key)){
+            $responseData = [
+                'success' => true,
+                'message' => 'Recuperata api key con successo!',
+                'api_key' => $user->api_key
+            ]; 
+        } else {
+            $responseData = [
+                'success' => false,
+                'message' => 'Errore nel recupero dell\'api key!',
+            ];
+        }
+        return response()->json($responseData); 
+    }
 }

@@ -22,36 +22,26 @@ class ApiController extends Controller
 
     public function getTimetable(string $id, string $dateParam)
     {
-        //Log::info($id);
         $dayOfWeek = date("l", strtotime($dateParam));
-        //Log::info($dayOfWeek);
         try{
             $selectedClass = Classe::findOrFail($id);
-            //Log::info($selectedClass->id);    
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             Log::info($e);
         }
              
         if ($selectedClass) {
             $timetable = $selectedClass->calendar();
-            //Log::info($timetable->pluck('time_start')->implode(', '));
             $filteredTimetable = $timetable->where('day_of_week', $dayOfWeek)->get();
-            //Log::info(empty($filteredTimetable));
             if($filteredTimetable->isEmpty()){
                 return response()->json(['message' => 'La classe non ha un orario associato']);
             }
             //costruzione matrice per la griglia delle presenze
-            //$res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
             
             $matrice = $this->getPresences($filteredTimetable ,$selectedClass, $dateParam);
-            /* if(empty($matrice)){
-                return response()->json(['message' => 'Gli studenti non hanno presenze/assenze da mostrare']);
-            } */
             $resp = [
                 'timetable' => $filteredTimetable,
                 'presences' => $matrice
             ];
-            //Log::info($resp);
             return response()->json($resp);
         } else {
             return response()->json(['message' => 'Orario non trovato'], 404);
@@ -151,6 +141,11 @@ class ApiController extends Controller
         } else {
             return response()->json(['message' => 'Parametro "class" mancante'], 400);
         }
+    }
+
+    public function getAuthorizedUser()
+    {
+
     }
 
 

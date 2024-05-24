@@ -25,7 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-//Route::middleware('checkApi')->group(function () {
+Route::middleware('checkApi')->group(function () {
     Route::post('/dashboard', [PresenceController::class, 'store']);
     Route::delete('/dashboard/{id}', [PresenceController::class, 'destroy']);
     Route::put('/dashboard/{id}', [PresenceController::class, 'update']);
@@ -35,34 +35,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     Route::get('/subject-options', [ApiController::class, 'getSubjectsOption']);
     Route::get('/grades', [ApiController::class, 'getGrades']);
     Route::get('/students', [ApiController::class, 'getStudentsByClass']);
-    //Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
-    Route::post('/presences', [ApiController::class, 'getPresences']);
-//});
-
-
-Route::middleware('auth:sanctum')->group(function () {
     Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
-});
-
-
-
-
-Route::post('/login', function (Request $request) {
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
-
-    Log::info($request);
-    $user = User::where('email', $request->email)->first();
-
-    if (! $user || ! Hash::check($request->password, $user->password)) {
-        return response()->json([
-            'message' => 'Invalid login details'
-        ], 401);
-    }
-
-    $token = $user->createToken('auth-token')->plainTextToken;
-
-    return response()->json(['token' => $token]);
+    Route::post('/presences', [ApiController::class, 'getPresences']);
 });

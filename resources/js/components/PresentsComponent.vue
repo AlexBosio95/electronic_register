@@ -98,15 +98,14 @@ import ButtonModal from './ButtonModal.vue';
                 this.mostraTable = true;
             })
             .catch(error => {
-                console.error(error);
-                
+                console.error(error);               
             });
         },
         setErrorEmptyStudents(){
             if(this.students.length <= 0){
                 this.current_error = "La classe non ha studenti associati";
             }
-        }      
+        }
     },
     watch: {
         current_class: "getTimetable",

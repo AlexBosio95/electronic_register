@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Log;
 
 class ApiMiddleware
 {
@@ -18,16 +18,13 @@ class ApiMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         /* Logica base per gestire la protezione delle chiamate API con api-key */
-        $apiKey = $request->header('X-API-KEY');
+        $user = Auth::user();
 
-        if (!$apiKey) {
-            return response()->json(['error' => 'API Key is missing'], 401);
+        if (!$user) {
+            return response()->json(['error' => 'Login error, missing user'], 401);
         }
+        Log::info($request);
 
-        // Verifica se l'API key è corretta
-        if ($apiKey !== 'YOUR_API_KEY') {
-            return response()->json(['error' => 'Invalid API Key'], 401);
-        }
 
         return $next($request);
     }
