@@ -15,51 +15,14 @@ use App\Models\GradeOption;
 use App\Models\Subject;
 use App\Models\Student;
 
-class MarksController extends Controller
+class MarksController extends CommonController
 {
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $userId = Auth::id();
-        $user = Auth::user();
-        $user_role = $user->role;
-        $students = [];
-        $classes = [];
-        $page = 'Voti';
-
-        $teacher = Teacher::where('user_id', $userId)->first();
-
-        if ($teacher) {
-            $classes = $teacher->classes;
-
-            $grades = GradesStudentRegister::where('teacher_id', $teacher->id)
-                                            ->where('type', 'mark')
-                                            ->get();
-
-            if ($classes->isNotEmpty()) {
-                $selectedClassId = $request->input('selected_class');
-
-                if ($selectedClassId) {
-                    $selectedClass = $classes->where('id', $selectedClassId)->first();
-
-                    if ($selectedClass) {
-                        $students = $selectedClass->students;
-                    } else {
-                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Invalid selected class.']);
-                    }
-                } else {
-                    $students = $classes->first()->students;
-                }
-
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'grades'));
-            } else {
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'No classes found for the teacher.']);
-            }
-        } else {
-            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page'))->withErrors(['message' => 'Teacher not found.']);
-        }
+        return $this->commonIndex($request, 'Voti');
     }
 
     /**
@@ -75,37 +38,49 @@ class MarksController extends Controller
      */
     public function store(Request $request)
     {
-
         try {
             // Validazione dei dati
             $validatedData = $request->validate([
                 'student' => 'required|exists:students,id',
                 'grade' => 'required|exists:grade_options,id',
                 'subject' => 'required|exists:subjects,id',
-                'date' => 'required'
+                'date' => 'required',
+                'user' => 'required'
             ]);
         } catch (\Exception $e) {
-            // Log dell'eccezione di validazione
             Log::error('Validation error:', ['message' => $e->getMessage()]);
             return response()->json(['error' => 'Validation error'], 422);
         }
 
-        $userId = Auth::id();
+        $userId = $validatedData['user'];
+
+        if (!$userId) {
+            Log::error('User ID is null');
+            return response()->json(['error' => 'User ID is null'], 500);
+        }
+
         $teacher = Teacher::where('user_id', $userId)->first();
 
         if (!$teacher) {
-            // Log errore se l'insegnante non è trovato
-            Log::error('Teacher not found');
+            Log::error('Teacher not found', ['userId' => $userId]);
             return response()->json(['error' => 'Teacher not found'], 404);
         }
 
-        $gradeName = GradeOption::findOrFail($validatedData['grade'])->name;
+        Log::info('Teacher found', ['teacher' => $teacher]);
+
+        try {
+            $gradeOption = GradeOption::findOrFail($validatedData['grade']);
+            $gradeName = $gradeOption->name;
+            Log::info('Grade option found', ['gradeName' => $gradeName]);
+        } catch (\Exception $e) {
+            Log::error('Grade option error:', ['message' => $e->getMessage()]);
+            return response()->json(['error' => 'Grade option error'], 500);
+        }
 
         try {
             $data = $validatedData['date'];
             $formattedDate = date('Y-m-d', strtotime($data));
-
-            \Log::info($formattedDate);
+            Log::info('Date formatted', ['formattedDate' => $formattedDate]);
 
             $mark = GradesStudentRegister::create([
                 'student_id' => $validatedData['student'],
@@ -115,6 +90,7 @@ class MarksController extends Controller
                 'type' => 'mark',
                 'data' => $formattedDate,
             ]);
+            Log::info('Grade record created', ['mark' => $mark]);
         } catch (\Exception $e) {
             // Log dell'eccezione durante la creazione del marchio
             Log::error('Error creating mark:', ['message' => $e->getMessage()]);
@@ -124,6 +100,7 @@ class MarksController extends Controller
         // Risposta con il marchio creato
         return response()->json($mark, 201);
     }
+
 
 
     /**
@@ -168,68 +145,6 @@ class MarksController extends Controller
 
         // Ritorna una risposta di successo
         return response()->json(['message' => 'Voto eliminato con successo.']);
-    }
-
-    /**
-     * Recupera i voti per quella classe
-     */
-
-    public function getGrades(Request $request)
-    {
-        // Verifica se è stata fornita una query string per la materia
-        if ($request->has('subject')) {
-            // Recupera i voti in base alla materia selezionata
-            $subjectId = $request->input('subject');
-            $grades = GradesStudentRegister::where('type', 'mark')
-                                            ->where('subject_id', $subjectId)
-                                            ->get();
-        } else {
-            $grades = [];
-        }
-    
-        return response()->json($grades);
-    }
-
-    /**
-     * Recupera le opzioni voti
-     */
-
-    public function getGradesOption()
-    {
-        $gradeOptions = GradeOption::all();
-        return response()->json($gradeOptions);
-    }
-
-    /**
-     * Recupera le opzioni materie
-     */
-
-    public function getSubjectsOption()
-    {
-        $subjectOption = Subject::all();
-        return response()->json($subjectOption);
-    }
-
-    /**
-     * Recupera gli studenti di quella classe
-     */
-
-    public function getStudentsByClass(Request $request)
-    {
-        //Log::info($request);
-        if ($request->has('class')) {
-            $classeId = $request->input('class');
-            $classe = Classe::find($classeId);
-
-            if ($classe) {
-                $students = Student::where('class_id', $classeId)->get();
-                return response()->json($students);
-            } else {
-                return response()->json(['message' => 'Classe non trovata'], 404);
-            }
-        } else {
-            return response()->json(['message' => 'Parametro "class" mancante'], 400);
-        }
     }
 
 }

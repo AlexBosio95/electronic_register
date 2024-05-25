@@ -2,8 +2,7 @@
   
   <div v-for="(pagina, key) in sections" :key="key">
     <a
-      v-if="shouldDisplay(pagina)"
-      :href="generateRoute(pagina)"
+      :href="generateRoute(key)"
       class="w-full flex items-center gap-x-1.5 group select-none focus:outline-none"
     >
       <div
@@ -13,7 +12,7 @@
         </div>
       </div>
 
-      <a v-if="page !== pagina.section_name" class="w-full flex items-center gap-x-1.5 group select-none focus:outline-none">
+      <a v-if="page !== pagina" class="w-full flex items-center gap-x-1.5 group select-none focus:outline-none">
         <div class="w-1 rounded-xl h-8 bg-transparent transition-colors duration-200 relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-[102%] translate-y-full group-hover:translate-y-0 bg-red-600 transition-all duration-300"></div>
         </div>
@@ -25,7 +24,7 @@
                 <path d="M16 21H14C14 18.2386 11.7614 16 9 16C6.23858 16 4 18.2386 4 21H2C2 17.134 5.13401 14 9 14C12.866 14 16 17.134 16 21Z"></path>
             </svg>
 
-            <span class="font-QuicksandMedium">{{ pagina.section_name }}</span>
+            <span class="font-QuicksandMedium">{{ pagina }}</span>
         </div>
       </a>
       <a v-else class="w-full flex items-center gap-x-1.5 group select-none focus:outline-none"> 
@@ -36,7 +35,7 @@
             <svg class="h-5 w-5 !fill-red-500 group-hover:fill-red-600 dark:fill-gray-600  transition-colors duration-200" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                 <path d="M5 22h14a2 2 0 0 0 2-2v-9a1 1 0 0 0-.29-.71l-8-8a1 1 0 0 0-1.41 0l-8 8A1 1 0 0 0 3 11v9a2 2 0 0 0 2 2zm5-2v-5h4v5zm-5-8.59 7-7 7 7V20h-3v-5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v5H5z"></path>
             </svg>
-            <span class="font-QuicksandMedium">{{ pagina.section_name }}</span>
+            <span class="font-QuicksandMedium">{{ pagina }}</span>
         </div>
       </a>  
     </a>
@@ -73,14 +72,7 @@ export default {
     },
     methods: {
       generateRoute(pagina) {
-        return `${pagina.route_name}`;
-      },
-      shouldDisplay(pagina) {
-        if (this.user_role === "admin" || (pagina.visibility && pagina.visibility[this.user_role] && pagina.visibility[this.user_role].length > 0)) 
-          return true;
-        else
-          return false;
-        
+        return `${pagina}`;
       }
     }
 };

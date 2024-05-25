@@ -1,7 +1,3 @@
-import Alpine from 'alpinejs'
-window.Alpine = Alpine
-Alpine.start()
-
 import axios from 'axios';
 window.axios = axios;
 import { createApp } from 'vue';
@@ -13,6 +9,7 @@ import PresentsComponent from './components/PresentsComponent.vue';
 import Calendar from './components/Calendar.vue';
 import ButtonModal from './components/ButtonModal.vue';
 import ModalManageAttendance from './components/ModalManageAttendance.vue';
+import DefaultComponent from './components/DefaultComponent.vue';
 
 const app = createApp({});
 
@@ -24,6 +21,7 @@ app.component('attendance-component', PresentsComponent);
 app.component('calendar', Calendar);
 app.component('button-modal', ButtonModal);
 app.component('manage-attendance', ModalManageAttendance);
+app.component('default-component', DefaultComponent);
 
 app.mount('#app');
 

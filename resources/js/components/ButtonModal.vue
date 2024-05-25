@@ -26,6 +26,7 @@
     :current_date="current_date"
     :presences="presences"
     :index="index"
+    :current_user="current_user"
     @closeModal="closeModal"
     ></modal-manage-attendance>
 
@@ -57,6 +58,9 @@ import ModalManageAttendance from './ModalManageAttendance.vue';
             type: Object
         },
         index: {
+            type: Number
+        },
+        current_user: {
             type: Number
         }
     },

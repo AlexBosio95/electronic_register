@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthorizedUsers\ClassController;
+use App\Http\Controllers\AuthorizedUsers\CommonController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AuthorizedUsers\PresenceController;
 use App\Http\Controllers\AuthorizedUsers\JustificationsController;
@@ -41,7 +42,7 @@ Route::middleware(['auth','checkUser','verified'])->group(function () {
     Route::resource('/justifications', JustificationsController::class);
     Route::resource('/plan', PlanController::class);
     Route::resource('/timetable', TimetableController::class);
-    Route::resource('/dashboard', PresenceController::class, ['names' => 'dashboard']);  
+    Route::resource('/dashboard', PresenceController::class, ['names' => 'dashboard']);
 });
 
 

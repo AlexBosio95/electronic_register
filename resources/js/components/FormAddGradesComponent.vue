@@ -47,7 +47,8 @@ export default {
             addGradeFormMode: Boolean,
             selectedSubject: Number,
             subjectOptions: Array,
-            selectedDay: String
+            selectedDay: String,
+            current_user: Number
     },
     data() {
         return {
@@ -79,7 +80,8 @@ export default {
                 student: this.selectedStudent,
                 grade: this.selectedGrade,
                 subject: this.selectedSubjectMark,
-                date: this.selectedDay
+                date: this.selectedDay,
+                user: this.current_user
             };
 
             const options = {
@@ -90,7 +92,7 @@ export default {
             };
 
             if (this.selectedStudent !== null && this.selectedGrade !== null && this.selectedSubjectMark !== null) {
-                axios.post('/marks', data, options)
+                axios.post('/api/marks', data, options)
                 .then(response => {
                     this.$emit('votoCreato', this.selectedSubjectMark);
                     this.selectedStudent = null;

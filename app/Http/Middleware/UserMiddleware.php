@@ -24,7 +24,7 @@ class UserMiddleware
         $metodo = $metodo = $request->method();
         $role = $user->role;
 
-        if ($user && $user->role === 'admin') {
+        if (($user && $user->role === 'admin') || ($routeName == "getapikey")) {
             return $next($request);
         }
 

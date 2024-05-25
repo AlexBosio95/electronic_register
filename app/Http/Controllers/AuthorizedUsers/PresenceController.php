@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
 
-class PresenceController extends Controller
+class PresenceController extends CommonController
 {
     use WithPresenceTrait;    
     
@@ -27,89 +27,7 @@ class PresenceController extends Controller
      */
     public function index(Request $request)
     {
-        $user = Auth::user();
-        if (!$user){
-            abort(401, 'Unauthorized');
-        }
-        $userId = $user->id;
-        $user_role = $user->role;
-        $students = [];
-        $classes = [];
-        $timetable = [];
-        $res = [];
-        $page = 'Presenze';
-        /*inizializzo current_date e current_day con giorno corrente e data corrente */
-        $current_date = date("Y-m-d");
-        $current_day = strftime('%A');
-        if($request->input('current_date') !== null)
-        {
-            /*validazione campo classe*/
-            $rules = [
-                'current_date' => ['regex:/^\d{1,2}\s(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{4}$/i'],
-            ];
-            $messages = [
-                'current_date.regex' => 'Field :attribute MUST BE in this format: day, month in letter in English INGLESE and year.',
-            ];
-            $validator = Validator::make($request->all(), $rules, $messages);
-            if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
-            }
-            $current_date = $request->input('current_date');
-            $current_date = \DateTime::createFromFormat('j F Y', $current_date)->format('Y-m-d');
-            $current_day = date("l", strtotime($current_date));
-        }
-
-        $teacher = Teacher::where('user_id', $userId)->first();
-
-        if ($teacher) {
-            $classes = $teacher->classes;
-
-            if ($classes->isNotEmpty()) {
-                /*validazione campo classe*/
-                $rules = [
-                    'selected_class' => 'integer',
-                ];
-                $messages = [
-                    'selected_class.integer' => 'Field :attribute MUST BE an id, an integer number',
-                ];
-                $validator = Validator::make($request->all(), $rules, $messages);
-                if ($validator->fails()) {
-                    return back()->withErrors($validator)->withInput();
-                }
-                $selectedClassId = $request->input('selected_class');
-                
-                //Log::info($selectedClassId);    
-
-                if ($selectedClassId) {
-                    $selectedClass = $classes->where('id', $selectedClassId)->first();                
-                    if ($selectedClass) {
-                        $students = $selectedClass->students;
-                        $timetable = $selectedClass->calendar;
-                        //costruzione matrice per la griglia delle presenze
-                        $res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
-                        if ($res === false){
-                            $res = [];
-                            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid Timetable']);                            
-                        }
-                    } else {
-                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid selected class.']);
-                    }
-                } else {
-                    $students = $classes->first()->students;
-                    $timetable = $classes->first()->calendar;
-                    //costruzione matrice per la griglia delle presenze
-                    $res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
-                    if ($res === false){
-                        return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res', 'current_date','current_day'))->withErrors(['message' => 'Invalid Timetable']);                            
-                    }
-                }
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'));
-            } else {
-                return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'))->withErrors(['message' => 'No classes found for the teacher.']);
-            }
-        } else {
-            return view('teacher.presents', compact('students', 'classes', 'user_role', 'page', 'timetable', 'res','current_date','current_day'))->withErrors(['message' => 'Teacher not found.']);
-        }
+        return $this->commonIndex($request, 'Presenze');
     }
 
 
@@ -133,6 +51,7 @@ class PresenceController extends Controller
             'hiddenHour' => 'required|regex:/^\d{2}:\d{2}$/',
             'attendance' => 'required|in:P,A',
             'hiddenDate' => ['required', 'regex:/^\d{1,2}\s(?:January|February|March|April|May|June|July|August|September|October|November|December)\s\d{4}$/i'],
+            'current_user' => 'required|integer'
         ];
         $messages = [
             'student_id.required' => 'Field Student ID is mandatory',
@@ -143,6 +62,7 @@ class PresenceController extends Controller
             'attendance.in' => 'Field Attendance MUST BE "P" o "A".',
             'hiddenDate.required' => 'Field Hidden Date is mandatory',
             'hiddenDate.regex' => 'Field Hidden Date MUST BE in the format day, month in letter in English and year.',
+            'current_user.regex' => 'Field Id must be integer'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
@@ -151,7 +71,7 @@ class PresenceController extends Controller
 
         $student = $request->input('student_id');
         $hour = $request->input('hiddenHour');
-        $userId = Auth::id();
+        $userId = $request->input('current_user');
         $teacher = Teacher::where('user_id', $userId)->first()->id; 
         $presence = $request->input('attendance');
         $date = $request->input('hiddenDate');  
@@ -276,76 +196,4 @@ class PresenceController extends Controller
         return $responseData;
     }
 
-    public function getTimetable(string $id, string $dateParam)
-    {
-        //Log::info($id);
-        $dayOfWeek = date("l", strtotime($dateParam));
-        //Log::info($dayOfWeek);
-        try{
-            $selectedClass = Classe::findOrFail($id);
-            //Log::info($selectedClass->id);    
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            Log::info($e);
-        }
-             
-        if ($selectedClass) {
-            $timetable = $selectedClass->calendar();
-            //Log::info($timetable->pluck('time_start')->implode(', '));
-            $filteredTimetable = $timetable->where('day_of_week', $dayOfWeek)->get();
-            //Log::info(empty($filteredTimetable));
-            if($filteredTimetable->isEmpty()){
-                return response()->json(['message' => 'La classe non ha un orario associato']);
-            }
-            //costruzione matrice per la griglia delle presenze
-            //$res = $this->buildPresenceGrid($students,$timetable,$current_day,$current_date);
-            
-            $matrice = $this->getPresences($filteredTimetable ,$selectedClass, $dateParam);
-            /* if(empty($matrice)){
-                return response()->json(['message' => 'Gli studenti non hanno presenze/assenze da mostrare']);
-            } */
-            $resp = [
-                'timetable' => $filteredTimetable,
-                'presences' => $matrice
-            ];
-            //Log::info($resp);
-            return response()->json($resp);
-        } else {
-            return response()->json(['message' => 'Orario non trovato'], 404);
-        }
-    }
-
-    public function getPresences($timetable, $selectedClass, $current_date){
-
-        $students = $selectedClass->students;
-        $current_date = \DateTime::createFromFormat('j F Y', $current_date)->format('Y-m-d');
-        $res = [];
-        foreach($students as $student){
-            $dayPresence = json_decode($student->presences, true);
-            //Filtra gli elementi dell'array in base al giorno corrente
-            $dayPresences = array_filter($dayPresence, function($item) use ($current_date) {
-                return $item['data'] === $current_date;
-            });
-            
-            $values = array_values($dayPresences);
-            foreach($timetable as $t){
-                $trovato = false;
-                foreach($values as $v){
-                    if($t['time_start'] ==  $v['hour']){
-                        $res[$student->id][] = [$v['presence'], $v['id']];  
-                        //$res[$student->id][] = $v['presence'];
-                        $trovato = true;
-                    } else {
-                        if ($trovato){
-                            break;
-                        }   
-                    }  
-                }
-                if(!$trovato){
-                    $res[$student->id][] = ['',''];
-                }
-            } 
-        }
-        //Log::info($res);
-        return $res;
-    }
 }

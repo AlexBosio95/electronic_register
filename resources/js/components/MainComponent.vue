@@ -5,8 +5,7 @@
         <div class="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-sm cursor-pointer">
             <calendar
                 v-model="dateSelected"
-                @date-selected="updateDateSelected"
-            >
+                @date-selected="updateDateSelected">
 
             </calendar>
             <menu-classes-component 
@@ -27,20 +26,14 @@
         </div>
     </div>
     <!-- Componenti Vue -->
-    <div v-if="page == 'Voti' " class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
-        <div class="py-5 px-10">
-            <GradesComponent 
-                :students="studentsByClass" 
-                :classes="classes"
-                :selectedDay="dateSelected"
-            />
-        </div>
+    <div class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
+    <div class="py-5 px-10">
+        <component 
+            :is="getPageComponent().component" 
+            v-bind="getPageComponent().props"
+        />
     </div>
-    <div v-else-if="page == 'Presenze' " class="relative flex-grow bg-[#1F2937] overflow-scroll border-l border-red-500">
-        <div class="py-5 px-10">
-            <attendance-component :students="studentsByClass" :current_class="selectedClass" :current_date="dateSelected"/>
-        </div>
-    </div>
+</div>
 </div>
 
 </template>
@@ -51,6 +44,7 @@ import GradesComponent from './GradesComponent.vue';
 import MenuClassesComponent from './MenuClassesComponent.vue';
 import MenuSections from './MenuSections.vue';
 import PresentsComponent from './PresentsComponent.vue';
+import DefaultComponent from './DefaultComponent.vue';
 
 
 export default {
@@ -59,7 +53,8 @@ export default {
         MenuSections,
         PresentsComponent,
         Calendar,
-        GradesComponent
+        GradesComponent,
+        DefaultComponent
     },
     props: {
         classes: {
@@ -73,80 +68,17 @@ export default {
         page: {
             type: String,
             required: true
+        },
+        sections: {
+            type: Object,
+            required: true
+        },
+        current_user: {
+            type: Number
         }
     },
     data() {
         return {
-            sections: {
-                dashboard: {
-                    section_name: 'Presenze',
-                    route_name: 'dashboard',
-                    visibility: {
-                        teacher: ['get', 'put', 'post', 'delete'],
-                        student: ['get']
-                    }
-                },
-                marks: {
-                    section_name: 'Voti',
-                    route_name: 'marks',
-                    visibility: {
-                        teacher: ['get', 'put', 'post', 'delete'],
-                        student: ['get']
-                    }
-                },
-                notes: {
-                    section_name: 'Note disciplinari',
-                    route_name: 'notes',
-                    visibility: {
-                        teacher: ['get', 'put', 'post', 'delete'],
-                        student: ['get']
-                    }
-                },
-                justifications: {
-                    section_name: 'Giustificazioni/Assenze',
-                    route_name: 'justifications',
-                    visibility: {
-                        teacher: ['get', 'put', 'post', 'delete'],
-                        student: ['get']
-                    }
-                },
-                plan: {
-                    section_name: 'Registro Professori',
-                    route_name: 'plan',
-                    visibility: {
-                        teacher: ['get', 'put', 'post', 'delete'],
-                        student: ['get']
-                    }
-                },
-                teachers: {
-                    section_name: 'Professori',
-                    route_name: 'teachers',
-                    visibility: {}
-                },
-                students: {
-                    section_name: 'Studenti',
-                    route_name: 'students',
-                    visibility: {}
-                },
-                classes: {
-                    section_name: 'Classi',
-                    route_name: 'classes',
-                    visibility: {}
-                },
-                subjects: {
-                    section_name: 'Materie',
-                    route_name: 'subjects',
-                    visibility: {}
-                },
-                timetable: {
-                    section_name: 'Orario',
-                    route_name: 'timetable',
-                    visibility: {
-                        teacher: ['get'],
-                        student: ['get']
-                    }
-                }
-            },
             selectedClass: this.classes[0]['id'],
             studentsByClass: [],
             dateSelected: null
@@ -159,7 +91,6 @@ export default {
             .then(response => response.json())
             .then(data => {
                 this.studentsByClass = data;
-                //console.log(data);
             })
             .catch(error => {
                 console.error('Si è verificato un errore:', error);
@@ -171,7 +102,38 @@ export default {
         },
         updateDateSelected(dateSelected){
             this.dateSelected = dateSelected;
+        },
+        getPageComponent() {
+        let component = null;
+        let props = {};
+        
+        switch (this.page) {
+            case 'Voti':
+                component = 'GradesComponent';
+                props = {
+                    students: this.studentsByClass,
+                    classes: this.classes,
+                    selectedDay: this.dateSelected,
+                    current_user: this.current_user
+                };
+                break;
+            case 'Presenze':
+                component = 'PresentsComponent';
+                props = {
+                    students: this.studentsByClass,
+                    current_class: this.selectedClass,
+                    current_date: this.dateSelected,
+                    current_user: this.current_user
+                };
+                break;
+            default:
+                component = 'DefaultComponent';
+                props = {};
+                break;
         }
+        
+        return { component, props };
+    }
     },
     watch:{
         selectedClass: 'getStudentsByClass'
