@@ -13,6 +13,7 @@ use App\Http\Controllers\AuthorizedUsers\SubjectsController;
 use App\Http\Controllers\AuthorizedUsers\TeacherController;
 use App\Http\Controllers\AuthorizedUsers\TimetableController;
 use Illuminate\Support\Facades\Route;
+use Sentry\State\HubInterface;
 
 /*
 |--------------------------------------------------------------------------

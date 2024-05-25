@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\AuthorizedUsers\MarksController;
 use App\Http\Controllers\AuthorizedUsers\PresenceController;
 use Illuminate\Support\Facades\Log;
+use Sentry\State\HubInterface;
 
 /*
 |--------------------------------------------------------------------------
