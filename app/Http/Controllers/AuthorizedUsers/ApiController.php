@@ -143,9 +143,14 @@ class ApiController extends Controller
         }
     }
 
-    public function getAuthorizedUser()
+    protected function ajaxLogAndResponse(Array $response, string $message, bool $result)
     {
-
+        $response = [
+            'result' => $result,
+            'message' => $message,
+            'data' => $response
+        ];
+        return response()->json($response);
     }
 
 
