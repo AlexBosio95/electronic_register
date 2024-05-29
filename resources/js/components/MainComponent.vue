@@ -40,21 +40,25 @@
 
 <script>
 import Calendar from './Calendar.vue';
-import GradesComponent from './GradesComponent.vue';
-import MenuClassesComponent from './MenuClassesComponent.vue';
-import MenuSections from './MenuSections.vue';
-import PresentsComponent from './PresentsComponent.vue';
-import DefaultComponent from './DefaultComponent.vue';
+import MenuClassesComponent from '../components/menu/MenuClassesComponent.vue';
+import MenuSections from '../components/menu/MenuSections.vue';
+import PresentsPage from '../page/PresentsPage.vue';
+import DefaultPage from '../page/DefaultPage.vue';
+import NotesPage from '../page/NotesPage.vue';
+import GradesPage from '../page/GradesPage.vue';
+import justificationsPage from '../page/justificationsPage.vue';
 
 
 export default {
     components:{
         MenuClassesComponent,
         MenuSections,
-        PresentsComponent,
+        PresentsPage,
         Calendar,
-        GradesComponent,
-        DefaultComponent
+        GradesPage,
+        DefaultPage,
+        NotesPage,
+        justificationsPage
     },
     props: {
         classes: {
@@ -109,7 +113,7 @@ export default {
         
         switch (this.page) {
             case 'Voti':
-                component = 'GradesComponent';
+                component = 'GradesPage';
                 props = {
                     students: this.studentsByClass,
                     classes: this.classes,
@@ -118,7 +122,25 @@ export default {
                 };
                 break;
             case 'Presenze':
-                component = 'PresentsComponent';
+                component = 'PresentsPage';
+                props = {
+                    students: this.studentsByClass,
+                    current_class: this.selectedClass,
+                    current_date: this.dateSelected,
+                    current_user: this.current_user
+                };
+                break;
+            case 'Note':
+                component = 'NotesPage';
+                props = {
+                    students: this.studentsByClass,
+                    current_class: this.selectedClass,
+                    current_date: this.dateSelected,
+                    current_user: this.current_user
+                };
+                break;
+            case 'Giustificazioni':
+                component = 'justificationsPage';
                 props = {
                     students: this.studentsByClass,
                     current_class: this.selectedClass,
@@ -127,7 +149,7 @@ export default {
                 };
                 break;
             default:
-                component = 'DefaultComponent';
+                component = 'DefaultPage';
                 props = {};
                 break;
         }

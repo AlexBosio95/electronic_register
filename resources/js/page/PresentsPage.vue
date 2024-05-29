@@ -43,7 +43,7 @@
 </template>
   
 <script>
-import ButtonModal from './ButtonModal.vue';
+import ButtonModal from '../components/ButtonModal.vue';
 
   export default {
     components:{
