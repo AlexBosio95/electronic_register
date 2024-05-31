@@ -1,8 +1,10 @@
 <template>
 
-    <div v-if="current_error && mostraTable === true" class="text-center top-2 bg-red-100 text-red-700 px-5 py-2 rounded-md">
-        {{ current_error }}
-    </div>
+    <PopUpComponent v-if="current_error && mostraTable === true"
+        :message="current_error"
+        :type="type"
+    />
+
     <div v-else-if="students.length > 0 && mostraTable === true">
         <div class="container mx-auto p-4">
             <!-- Griglia -->
@@ -30,8 +32,6 @@
                                 Poi da lì in qualche modo triggero l'apertura del modal-->
                                 <button-modal :presenza="presences[student.id][index - 1][0]" :student="student.id" :hourPresence="timetable[index -1]['time_start']" :current_date="current_date" :presences="presences" :index="index - 1" :current_user="current_user"></button-modal>                              
                             </td>  
-                            
-                              
                         </tr>
                         
                     </tbody>
@@ -41,13 +41,13 @@
     </div>
     
 </template>
-  
 <script>
 import ButtonModal from '../components/ButtonModal.vue';
-
-  export default {
+import PopUpComponent from '../components/common/PopUpComponent.vue';
+export default {
     components:{
-        ButtonModal
+        ButtonModal,
+        PopUpComponent
     },
     props: {
         classes: {
@@ -72,7 +72,8 @@ import ButtonModal from '../components/ButtonModal.vue';
             timetable: [],
             presences: [],
             current_error: "",
-            mostraTable: true
+            mostraTable: true,
+            type: "error"
         };
     },
     methods: {
