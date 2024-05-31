@@ -1,0 +1,40 @@
+import axios from 'axios';
+window.axios = axios;
+import { createApp } from 'vue';
+
+// Pagine
+import GradesPage from './page/GradesPage.vue';
+import PresentsPage from './page/PresentsPage.vue';
+import DefaultPage from './page/DefaultPage.vue';
+import NotesPage from './page/NotesPage.vue';
+import JustificationsPage from './page/JustificationsPage.vue';
+
+// Componenti
+import MenuClassesComponent from './components/menu/MenuClassesComponent.vue';
+import MainComponent from './components/MainComponent.vue';
+import MenuSections from './components/menu/MenuSections.vue';
+import Calendar from './components/menu/Calendar.vue';
+import ButtonModal from './components/ButtonModal.vue';
+import ModalManageAttendance from './components/ModalManageAttendance.vue';
+import PopUpComponent from './components/common/PopUpComponent.vue'
+
+const app = createApp({});
+
+// Pagine
+app.component('attendance-component', PresentsPage);
+app.component('grades-component', GradesPage);
+app.component('notes-component', NotesPage);
+app.component('default-component', DefaultPage);
+app.component('justification-component', JustificationsPage);
+
+// Componenti
+app.component('menu-classes-component', MenuClassesComponent);
+app.component('main-component', MainComponent);
+app.component('menu-sections', MenuSections);
+app.component('calendar', Calendar);
+app.component('button-modal', ButtonModal);
+app.component('manage-attendance', ModalManageAttendance);
+app.component('popup-component', PopUpComponent);
+
+app.mount('#app');
+
