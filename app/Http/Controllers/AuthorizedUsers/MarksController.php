@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\AuthorizedUsers;
 
+use App\Http\Controllers\AuthorizedUsers\ControllerTraits\WithPresenceTrait;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\StudentRegister;
@@ -17,6 +18,7 @@ use App\Models\Student;
 
 class MarksController extends CommonController
 {
+    use WithPresenceTrait;
     /**
      * Display a listing of the resource.
      */
@@ -137,14 +139,24 @@ class MarksController extends CommonController
 
         // Verifica se il voto esiste
         if (!$grade) {
-            return response()->json(['message' => 'Voto non trovato.'], 404);
+            //return response()->json(['message' => 'Voto non trovato.'], 404);
+            $result = false;
+            $statusCode = 404;
+            $message = 'Voto non trovato';
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
 
         // Elimina il voto dal database
         $grade->delete();
 
+        $result = true;
+        $statusCode = 200;
+        $message = 'Voto cancellato con successo';
+        $responseData = [];
         // Ritorna una risposta di successo
-        return response()->json(['message' => 'Voto eliminato con successo.']);
+        //return response()->json(['message' => 'Voto eliminato con successo.']);
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 
 }

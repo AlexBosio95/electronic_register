@@ -73,7 +73,6 @@ export default {
             fetch('/api/grade-options')
             .then(response => response.json())
             .then(data => {
-                console.log(data.data);
                 if (!data.result){
                     //TO DO CON GESTIONE pop up
                 } else {

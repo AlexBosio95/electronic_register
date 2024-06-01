@@ -121,18 +121,30 @@ export default {
         },
         deleteGrade(gradeId) {
             if (confirm('Sei sicuro di voler eliminare questo voto?')) {
-                axios.delete(`/api/marks/${gradeId}`)
-                    .then(response => {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                fetch(`/api/marks/${gradeId}`,{
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(!data.result){
+                        //GESTIONE ERRORE CON POP-UP
+                    } else {
                         this.grades = this.grades.filter(grade => grade.id !== gradeId);
-                    })
-                    .catch(error => {
-                        if (error.response && error.response.status === 404) {
-                            alert('Errore: Voto non trovato.');
-                        } else {
-                            alert('Errore durante l\'eliminazione del voto.');
-                        }
-                        console.error('Si è verificato un errore:', error);
-                    });
+                    }
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 404) {
+                        alert('Errore: Voto non trovato.');
+                    } else {
+                        alert('Errore durante l\'eliminazione del voto.');
+                    }
+                    console.error('Si è verificato un errore:', error);
+                });
             }
         },
         filteredGrades(studentId) {
