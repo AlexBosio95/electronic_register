@@ -33,19 +33,32 @@ class ApiController extends Controller
             $timetable = $selectedClass->calendar();
             $filteredTimetable = $timetable->where('day_of_week', $dayOfWeek)->get();
             if($filteredTimetable->isEmpty()){
-                return response()->json(['message' => 'La classe non ha un orario associato']);
-            }
-            //costruzione matrice per la griglia delle presenze
+                //return response()->json(['message' => 'La classe non ha un orario associato'], 404);
+                $resp = [];
+                $result = false;
+                $message = 'La classe non ha un orario associato';
+                $statusCode = 404;
+            } else {
+                //costruzione matrice per la griglia delle presenze
             
-            $matrice = $this->getPresences($filteredTimetable ,$selectedClass, $dateParam);
-            $resp = [
-                'timetable' => $filteredTimetable,
-                'presences' => $matrice
-            ];
-            return response()->json($resp);
+                $matrice = $this->getPresences($filteredTimetable ,$selectedClass, $dateParam);
+                $resp = [
+                    'timetable' => $filteredTimetable,
+                    'presences' => $matrice
+                ];
+                //return response()->json($resp);
+                $result = true;
+                $message = '';
+                $statusCode = 200;
+            }           
         } else {
-            return response()->json(['message' => 'Orario non trovato'], 404);
+            //return response()->json(['message' => 'Orario non trovato'], 404);
+            $resp = [];
+            $result = false;
+            $message = 'Orario non trovato';
+            $statusCode = 404;
         }
+        return $this->ajaxLogAndResponse($resp, $message, $result, $statusCode);
     }
 
 

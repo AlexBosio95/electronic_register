@@ -86,16 +86,13 @@ export default {
             fetch(`/api/timetable/${classParam}/${dateParam}`)
             .then(response => response.json())
             .then(data => {
-                if (!!data['message']){
-                    //console.log(data['message']);
-                    this.current_error = data['message'];
+                if (!data.result){
+                    this.current_error = data.message;
                     this.mostraTable = true;
                     return;
                 }
-                this.timetable = data['timetable'];
-                this.presences = data['presences'];
-                //console.log(this.timetable);
-                //console.log(this.presences);
+                this.timetable = data.data.timetable;
+                this.presences = data.data.presences;
                 this.mostraTable = true;
             })
             .catch(error => {
