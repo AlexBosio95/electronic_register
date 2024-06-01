@@ -134,22 +134,34 @@ class ApiController extends Controller
 
             if ($classe) {
                 $students = Student::where('class_id', $classeId)->get();
-                return response()->json($students);
+                $result = true;
+                $message = "";
+                $statusCode = 200;
             } else {
-                return response()->json(['message' => 'Classe non trovata'], 404);
+                $students = [];
+                $result = false;
+                $message = 'Classe non trovata';
+                $statusCode = 404;
             }
         } else {
-            return response()->json(['message' => 'Parametro "class" mancante'], 400);
+            $students = [];
+            $result = false;
+            $message = 'Parametro "class" mancante';
+            $statusCode = 404;
         }
+        return $this->ajaxLogAndResponse($students, $message, $result, $statusCode);
     }
 
-    protected function ajaxLogAndResponse(Array $response, string $message, bool $result)
+    protected function ajaxLogAndResponse($response, string $message, bool $result, int $statusCode)
     {
         $response = [
             'result' => $result,
             'message' => $message,
             'data' => $response
         ];
+        if (!$result){
+            return response()->json(['message' => $message], $statusCode);
+        }
         return response()->json($response);
     }
 

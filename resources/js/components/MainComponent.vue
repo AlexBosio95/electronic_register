@@ -94,7 +94,11 @@ export default {
             fetch(`/api/students?${classParam}`)
             .then(response => response.json())
             .then(data => {
-                this.studentsByClass = data;
+                if(data['result']){
+                    this.studentsByClass = data['data'];
+                } else {
+                    alert(data['message']);
+                }
             })
             .catch(error => {
                 console.error('Si è verificato un errore:', error);
@@ -167,7 +171,6 @@ export default {
         const currentYear= currentDate.getFullYear();
         const currentMonth= currentDate.getMonth();
         this.dateSelected = `${currentDay} ${months[currentMonth]} ${currentYear}`;
-        //this.getStudentsByClass();
     },
     mounted() {
         this.getStudentsByClass();
