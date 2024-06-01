@@ -97,7 +97,7 @@ export default {
                 if(data['result']){
                     this.studentsByClass = data['data'];
                 } else {
-                    alert(data['message']);
+                    //TO DO CON GESTIONE pop up
                 }
             })
             .catch(error => {

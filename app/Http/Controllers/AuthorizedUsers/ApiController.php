@@ -33,7 +33,6 @@ class ApiController extends Controller
             $timetable = $selectedClass->calendar();
             $filteredTimetable = $timetable->where('day_of_week', $dayOfWeek)->get();
             if($filteredTimetable->isEmpty()){
-                //return response()->json(['message' => 'La classe non ha un orario associato'], 404);
                 $resp = [];
                 $result = false;
                 $message = 'La classe non ha un orario associato';
@@ -46,13 +45,11 @@ class ApiController extends Controller
                     'timetable' => $filteredTimetable,
                     'presences' => $matrice
                 ];
-                //return response()->json($resp);
                 $result = true;
                 $message = '';
                 $statusCode = 200;
             }           
         } else {
-            //return response()->json(['message' => 'Orario non trovato'], 404);
             $resp = [];
             $result = false;
             $message = 'Orario non trovato';
@@ -110,8 +107,12 @@ class ApiController extends Controller
         } else {
             $grades = [];
         }
+        $responseData = $grades;
+        $result = true;
+        $message = 'Voti recuperati con successo';
+        $statusCode = 200;
     
-        return response()->json($grades);
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 
     /**
@@ -121,7 +122,7 @@ class ApiController extends Controller
     public function getGradesOption()
     {
         $gradeOptions = GradeOption::all();
-        return response()->json($gradeOptions);
+        return $this->ajaxLogAndResponse($gradeOptions, "Dati ottenuti con successo", true, 200);
     }
 
     /**
@@ -131,7 +132,7 @@ class ApiController extends Controller
     public function getSubjectsOption()
     {
         $subjectOption = Subject::all();
-        return response()->json($subjectOption);
+        return $this->ajaxLogAndResponse($subjectOption, "Dati ottenuti con successo", true, 200);
     }
 
     /**
@@ -165,18 +166,7 @@ class ApiController extends Controller
         return $this->ajaxLogAndResponse($students, $message, $result, $statusCode);
     }
 
-    protected function ajaxLogAndResponse($response, string $message, bool $result, int $statusCode)
-    {
-        $response = [
-            'result' => $result,
-            'message' => $message,
-            'data' => $response
-        ];
-        if (!$result){
-            return response()->json(['message' => $message], $statusCode);
-        }
-        return response()->json($response);
-    }
+    
 
 
 }

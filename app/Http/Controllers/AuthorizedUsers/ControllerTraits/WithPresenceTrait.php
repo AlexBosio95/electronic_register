@@ -48,5 +48,20 @@ trait WithPresenceTrait
         return $res;
     }
 
+    protected function ajaxLogAndResponse(mixed $response, string $message, bool $result, int $statusCode)
+    {
+        $response = [
+            'result' => $result,
+            'message' => $message,
+            'data' => $response
+        ];
+        if (!$result){
+            Log::info(response()->json(['result' => false, 'message' => $message], $statusCode));
+            return response()->json(['result' => false, 'message' => $message], $statusCode);
+        }
+        Log::info(response()->json($response));
+        return response()->json($response);
+    }
+
 
 }

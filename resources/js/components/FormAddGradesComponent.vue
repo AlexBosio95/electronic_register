@@ -70,13 +70,16 @@ export default {
     },
     methods:{
         getGradeOptions(){
-            axios.get('/api/grade-options')
-                .then(response => {
-                    this.gradeOptions = response.data;
-                })
-                .catch(error => {
-                    console.error('Errore nel recupero delle opzioni di voto:', error);
-                });
+            fetch('/api/grade-options')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.data);
+                if (!data.result){
+                    //TO DO CON GESTIONE pop up
+                } else {
+                    this.gradeOptions = data.data;
+                }
+            })
         },
         newGrade(){
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

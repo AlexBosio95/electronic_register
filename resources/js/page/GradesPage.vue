@@ -152,9 +152,14 @@ export default {
             }, 400);
         },
         getSubjectOptions(){
-            axios.get('/api/subject-options')
-                .then(response => {
-                    this.subjectOptions = response.data;
+            fetch('/api/subject-options')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.result){
+                        //TO DO CON GESTIONE pop up
+                    } else {
+                        this.subjectOptions = data.data;
+                    }
                 })
                 .catch(error => {
                     console.error('Errore nel recupero delle opzioni di materia:', error);
@@ -165,8 +170,11 @@ export default {
             fetch(`/api/grades?${subjectParam}`)
             .then(response => response.json())
             .then(data => {
-                this.grades = data;
-                console.log(data);
+                if(!data.result){
+                    //TO DO GESTIONE con pop up
+                } else {
+                    this.grades = data.data;
+                }
             })
             .catch(error => {
                 console.error('Si è verificato un errore:', error);

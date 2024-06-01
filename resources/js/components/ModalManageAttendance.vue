@@ -98,24 +98,23 @@
             };
 
             fetch('/api/dashboard', options)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(responseData => {
-                    //console.log("TUTTO OK");
+            .then(response => response.json())
+            .then(data => {
+                if(!data.result){
+                    //TO DO CON GESTIONE pop up
+                } else {
                     this.presences[this.student][this.index][0] = this.current_presence;
-                    this.presences[this.student][this.index][1] = responseData.recordId;
-                })
-                .catch(error => {
-                    /* this.errorMessage = "Errore durante l'inserimento della presenza";
-                    this.mostraErrore = true;
-                    setTimeout(() => {
-                        this.mostraErrore = false;
-                    }, 2200); */
-                });
+                    this.presences[this.student][this.index][1] = data.data.recordId;
+                }
+                
+            })
+            .catch(error => {
+                /* this.errorMessage = "Errore durante l'inserimento della presenza";
+                this.mostraErrore = true;
+                setTimeout(() => {
+                    this.mostraErrore = false;
+                }, 2200); */
+            });
         },
         buildApiUpdate() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -132,11 +131,14 @@
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Errore durante la richiesta PUT');
+            .then(response => response.json())
+            .then(data => {
+                if (!data['result']) {
+                    //TO DO GESTIONE DELL'ERRORE COL POP-UP
+                } else {
+                    this.presences[this.student][this.index][0] = this.current_presence;
                 }
-                this.presences[this.student][this.index][0] = this.current_presence;
+                
             })
             .catch(error => {
                 console.log('Errore durante la richiesta PUT:', error.message);
@@ -155,22 +157,20 @@
                     'X-CSRF-TOKEN': csrfToken,
                 }
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Errore durante la richiesta di DELETE');
-                }
-                this.presences[this.student][this.index][0] = '';
-                this.presences[this.student][this.index][1] = '';
-                return;
+            .then(response => response.json())
+            .then(data => {
+                if (!data['result']) {
+                    //TO DO GESTIONE col pop up di errore
+                } else {
+                    this.presences[this.student][this.index][0] = '';
+                    this.presences[this.student][this.index][1] = '';
+                    return;
+                }              
             })
             .catch(error => {
                 console.log('Errore durante la richiesta PUT:', error.message);
                 // Gestisci l'errore qui, ad esempio mostrando un messaggio all'utente
             });
-
-
-
-
         }
     }
     };
