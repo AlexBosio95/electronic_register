@@ -73,6 +73,7 @@ export default {
             fetch('/api/grade-options')
             .then(response => response.json())
             .then(data => {
+
                 if (!data.result){
                     //TO DO CON GESTIONE pop up
                 } else {
@@ -90,23 +91,32 @@ export default {
                 date: this.selectedDay,
                 user: this.current_user
             };
-
-            const options = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken 
-                }
-            };
+            console.log(data);
 
             if (this.selectedStudent !== null && this.selectedGrade !== null && this.selectedSubjectMark !== null) {
-                axios.post('/api/marks', data, options)
-                .then(response => {
-                    this.$emit('votoCreato', this.selectedSubjectMark);
-                    this.selectedStudent = null;
-                    this.selectedGrade = null;
-                    this.selectedSubjectMark = null;
+                fetch('/api/marks', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    if (!data.result){
+                        //GESTIONE ERRORE CON POP-UP RIVEDERE ANCHE IL TRY CATCH
+                    } else {
+                        this.$emit('votoCreato', this.selectedSubjectMark);
+                        this.selectedStudent = null;
+                        this.selectedGrade = null;
+                        this.selectedSubjectMark = null;
+                    }
+                    
                 })
                 .catch(error => {
+                    console.log(error.message);
                     this.errorMessage = "Errore durante la creazione del voto";
                     this.popUpShow = true;
                     setTimeout(() => {

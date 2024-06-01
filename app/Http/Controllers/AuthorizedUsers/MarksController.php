@@ -51,21 +51,36 @@ class MarksController extends CommonController
             ]);
         } catch (\Exception $e) {
             Log::error('Validation error:', ['message' => $e->getMessage()]);
-            return response()->json(['error' => 'Validation error'], 422);
+            //return response()->json(['error' => 'Validation error'], 422);
+            $result = false;
+            $message = 'Validation error';
+            $statusCode = 422;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
 
         $userId = $validatedData['user'];
 
         if (!$userId) {
             Log::error('User ID is null');
-            return response()->json(['error' => 'User ID is null'], 500);
+            //return response()->json(['error' => 'User ID is null'], 500);
+            $result = false;
+            $message = 'User ID is null';
+            $statusCode = 500;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
 
         $teacher = Teacher::where('user_id', $userId)->first();
 
         if (!$teacher) {
             Log::error('Teacher not found', ['userId' => $userId]);
-            return response()->json(['error' => 'Teacher not found'], 404);
+            //return response()->json(['error' => 'Teacher not found'], 404);
+            $result = false;
+            $message = 'Teacher not found';
+            $statusCode = 404;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
 
         Log::info('Teacher found', ['teacher' => $teacher]);
@@ -76,7 +91,12 @@ class MarksController extends CommonController
             Log::info('Grade option found', ['gradeName' => $gradeName]);
         } catch (\Exception $e) {
             Log::error('Grade option error:', ['message' => $e->getMessage()]);
-            return response()->json(['error' => 'Grade option error'], 500);
+            //return response()->json(['error' => 'Grade option error'], 500);
+            $result = false;
+            $message = 'Grade option error';
+            $statusCode = 500;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
 
         try {
@@ -92,15 +112,25 @@ class MarksController extends CommonController
                 'type' => 'mark',
                 'data' => $formattedDate,
             ]);
-            Log::info('Grade record created', ['mark' => $mark]);
+            //Log::info('Grade record created', ['mark' => $mark]);
         } catch (\Exception $e) {
             // Log dell'eccezione durante la creazione del marchio
             Log::error('Error creating mark:', ['message' => $e->getMessage()]);
-            return response()->json(['error' => 'Error creating mark'], 500);
+            //return response()->json(['error' => 'Error creating mark'], 500);
+            $result = false;
+            $message = 'Validation error';
+            $statusCode = 500;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
 
         // Risposta con il marchio creato
-        return response()->json($mark, 201);
+        //return response()->json($mark, 201);
+        $result = true;
+        $statusCode = 201;
+        $message = 'Voto creato con successo';
+        $responseData = $mark;
+        $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 
 
