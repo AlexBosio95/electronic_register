@@ -58,15 +58,15 @@
 <script>
 export default {
     props: {
-          classes: {
-              type: Object
-          },
-          user_role: {
-              type: String
-          },
-          page: {
-              type: String
-          }
+        classes: {
+            type: Object
+        },
+        user_role: {
+            type: String
+        },
+        page: {
+            type: String
+        }
     },
     data() {
         const currentDate = new Date();

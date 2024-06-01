@@ -5,14 +5,14 @@ namespace App\Http\Controllers\AuthorizedUsers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class JustificationsController extends Controller
+class JustificationsController extends CommonController
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return $this->commonIndex($request, 'Giustificazioni');
     }
 
     /**

@@ -1,8 +1,10 @@
 <template>
     <div class="relative w-full">
-        <div v-if="mostraSuccesso" class="absolute bg-green-200 text-green-700 py-2 rounded-md inset-x-80 top-10 text-center font-semibold">
-            Voto aggiunto con successo
-        </div>
+
+        <PopUpComponent v-if="popUpShow"
+            :message="message"
+            :type="type"
+        />
 
         <div class="flex mb-4 justify-between">
             <div>
@@ -80,9 +82,10 @@
 </template>
 
 <script>
+import PopUpComponent from '../components/common/PopUpComponent.vue';
 import FormAddGradesComponent from '../components/FormAddGradesComponent.vue';
 export default {
-    components: {FormAddGradesComponent},
+    components: {FormAddGradesComponent, PopUpComponent},
     data() {
         return {
             editMode: false,
@@ -90,9 +93,11 @@ export default {
             addGradeFormMode: false,
             gradesValue: [],
             subjets: [],
-            mostraSuccesso: false,
+            popUpShow: false,
             subjectOptions: [],
             selectedSubject: null,
+            message: "Voto aggiunto con successo",
+            type: "good"
         };
         
     },
@@ -135,11 +140,11 @@ export default {
         },
         handleVotoCreato(selectedSubjectMark) {
             this.addGradeFormMode = false;
-            this.mostraSuccesso = true;
+            this.popUpShow = true;
             this.selectedSubject = selectedSubjectMark;
 
             setTimeout(() => {
-                this.mostraSuccesso = false;
+                this.popUpShow = false;
             }, 3200);
 
             setTimeout(() => {

@@ -32,12 +32,10 @@
 
     
 </template>
-  
 <script>
 
 import ModalManageAttendance from './ModalManageAttendance.vue';
-  
-  export default {
+    export default {
     components: { 
         ModalManageAttendance 
     },
@@ -74,6 +72,5 @@ import ModalManageAttendance from './ModalManageAttendance.vue';
             this.isOpenModal = false;
         }
     }
-  };
-  
+    };
 </script>

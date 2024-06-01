@@ -1,5 +1,4 @@
 <template>
-
     <div class="fixed z-10 inset-0 overflow-y-auto">
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-black opacity-50"></div>
@@ -20,14 +19,9 @@
             </div>
         </div>
     </div>
- 
 </template>
-  
 <script>
-
-
-  
-  export default {
+    export default {
     props: {
         student:{
             type: Number
@@ -179,6 +173,6 @@
 
         }
     }
-  };
-  
-  </script>
+    };
+
+</script>

@@ -33,15 +33,19 @@
             </button>
         </div>
 
-        <div v-if="mostraErrore" class="text-center bg-red-100 text-red-700 px-5 py-2 rounded-md mt-6">
-            {{errorMessage}}
-        </div>
+        <PopUpComponent v-if="popUpShow"
+            :message="errorMessage"
+            :type="type"
+        />
+
     </div>
 </div>
 </template>
 
 <script>
+import PopUpComponent from '../components/common/PopUpComponent.vue';
 export default {
+    components: {PopUpComponent},
     props: {
             students: Array,
             addGradeFormMode: Boolean,
@@ -56,8 +60,9 @@ export default {
             selectedGrade: null,
             gradeOptions: [],
             selectedSubjectMark: null,
-            mostraErrore: false,
-            errorMessage: ""
+            popUpShow: false,
+            errorMessage: "",
+            type: "error"
         };
     },
     mounted() {
@@ -101,16 +106,16 @@ export default {
                 })
                 .catch(error => {
                     this.errorMessage = "Errore durante la creazione del voto";
-                    this.mostraErrore = true;
+                    this.popUpShow = true;
                     setTimeout(() => {
-                        this.mostraErrore = false;
+                        this.popUpShow = false;
                     }, 2200);
                 });
             } else {
                 this.errorMessage = "Non hai compilato tutti i campi";
-                this.mostraErrore = true;
+                this.popUpShow = true;
                 setTimeout(() => {
-                    this.mostraErrore = false;
+                    this.popUpShow = false;
                 }, 2200);
             }
         }
