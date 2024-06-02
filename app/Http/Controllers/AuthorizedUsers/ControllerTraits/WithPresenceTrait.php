@@ -56,10 +56,10 @@ trait WithPresenceTrait
             'data' => $response
         ];
         if (!$result){
-            Log::info(response()->json(['result' => false, 'message' => $message], $statusCode));
+            //Log::info(response()->json(['result' => false, 'message' => $message], $statusCode));
             return response()->json(['result' => false, 'message' => $message], $statusCode);
         }
-        Log::info(response()->json($response));
+        //Log::info(response()->json($response));
         return response()->json($response);
     }
 
