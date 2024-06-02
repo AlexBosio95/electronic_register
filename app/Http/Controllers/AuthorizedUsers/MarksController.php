@@ -115,7 +115,7 @@ class MarksController extends CommonController
             //Log::info('Grade record created', ['mark' => $mark]);
         } catch (\Exception $e) {
             // Log dell'eccezione durante la creazione del marchio
-            Log::error('Error creating mark:', ['message' => $e->getMessage()]);
+            //Log::error('Error creating mark:', ['message' => $e->getMessage()]);
             //return response()->json(['error' => 'Error creating mark'], 500);
             $result = false;
             $message = 'Validation error';
@@ -129,8 +129,8 @@ class MarksController extends CommonController
         $result = true;
         $statusCode = 201;
         $message = 'Voto creato con successo';
-        $responseData = $mark;
-        $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
+        $responseData = [];
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 
 

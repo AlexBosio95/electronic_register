@@ -104,7 +104,6 @@ export default {
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
                     if (!data.result){
                         //GESTIONE ERRORE CON POP-UP RIVEDERE ANCHE IL TRY CATCH
                     } else {
