@@ -96,8 +96,8 @@ export default {
             popUpShow: false,
             subjectOptions: [],
             selectedSubject: null,
-            message: "Voto aggiunto con successo",
-            type: "good"
+            message: "",
+            type: null
         };
         
     },
@@ -132,7 +132,19 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     if(!data.result){
-                        //GESTIONE ERRORE CON POP-UP
+                        this.popUpShow = true;
+                        this.message = "Errore formattazione dei dati";
+                        this.type = "error";
+
+                        setTimeout(() => {
+                            this.popUpShow = false;
+                            this.message = "";
+                            this.type = null;
+                        }, 3200);
+
+                        setTimeout(() => {
+                            this.getGrade();
+                        }, 400);
                     } else {
                         this.grades = this.grades.filter(grade => grade.id !== gradeId);
                     }
@@ -154,9 +166,13 @@ export default {
             this.addGradeFormMode = false;
             this.popUpShow = true;
             this.selectedSubject = selectedSubjectMark;
+            this.message = "Voto aggiunto con successo";
+            this.type = "good";
 
             setTimeout(() => {
                 this.popUpShow = false;
+                this.message = "";
+                this.type = null;
             }, 3200);
 
             setTimeout(() => {
@@ -168,7 +184,19 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     if (!data.result){
-                        //TO DO CON GESTIONE pop up
+                        this.popUpShow = true;
+                        this.message = "Errore formattazione dei dati";
+                        this.type = "error";
+
+                        setTimeout(() => {
+                            this.popUpShow = false;
+                            this.message = "";
+                            this.type = null;
+                        }, 3200);
+
+                        setTimeout(() => {
+                            this.getGrade();
+                        }, 400);
                     } else {
                         this.subjectOptions = data.data;
                     }
@@ -183,7 +211,19 @@ export default {
             .then(response => response.json())
             .then(data => {
                 if(!data.result){
-                    //TO DO GESTIONE con pop up
+                    this.popUpShow = true;
+                    this.message = "Errore formattazione dei dati";
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                        this.message = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
                 } else {
                     this.grades = data.data;
                 }
