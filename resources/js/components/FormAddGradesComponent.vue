@@ -62,7 +62,7 @@ export default {
             selectedSubjectMark: null,
             popUpShow: false,
             errorMessage: "",
-            type: "error"
+            type: null
         };
     },
     mounted() {
@@ -75,7 +75,19 @@ export default {
             .then(data => {
 
                 if (!data.result){
-                    //TO DO CON GESTIONE pop up
+                    this.popUpShow = true;
+                    this.errorMessage = "Errore formattazione dei dati";
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                        this.errorMessage = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
                 } else {
                     this.gradeOptions = data.data;
                 }
@@ -91,7 +103,6 @@ export default {
                 date: this.selectedDay,
                 user: this.current_user
             };
-            console.log(data);
 
             if (this.selectedStudent !== null && this.selectedGrade !== null && this.selectedSubjectMark !== null) {
                 fetch('/api/marks', {
@@ -107,6 +118,19 @@ export default {
                     console.log(data);
                     if (!data.result){
                         //GESTIONE ERRORE CON POP-UP RIVEDERE ANCHE IL TRY CATCH
+                        this.popUpShow = true;
+                        this.errorMessage = "Errore formattazione dei dati";
+                        this.type = "error";
+
+                        setTimeout(() => {
+                            this.popUpShow = false;
+                            this.errorMessage = "";
+                            this.type = null;
+                        }, 3200);
+
+                        setTimeout(() => {
+                            this.getGrade();
+                        }, 400);
                     } else {
                         this.$emit('votoCreato', this.selectedSubjectMark);
                         this.selectedStudent = null;
@@ -119,8 +143,11 @@ export default {
                     console.log(error.message);
                     this.errorMessage = "Errore durante la creazione del voto";
                     this.popUpShow = true;
+                    this.type = "error";
                     setTimeout(() => {
                         this.popUpShow = false;
+                        this.type = null;
+                        this.errorMessage = "";
                     }, 2200);
                 });
             } else {

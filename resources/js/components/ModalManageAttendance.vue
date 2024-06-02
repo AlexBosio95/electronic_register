@@ -1,5 +1,9 @@
 <template>
     <div class="fixed z-10 inset-0 overflow-y-auto">
+        <PopUpComponent v-if="popUpShow"
+            :message="message"
+            :type="type"
+        />
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-black opacity-50"></div>
             <div class="bg-white p-8 rounded-lg z-50 shadow-md max-w-sm mx-auto relative">
@@ -21,7 +25,9 @@
     </div>
 </template>
 <script>
-    export default {
+import PopUpComponent from '../components/common/PopUpComponent.vue';
+export default {
+        components: {PopUpComponent},
     props: {
         student:{
             type: Number
@@ -44,7 +50,9 @@
     },
     data() {
         return {
-            
+            message: "",
+            type: null,
+            popUpShow: false
         };
     },
     methods: {
@@ -101,7 +109,19 @@
             .then(response => response.json())
             .then(data => {
                 if(!data.result){
-                    //TO DO CON GESTIONE pop up
+                    this.popUpShow = true;
+                    this.message = "Errore formattazione dei dati";
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                        this.message = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
                 } else {
                     this.presences[this.student][this.index][0] = this.current_presence;
                     this.presences[this.student][this.index][1] = data.data.recordId;
@@ -134,7 +154,19 @@
             .then(response => response.json())
             .then(data => {
                 if (!data['result']) {
-                    //TO DO GESTIONE DELL'ERRORE COL POP-UP
+                    this.popUpShow = true;
+                    this.message = "Errore formattazione dei dati";
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                        this.message = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
                 } else {
                     this.presences[this.student][this.index][0] = this.current_presence;
                 }
@@ -160,7 +192,19 @@
             .then(response => response.json())
             .then(data => {
                 if (!data['result']) {
-                    //TO DO GESTIONE col pop up di errore
+                    this.popUpShow = true;
+                    this.message = "Errore formattazione dei dati";
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                        this.message = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
                 } else {
                     this.presences[this.student][this.index][0] = '';
                     this.presences[this.student][this.index][1] = '';
