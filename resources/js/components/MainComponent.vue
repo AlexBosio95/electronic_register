@@ -104,11 +104,11 @@ export default {
             fetch(`/api/students?${classParam}`)
             .then(response => response.json())
             .then(data => {
-                if(data['result']){
-                    this.studentsByClass = data['data'];
+                if(data.result){
+                    this.studentsByClass = data.data;
                 } else {
                     this.popUpShow = true;
-                    this.message = "Errore formattazione dei dati";
+                    this.message = data.message;;
                     this.type = "error";
 
                     setTimeout(() => {

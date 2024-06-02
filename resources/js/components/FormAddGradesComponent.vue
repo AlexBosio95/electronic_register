@@ -76,7 +76,7 @@ export default {
 
                 if (!data.result){
                     this.popUpShow = true;
-                    this.errorMessage = "Errore formattazione dei dati";
+                    this.errorMessage = data.message;
                     this.type = "error";
 
                     setTimeout(() => {
@@ -118,7 +118,7 @@ export default {
                     if (!data.result){
                         //GESTIONE ERRORE CON POP-UP RIVEDERE ANCHE IL TRY CATCH
                         this.popUpShow = true;
-                        this.errorMessage = "Errore formattazione dei dati";
+                        this.errorMessage = data.message;
                         this.type = "error";
 
                         setTimeout(() => {

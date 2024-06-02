@@ -110,7 +110,7 @@ export default {
             .then(data => {
                 if(!data.result){
                     this.popUpShow = true;
-                    this.message = "Errore formattazione dei dati";
+                    this.message = data.message;
                     this.type = "error";
 
                     setTimeout(() => {
@@ -153,9 +153,9 @@ export default {
             })
             .then(response => response.json())
             .then(data => {
-                if (!data['result']) {
+                if (!data.result) {
                     this.popUpShow = true;
-                    this.message = "Errore formattazione dei dati";
+                    this.message = data.message;
                     this.type = "error";
 
                     setTimeout(() => {
@@ -191,9 +191,9 @@ export default {
             })
             .then(response => response.json())
             .then(data => {
-                if (!data['result']) {
+                if (!data.result) {
                     this.popUpShow = true;
-                    this.message = "Errore formattazione dei dati";
+                    this.message = data.message;
                     this.type = "error";
 
                     setTimeout(() => {
