@@ -33,19 +33,29 @@ class ApiController extends Controller
             $timetable = $selectedClass->calendar();
             $filteredTimetable = $timetable->where('day_of_week', $dayOfWeek)->get();
             if($filteredTimetable->isEmpty()){
-                return response()->json(['message' => 'La classe non ha un orario associato']);
-            }
-            //costruzione matrice per la griglia delle presenze
+                $resp = [];
+                $result = false;
+                $message = 'La classe non ha un orario associato';
+                $statusCode = 404;
+            } else {
+                //costruzione matrice per la griglia delle presenze
             
-            $matrice = $this->getPresences($filteredTimetable ,$selectedClass, $dateParam);
-            $resp = [
-                'timetable' => $filteredTimetable,
-                'presences' => $matrice
-            ];
-            return response()->json($resp);
+                $matrice = $this->getPresences($filteredTimetable ,$selectedClass, $dateParam);
+                $resp = [
+                    'timetable' => $filteredTimetable,
+                    'presences' => $matrice
+                ];
+                $result = true;
+                $message = '';
+                $statusCode = 200;
+            }           
         } else {
-            return response()->json(['message' => 'Orario non trovato'], 404);
+            $resp = [];
+            $result = false;
+            $message = 'Orario non trovato';
+            $statusCode = 404;
         }
+        return $this->ajaxLogAndResponse($resp, $message, $result, $statusCode);
     }
 
 
@@ -97,8 +107,12 @@ class ApiController extends Controller
         } else {
             $grades = [];
         }
+        $responseData = $grades;
+        $result = true;
+        $message = 'Voti recuperati con successo';
+        $statusCode = 200;
     
-        return response()->json($grades);
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 
     /**
@@ -108,7 +122,7 @@ class ApiController extends Controller
     public function getGradesOption()
     {
         $gradeOptions = GradeOption::all();
-        return response()->json($gradeOptions);
+        return $this->ajaxLogAndResponse($gradeOptions, "Dati ottenuti con successo", true, 200);
     }
 
     /**
@@ -118,7 +132,7 @@ class ApiController extends Controller
     public function getSubjectsOption()
     {
         $subjectOption = Subject::all();
-        return response()->json($subjectOption);
+        return $this->ajaxLogAndResponse($subjectOption, "Dati ottenuti con successo", true, 200);
     }
 
     /**
@@ -134,24 +148,25 @@ class ApiController extends Controller
 
             if ($classe) {
                 $students = Student::where('class_id', $classeId)->get();
-                return response()->json($students);
+                $result = true;
+                $message = "";
+                $statusCode = 200;
             } else {
-                return response()->json(['message' => 'Classe non trovata'], 404);
+                $students = [];
+                $result = false;
+                $message = 'Classe non trovata';
+                $statusCode = 404;
             }
         } else {
-            return response()->json(['message' => 'Parametro "class" mancante'], 400);
+            $students = [];
+            $result = false;
+            $message = 'Parametro "class" mancante';
+            $statusCode = 404;
         }
+        return $this->ajaxLogAndResponse($students, $message, $result, $statusCode);
     }
 
-    protected function ajaxLogAndResponse(Array $response, string $message, bool $result)
-    {
-        $response = [
-            'result' => $result,
-            'message' => $message,
-            'data' => $response
-        ];
-        return response()->json($response);
-    }
+    
 
 
 }

@@ -62,7 +62,7 @@ export default {
             selectedSubjectMark: null,
             popUpShow: false,
             errorMessage: "",
-            type: "error"
+            type: null
         };
     },
     mounted() {
@@ -70,13 +70,28 @@ export default {
     },
     methods:{
         getGradeOptions(){
-            axios.get('/api/grade-options')
-                .then(response => {
-                    this.gradeOptions = response.data;
-                })
-                .catch(error => {
-                    console.error('Errore nel recupero delle opzioni di voto:', error);
-                });
+            fetch('/api/grade-options')
+            .then(response => response.json())
+            .then(data => {
+
+                if (!data.result){
+                    this.popUpShow = true;
+                    this.errorMessage = data.message;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                        this.errorMessage = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
+                } else {
+                    this.gradeOptions = data.data;
+                }
+            })
         },
         newGrade(){
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -89,26 +104,49 @@ export default {
                 user: this.current_user
             };
 
-            const options = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken 
-                }
-            };
-
             if (this.selectedStudent !== null && this.selectedGrade !== null && this.selectedSubjectMark !== null) {
-                axios.post('/api/marks', data, options)
-                .then(response => {
-                    this.$emit('votoCreato', this.selectedSubjectMark);
-                    this.selectedStudent = null;
-                    this.selectedGrade = null;
-                    this.selectedSubjectMark = null;
+                fetch('/api/marks', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify(data),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.result){
+                        //GESTIONE ERRORE CON POP-UP RIVEDERE ANCHE IL TRY CATCH
+                        this.popUpShow = true;
+                        this.errorMessage = data.message;
+                        this.type = "error";
+
+                        setTimeout(() => {
+                            this.popUpShow = false;
+                            this.errorMessage = "";
+                            this.type = null;
+                        }, 3200);
+
+                        setTimeout(() => {
+                            this.getGrade();
+                        }, 400);
+                    } else {
+                        this.$emit('votoCreato', this.selectedSubjectMark);
+                        this.selectedStudent = null;
+                        this.selectedGrade = null;
+                        this.selectedSubjectMark = null;
+                    }
+                    
                 })
                 .catch(error => {
+                    console.log(error.message);
                     this.errorMessage = "Errore durante la creazione del voto";
                     this.popUpShow = true;
+                    this.type = "error";
                     setTimeout(() => {
                         this.popUpShow = false;
+                        this.type = null;
+                        this.errorMessage = "";
                     }, 2200);
                 });
             } else {

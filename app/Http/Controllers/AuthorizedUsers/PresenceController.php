@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-
+use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 
 class PresenceController extends CommonController
 {
@@ -66,7 +66,11 @@ class PresenceController extends CommonController
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            $message = 'Errore nella validazione dei dati, controllarli';
+            $result = false;
+            $statusCode = 400;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
 
         $student = $request->input('student_id');
@@ -81,14 +85,22 @@ class PresenceController extends CommonController
         try {
             $stud = Student::findOrFail($student);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            return back()->withErrors('Studente non trovato')->withInput();
+            $message = 'Studente non trovato';
+            $result = false;
+            $statusCode = 404;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
         $checkTeacherStudent = DB::table('teacher_classes')
                                     ->where('class_id', $stud->class_id)
                                     ->where('teacher_id', $teacher)
                                     ->get();
         if ($checkTeacherStudent->isEmpty()){
-            return redirect()->back()->withErrors(['message' => 'Non è uno studente di quel prof']);
+            $message = 'Non è uno studente di quel prof';
+            $result = false;
+            $statusCode = 400;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }                       
         // Cerca un record con le stesse proprietà
         $checkExistingRecord = AttendStudentRegister::where([
@@ -101,7 +113,11 @@ class PresenceController extends CommonController
 
         // Se esiste già un record corrispondente, ritorna un errore
         if ($checkExistingRecord) {
-            return redirect()->back()->withErrors(['message' => 'Record già esistente']);
+            $message = 'Record già esistente';
+            $result = false;
+            $statusCode = 400;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
 
         // Altrimenti, crea un nuovo record e lo salva nel database
@@ -118,13 +134,13 @@ class PresenceController extends CommonController
 
         // Costruisci un array con i dati da restituire come JSON
         $responseData = [
-            'success' => true,
-            'message' => 'Dati salvati con successo!',
-            'recordId' => $newRecordId,
+            'recordId' => $newRecordId
         ];
-
+        $result = true;
+        $message = "Dato inserito con successo!";
+        $statusCode = 200;
         // Restituisci i dati come una risposta JSON
-        return response()->json($responseData);
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 
     /**
@@ -149,7 +165,12 @@ class PresenceController extends CommonController
     public function update(Request $request, string $id)
     {
         if(!is_numeric($id)){
-            return back()->withErrors("Parameter ID must be of type integer")->withInput();
+            //return back()->withErrors("Parameter ID must be of type integer")->withInput();
+            $message = 'Parameter ID must be of type integer';
+            $result = false;
+            $statusCode = 400;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
         $rules = [
             'attendance_mod' => 'required|in:P,A'
@@ -160,22 +181,33 @@ class PresenceController extends CommonController
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
+            //return back()->withErrors($validator)->withInput();
+            $message = 'Errore nella validazione dei dati di input, controllarli';
+            $result = false;
+            $statusCode = 400;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
         $presence = $request->input('attendance_mod');
         try{
             $toMod = AttendStudentRegister::findOrFail($id);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            return back()->withErrors('Record della presenza non trovato')->withInput();
+            //return back()->withErrors('Record della presenza non trovato')->withInput();
+            $message = 'Record della presenza non trovato';
+            $result = false;
+            $statusCode = 404;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
         $toMod->presence = $presence;
         $toMod->save();
         // Costruisci un array con i dati da restituire come JSON
-        $responseData = [
-            'success' => true,
-            'message' => 'Dati salvati con successo!'
-        ];
-        return $responseData;
+        $responseData = [];
+        $result = true;
+        $message = 'Dati salvati con successo!';
+        $statusCode = 200;
+        //return $responseData;
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 
     /**
@@ -186,14 +218,18 @@ class PresenceController extends CommonController
         try{
             $pres = AttendStudentRegister::findOrFail($id);   
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            Log::info($e);
+            $message = $e;
+            $result = false;
+            $statusCode = 404;
+            $responseData = [];
+            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
         $pres->delete();
-        $responseData = [
-            'success' => true,
-            'message' => 'Dati salvati con successo!'
-        ];
-        return $responseData;
+        $result = true;
+        $message = 'Dati salvati con successo!';
+        $statusCode = 200;
+        $responseData = [];
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 
 }

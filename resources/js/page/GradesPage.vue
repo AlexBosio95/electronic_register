@@ -96,8 +96,8 @@ export default {
             popUpShow: false,
             subjectOptions: [],
             selectedSubject: null,
-            message: "Voto aggiunto con successo",
-            type: "good"
+            message: "",
+            type: null
         };
         
     },
@@ -121,18 +121,42 @@ export default {
         },
         deleteGrade(gradeId) {
             if (confirm('Sei sicuro di voler eliminare questo voto?')) {
-                axios.delete(`/api/marks/${gradeId}`)
-                    .then(response => {
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                fetch(`/api/marks/${gradeId}`,{
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(!data.result){
+                        this.popUpShow = true;
+                        this.message = data.message;
+                        this.type = "error";
+
+                        setTimeout(() => {
+                            this.popUpShow = false;
+                            this.message = "";
+                            this.type = null;
+                        }, 3200);
+
+                        setTimeout(() => {
+                            this.getGrade();
+                        }, 400);
+                    } else {
                         this.grades = this.grades.filter(grade => grade.id !== gradeId);
-                    })
-                    .catch(error => {
-                        if (error.response && error.response.status === 404) {
-                            alert('Errore: Voto non trovato.');
-                        } else {
-                            alert('Errore durante l\'eliminazione del voto.');
-                        }
-                        console.error('Si è verificato un errore:', error);
-                    });
+                    }
+                })
+                .catch(error => {
+                    if (error.response && error.response.status === 404) {
+                        alert('Errore: Voto non trovato.');
+                    } else {
+                        alert('Errore durante l\'eliminazione del voto.');
+                    }
+                    console.error('Si è verificato un errore:', error);
+                });
             }
         },
         filteredGrades(studentId) {
@@ -142,9 +166,13 @@ export default {
             this.addGradeFormMode = false;
             this.popUpShow = true;
             this.selectedSubject = selectedSubjectMark;
+            this.message = "Voto aggiunto con successo";
+            this.type = "good";
 
             setTimeout(() => {
                 this.popUpShow = false;
+                this.message = "";
+                this.type = null;
             }, 3200);
 
             setTimeout(() => {
@@ -152,9 +180,26 @@ export default {
             }, 400);
         },
         getSubjectOptions(){
-            axios.get('/api/subject-options')
-                .then(response => {
-                    this.subjectOptions = response.data;
+            fetch('/api/subject-options')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.result){
+                        this.popUpShow = true;
+                        this.message = data.message;
+                        this.type = "error";
+
+                        setTimeout(() => {
+                            this.popUpShow = false;
+                            this.message = "";
+                            this.type = null;
+                        }, 3200);
+
+                        setTimeout(() => {
+                            this.getGrade();
+                        }, 400);
+                    } else {
+                        this.subjectOptions = data.data;
+                    }
                 })
                 .catch(error => {
                     console.error('Errore nel recupero delle opzioni di materia:', error);
@@ -165,8 +210,23 @@ export default {
             fetch(`/api/grades?${subjectParam}`)
             .then(response => response.json())
             .then(data => {
-                this.grades = data;
-                console.log(data);
+                if(!data.result){
+                    this.popUpShow = true;
+                    this.message = data.message;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                        this.message = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
+                } else {
+                    this.grades = data.data;
+                }
             })
             .catch(error => {
                 console.error('Si è verificato un errore:', error);

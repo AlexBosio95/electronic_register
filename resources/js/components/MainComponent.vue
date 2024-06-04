@@ -32,6 +32,11 @@
             :is="getPageComponent().component" 
             v-bind="getPageComponent().props"
         />
+
+        <PopUpComponent v-if="popUpShow"
+            :message="message"
+            :type="type"
+        />
     </div>
 </div>
 </div>
@@ -39,6 +44,7 @@
 </template>
 
 <script>
+import PopUpComponent from '../components/common/PopUpComponent.vue';
 import Calendar from './menu/Calendar.vue';
 import MenuClassesComponent from '../components/menu/MenuClassesComponent.vue';
 import MenuSections from '../components/menu/MenuSections.vue';
@@ -58,7 +64,8 @@ export default {
         GradesPage,
         DefaultPage,
         NotesPage,
-        JustificationsPage
+        JustificationsPage,
+        PopUpComponent
     },
     props: {
         classes: {
@@ -85,7 +92,10 @@ export default {
         return {
             selectedClass: this.classes[0]['id'],
             studentsByClass: [],
-            dateSelected: null
+            dateSelected: null,
+            message: "",
+            type: null,
+            popUpShow: false
         }
     },
     methods:{
@@ -94,7 +104,21 @@ export default {
             fetch(`/api/students?${classParam}`)
             .then(response => response.json())
             .then(data => {
-                this.studentsByClass = data;
+                if(data.result){
+                    this.studentsByClass = data.data;
+                } else {
+                    this.popUpShow = true;
+                    this.message = data.message;;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
+                }
             })
             .catch(error => {
                 console.error('Si è verificato un errore:', error);
@@ -167,7 +191,6 @@ export default {
         const currentYear= currentDate.getFullYear();
         const currentMonth= currentDate.getMonth();
         this.dateSelected = `${currentDay} ${months[currentMonth]} ${currentYear}`;
-        //this.getStudentsByClass();
     },
     mounted() {
         this.getStudentsByClass();

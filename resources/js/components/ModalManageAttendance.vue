@@ -1,5 +1,9 @@
 <template>
     <div class="fixed z-10 inset-0 overflow-y-auto">
+        <PopUpComponent v-if="popUpShow"
+            :message="message"
+            :type="type"
+        />
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 text-center sm:block sm:p-0">
             <div class="fixed inset-0 bg-black opacity-50"></div>
             <div class="bg-white p-8 rounded-lg z-50 shadow-md max-w-sm mx-auto relative">
@@ -21,7 +25,9 @@
     </div>
 </template>
 <script>
-    export default {
+import PopUpComponent from '../components/common/PopUpComponent.vue';
+export default {
+        components: {PopUpComponent},
     props: {
         student:{
             type: Number
@@ -44,7 +50,9 @@
     },
     data() {
         return {
-            
+            message: "",
+            type: null,
+            popUpShow: false
         };
     },
     methods: {
@@ -98,24 +106,35 @@
             };
 
             fetch('/api/dashboard', options)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(responseData => {
-                    //console.log("TUTTO OK");
-                    this.presences[this.student][this.index][0] = this.current_presence;
-                    this.presences[this.student][this.index][1] = responseData.recordId;
-                })
-                .catch(error => {
-                    /* this.errorMessage = "Errore durante l'inserimento della presenza";
-                    this.mostraErrore = true;
+            .then(response => response.json())
+            .then(data => {
+                if(!data.result){
+                    this.popUpShow = true;
+                    this.message = data.message;
+                    this.type = "error";
+
                     setTimeout(() => {
-                        this.mostraErrore = false;
-                    }, 2200); */
-                });
+                        this.popUpShow = false;
+                        this.message = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
+                } else {
+                    this.presences[this.student][this.index][0] = this.current_presence;
+                    this.presences[this.student][this.index][1] = data.data.recordId;
+                }
+                
+            })
+            .catch(error => {
+                /* this.errorMessage = "Errore durante l'inserimento della presenza";
+                this.mostraErrore = true;
+                setTimeout(() => {
+                    this.mostraErrore = false;
+                }, 2200); */
+            });
         },
         buildApiUpdate() {
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -132,11 +151,26 @@
                 },
                 body: JSON.stringify(data),
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Errore durante la richiesta PUT');
+            .then(response => response.json())
+            .then(data => {
+                if (!data.result) {
+                    this.popUpShow = true;
+                    this.message = data.message;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                        this.message = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
+                } else {
+                    this.presences[this.student][this.index][0] = this.current_presence;
                 }
-                this.presences[this.student][this.index][0] = this.current_presence;
+                
             })
             .catch(error => {
                 console.log('Errore durante la richiesta PUT:', error.message);
@@ -155,22 +189,32 @@
                     'X-CSRF-TOKEN': csrfToken,
                 }
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Errore durante la richiesta di DELETE');
-                }
-                this.presences[this.student][this.index][0] = '';
-                this.presences[this.student][this.index][1] = '';
-                return;
+            .then(response => response.json())
+            .then(data => {
+                if (!data.result) {
+                    this.popUpShow = true;
+                    this.message = data.message;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                        this.message = "";
+                        this.type = null;
+                    }, 3200);
+
+                    setTimeout(() => {
+                        this.getGrade();
+                    }, 400);
+                } else {
+                    this.presences[this.student][this.index][0] = '';
+                    this.presences[this.student][this.index][1] = '';
+                    return;
+                }              
             })
             .catch(error => {
                 console.log('Errore durante la richiesta PUT:', error.message);
                 // Gestisci l'errore qui, ad esempio mostrando un messaggio all'utente
             });
-
-
-
-
         }
     }
     };
