@@ -29,7 +29,9 @@
                                 </button>
                             </div>
                         </th>
-                        <th class="px-4 py-6 border">Calendario</th>
+                        <th class="px-4 py-6 border">
+                            <menu-months></menu-months>
+                        </th>
                     </thead>
 
                     <!-- Righe per gli studenti -->
@@ -51,9 +53,11 @@
 <script>
 
 import PopUpComponent from '../components/common/PopUpComponent.vue';
+import MenuMonths from '../components/menu/MenuMonths.vue';
 export default {
     components:{
-        PopUpComponent
+        PopUpComponent,
+        MenuMonths
     },
     props: {
         classes: {
