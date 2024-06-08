@@ -13,7 +13,7 @@
                 <table id="timeTable" class="table-auto w-full">
                     <!-- Intestazione delle colonne -->
                     <thead>
-                        <th class="px-4 py-6">
+                        <th class="px-4 py-6 border">
                             <div class="flex justify-between space-x-2">
                                 <button 
                                     @click="searchJustification('justificated')"
@@ -29,7 +29,7 @@
                                 </button>
                             </div>
                         </th>
-                        <th class="px-4 py-6">Calendario</th>
+                        <th class="px-4 py-6 border">Calendario</th>
                     </thead>
 
                     <!-- Righe per gli studenti -->
