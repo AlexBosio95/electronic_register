@@ -16,21 +16,15 @@
                         <th class="px-4 py-6 border">
                             <div class="flex justify-between space-x-2">
                                 <button 
-                                    @click="searchJustification('justificated')"
-                                    :class="{'bg-blue-500': !searchJustificated, 'bg-green-500': searchJustificated}"
-                                    class="bg-blue-500 text-white px-2 py-1 rounded">
-                                    Giustificate
-                                </button>
-                                <button 
-                                    @click="searchJustification('notJustificated')"
-                                    :class="{'bg-blue-500': searchJustificated, 'bg-green-500': !searchJustificated}"
-                                    class="bg-blue-500 text-white px-2 py-1 rounded">
-                                    Non Giustificate
+                                    @click="this.searchJustificated = !this.searchJustificated; searchJustifications(this.current_month)"
+                                    :class="{'bg-red-500': !searchJustificated, 'bg-green-500': searchJustificated}"
+                                    class="text-white px-4 py-2 rounded w-40 flex items-center justify-center">
+                                    {{ searchJustificated ? 'Giustificate' : 'Non Giustificate' }}
                                 </button>
                             </div>
                         </th>
                         <th class="px-4 py-6 border">
-                            <menu-months></menu-months>
+                            <menu-months @current-month="searchJustifications"></menu-months>
                         </th>
                     </thead>
 
@@ -82,7 +76,9 @@ export default {
             current_error: "",
             mostraTable: true,
             type: "error",
-            searchJustificated: false
+            searchJustificated: false,
+            justifications : [],
+            current_month: null
         };
     },
     methods: {
@@ -91,17 +87,43 @@ export default {
                 this.current_error = "La classe non ha studenti associati";
             }
         },
-        searchJustification(toSearch){
-            if(toSearch == "justificated"){
-                this.searchJustificated = true;
-            } else if (toSearch == "notJustificated"){
-                this.searchJustificated = false;
-            }
+        searchJustifications(month){
+
+            this.current_month = month;
+            fetch(`/api/absences/${month}`)
+            .then(response => response.json())
+            .then(data => {
+                if(data.result){
+                    this.justifications = data.data;
+                    console.log(this.justifications);
+                } else {
+                    this.popUpShow = true;
+                    this.message = data.message;;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                    }, 3200);
+                }
+            })
+            .catch(error => {
+                console.error('Si è verificato un errore:', error);
+                alert('Si è verificato un errore durante il recupero dei voti.');
+            });
+            
             //chiamata ajax per cercare le giustificazioni
+
         }
     },
     watch: {
         students: "setErrorEmptyStudents"
+    },
+    beforeMount(){
+        var data = new Date();
+        this.current_month = data.getMonth() + 1;
+    },
+    mounted() {
+        this.searchJustifications(this.current_month);
     }
 }
 </script>

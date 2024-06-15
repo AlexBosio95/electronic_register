@@ -14,7 +14,7 @@ use App\Models\GradesStudentRegister;
 use App\Models\GradeOption;
 use App\Models\Subject;
 use App\Http\Controllers\AuthorizedUsers\ControllerTraits\WithPresenceTrait;
-
+use App\Models\Absence;
 
 class ApiController extends Controller
 {
@@ -166,7 +166,12 @@ class ApiController extends Controller
         return $this->ajaxLogAndResponse($students, $message, $result, $statusCode);
     }
 
-    
+    public function getJustifications($month){
+        
+        $absences = Absence::whereMonth('date', $month)->get();
+        Log::info($absences);
+        return $this->ajaxLogAndResponse($absences, "", true, 200);
+    }
 
 
 }

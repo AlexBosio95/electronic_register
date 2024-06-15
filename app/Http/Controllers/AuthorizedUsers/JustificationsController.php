@@ -12,7 +12,7 @@ class JustificationsController extends CommonController
      */
     public function index(Request $request)
     {
-        return $this->commonIndex($request, 'Giustificazioni');
+        return $this->commonIndex($request, 'Giustificazioni/Assenze');
     }
 
     /**

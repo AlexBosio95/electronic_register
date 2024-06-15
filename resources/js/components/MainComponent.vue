@@ -163,7 +163,7 @@ export default {
                     current_user: this.current_user
                 };
                 break;
-            case 'Giustificazioni':
+            case 'Giustificazioni/Assenze':
                 component = 'JustificationsPage';
                 props = {
                     students: this.studentsByClass,

@@ -163,10 +163,6 @@ export default {
                         this.message = "";
                         this.type = null;
                     }, 3200);
-
-                    setTimeout(() => {
-                        this.getGrade();
-                    }, 400);
                 } else {
                     this.presences[this.student][this.index][0] = this.current_presence;
                 }
