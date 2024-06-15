@@ -9,7 +9,7 @@
       >
         Mese Precedente
       </button>
-      <div class="w-32 text-xl font-semibold text-gray-800">{{ currentMonthName }}</div>
+      <div class="w-32 text-xl font-semibold text-gray-800">{{ currentMonthName }} {{ currentYear }}</div>
       <button 
         @click="nextMonth" 
         class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-300"
@@ -38,6 +38,9 @@ export default {
     currentMonthName() {
       const options = { month: 'long' };
       return this.currentDate.toLocaleDateString('it-IT', options);
+    },
+    currentYear(){
+      return this.currentDate.getFullYear();
     }
   },
   methods: {

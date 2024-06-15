@@ -33,7 +33,17 @@
                         <tr v-for="student in students" :key="student.id" class="bg-white">
                             <input type="hidden" v-model="student.id">
                             <td  class="px-2 py-6 w-40 border border-gray-200">{{ student.name }}</td>
-                            <td  class="px-8 py-6 border border-gray-200"></td>
+                            <td  class="px-8 py-6 border border-gray-200">
+                                <div class="flex space-x-4">
+                                    <template v-for="item in justifications">
+                                        <div v-if="item.student_id === student.id" :key="item.id" class="bg-blue-500 text-white px-2 py-2 rounded">
+                                            <button>
+                                                {{ transformDate(item.date) }}
+                                            </button>
+                                        </div>
+                                    </template>
+                                </div>
+                            </td>
                         </tr>                      
                     </tbody>
                 </table>
@@ -113,6 +123,12 @@ export default {
             
             //chiamata ajax per cercare le giustificazioni
 
+        },
+        transformDate(data){
+            const dateParts = data.split("-");
+            const day = dateParts[2];
+            const month = dateParts[1];
+            return `${day}/${month}`;
         }
     },
     watch: {

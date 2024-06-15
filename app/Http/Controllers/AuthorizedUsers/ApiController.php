@@ -168,8 +168,7 @@ class ApiController extends Controller
 
     public function getJustifications($month){
         
-        $absences = Absence::whereMonth('date', $month)->get();
-        Log::info($absences);
+        $absences = Absence::whereMonth('date', $month)->orderBy('date')->get();
         return $this->ajaxLogAndResponse($absences, "", true, 200);
     }
 
