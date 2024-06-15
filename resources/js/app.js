@@ -21,6 +21,7 @@ import ButtonModal from './components/ButtonModal.vue';
 import ModalManageAttendance from './components/ModalManageAttendance.vue';
 import PopUpComponent from './components/common/PopUpComponent.vue'
 import MenuMonths from './components/menu/MenuMonths.vue';
+import ModalManageAbsences from './components/ModalManageAbsences.vue';
 
 const app = createApp({});
 
@@ -40,6 +41,7 @@ app.component('button-modal', ButtonModal);
 app.component('manage-attendance', ModalManageAttendance);
 app.component('popup-component', PopUpComponent);
 app.component('menu-months', MenuMonths);
+app.component('modal-absences', ModalManageAbsences);
 
 app.mount('#app');
 

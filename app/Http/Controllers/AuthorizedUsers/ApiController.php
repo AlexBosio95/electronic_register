@@ -166,9 +166,9 @@ class ApiController extends Controller
         return $this->ajaxLogAndResponse($students, $message, $result, $statusCode);
     }
 
-    public function getJustifications($month){
+    public function getJustifications($month, $status){
         
-        $absences = Absence::whereMonth('date', $month)->orderBy('date')->get();
+        $absences = Absence::whereMonth('date', $month)->where('status', $status)->orderBy('date')->get();
         return $this->ajaxLogAndResponse($absences, "", true, 200);
     }
 

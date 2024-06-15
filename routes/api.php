@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthorizedUsers\ApiController;
+use App\Http\Controllers\AuthorizedUsers\JustificationsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
@@ -37,6 +38,7 @@ Route::middleware('checkApi')->group(function () {
     Route::get('/students', [ApiController::class, 'getStudentsByClass']);
     Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
     Route::post('/presences', [ApiController::class, 'getPresences']);
-    Route::get('/absences/{month}', [ApiController::class, 'getJustifications']);
+    Route::get('/absences/{month}/{type}', [ApiController::class, 'getJustifications']);
+    Route::put('/justification/{id}', [JustificationsController::class, 'update']);
 });
 

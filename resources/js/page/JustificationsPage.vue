@@ -36,8 +36,11 @@
                             <td  class="px-8 py-6 border border-gray-200">
                                 <div class="flex space-x-4">
                                     <template v-for="item in justifications">
-                                        <div v-if="item.student_id === student.id" :key="item.id" class="bg-blue-500 text-white px-2 py-2 rounded">
-                                            <button>
+                                        <div v-if="item.student_id === student.id" :key="item.id" 
+                                            :class="{'bg-red-500' : item.status=='pending', 'bg-green-500' : item.status=='approved'}"
+                                            class = "text-white px-2 py-2 rounded"
+                                            >  
+                                            <button @click="openModal(item)">
                                                 {{ transformDate(item.date) }}
                                             </button>
                                         </div>
@@ -51,6 +54,15 @@
         </div>    
     </div>
 
+    <modal-absences v-if="selectedItem != null"
+        :absence="selectedItem"
+        @close="selectedItem= null"
+        @update-justifications = "updateJustifications"
+    >
+
+    </modal-absences>
+
+
 
 </template>
 
@@ -58,10 +70,12 @@
 
 import PopUpComponent from '../components/common/PopUpComponent.vue';
 import MenuMonths from '../components/menu/MenuMonths.vue';
+import ModalManageAbsences from '../components/ModalManageAbsences.vue';
 export default {
     components:{
         PopUpComponent,
-        MenuMonths
+        MenuMonths,
+        ModalManageAbsences
     },
     props: {
         classes: {
@@ -88,7 +102,8 @@ export default {
             type: "error",
             searchJustificated: false,
             justifications : [],
-            current_month: null
+            current_month: null,
+            selectedItem : null
         };
     },
     methods: {
@@ -98,14 +113,26 @@ export default {
             }
         },
         searchJustifications(month){
-
+            var type = 'pending';
+            if(this.searchJustificated == true){
+                var type = 'approved';
+            }
             this.current_month = month;
-            fetch(`/api/absences/${month}`)
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            fetch(`/api/absences/${month}/${type}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    }
+                }   
+            )
             .then(response => response.json())
             .then(data => {
                 if(data.result){
                     this.justifications = data.data;
-                    console.log(this.justifications);
                 } else {
                     this.popUpShow = true;
                     this.message = data.message;;
@@ -129,6 +156,13 @@ export default {
             const day = dateParts[2];
             const month = dateParts[1];
             return `${day}/${month}`;
+        },
+        openModal(item){
+            this.selectedItem = item;
+        },
+        updateJustifications(justifications){
+            this.justifications = justifications;
+            this.selectedItem = null;
         }
     },
     watch: {
