@@ -159,7 +159,7 @@ export default {
                 props = {
                     students: this.studentsByClass,
                     current_class: this.selectedClass,
-                    current_date: this.dateSelected,
+                    selectedDay: this.dateSelected,
                     current_user: this.current_user
                 };
                 break;

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Http\Controllers\AuthorizedUsers\MarksController;
 use App\Http\Controllers\AuthorizedUsers\PresenceController;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\AuthorizedUsers\NotesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,7 +35,12 @@ Route::middleware('checkApi')->group(function () {
     Route::get('/grade-options', [ApiController::class, 'getGradesOption']);
     Route::get('/subject-options', [ApiController::class, 'getSubjectsOption']);
     Route::get('/grades', [ApiController::class, 'getGrades']);
+    Route::get('/notes', [ApiController::class, 'getNotes']);
     Route::get('/students', [ApiController::class, 'getStudentsByClass']);
     Route::get('/timetable/{classId}/{dateParam}', [ApiController::class, 'getTimetable']);
     Route::post('/presences', [ApiController::class, 'getPresences']);
+    Route::delete('/notes/{id}', [NotesController::class, 'destroy']);
+    Route::put('/notes/{id}', [NotesController::class, 'update']);
+    Route::post('/note-add', [NotesController::class, 'store']);
+
 });
