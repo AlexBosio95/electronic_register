@@ -100,7 +100,7 @@ class JustificationsController extends CommonController
         $result = true;
         $message = "Assenza giustificata con successo!";
         $statusCode = 200;
-        $absences = Absence::whereMonth('date', $month)->orderBy('date')->get();
+        $absences = Absence::whereMonth('date', $month)->where('status', 'pending')->orderBy('date')->get();
         // Restituisci i dati come una risposta JSON
         return $this->ajaxLogAndResponse($absences, $message, $result, $statusCode);
     }

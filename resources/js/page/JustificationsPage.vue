@@ -120,6 +120,7 @@ export default {
             this.current_month = month;
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            //la getJustification non funziona perchè non cambia la classe
             fetch(`/api/absences/${month}/${type}`,
                 {
                     method: 'GET',
@@ -158,7 +159,10 @@ export default {
             return `${day}/${month}`;
         },
         openModal(item){
-            this.selectedItem = item;
+            if (item.status != 'approved'){
+                this.selectedItem = item;
+            }
+            
         },
         updateJustifications(justifications){
             this.justifications = justifications;
@@ -166,7 +170,9 @@ export default {
         }
     },
     watch: {
-        students: "setErrorEmptyStudents"
+        students: "setErrorEmptyStudents",
+        current_class: "",
+        current_date: ""
     },
     beforeMount(){
         var data = new Date();

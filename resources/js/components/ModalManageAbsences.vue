@@ -39,7 +39,10 @@ export default {
         submitJustification(id){
             
 
-
+            if (this.reasons == ""){
+                alert('Non hai compilato tutti i campi');
+                return;
+            }
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             const url = `/api/justification/${id}`;
             const data = {
