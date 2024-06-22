@@ -40,7 +40,7 @@ export default {
             
 
             if (this.reasons == ""){
-                alert('Non hai compilato tutti i campi');
+                this.$emit('errore-compilazione');
                 return;
             }
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');

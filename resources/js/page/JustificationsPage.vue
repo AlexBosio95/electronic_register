@@ -1,9 +1,9 @@
 <template>
     
-    <PopUpComponent v-if="current_error && mostraTable === true"
-        :message="current_error"
-        :type="type"
-    />
+    <PopUpComponent v-if="popUpShow"
+            :message="current_error"
+            :type="type"
+        />
 
 
     <div v-else-if="students.length > 0 && mostraTable === true">
@@ -58,6 +58,7 @@
         :absence="selectedItem"
         @close="selectedItem= null"
         @update-justifications = "updateJustifications"
+        @errore-compilazione="setCompilationErrore"
     >
 
     </modal-absences>
@@ -100,6 +101,7 @@ export default {
             current_error: "",
             mostraTable: true,
             type: "error",
+            popUpShow: false,
             searchJustificated: false,
             justifications : [],
             current_month: null,
@@ -168,6 +170,17 @@ export default {
         },
         updateJustifications(justifications){
             this.justifications = justifications;
+            this.selectedItem = null;
+        },
+        setCompilationErrore(){
+            this.current_error = "Non hai compilato tutti i campi";
+            this.popUpShow = true;
+            this.type = "error";
+            setTimeout(() => {
+                this.popUpShow = false;
+                this.message = "";
+                this.type = null;
+            }, 1000);
             this.selectedItem = null;
         }
     },
