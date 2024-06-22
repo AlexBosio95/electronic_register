@@ -113,6 +113,8 @@ export default {
             }
         },
         searchJustifications(month){
+            this.current_error = "";
+            this.mostraTable = true;
             var type = 'pending';
             if(this.searchJustificated == true){
                 var type = 'approved';
@@ -171,8 +173,12 @@ export default {
     },
     watch: {
         students: "setErrorEmptyStudents",
-        current_class: "",
-        current_date: ""
+        current_class() {
+            this.searchJustifications(this.current_month);
+        },
+        current_date() {
+            this.searchJustifications(this.current_month);
+        }
     },
     beforeMount(){
         var data = new Date();
