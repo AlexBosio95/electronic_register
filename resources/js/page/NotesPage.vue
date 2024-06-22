@@ -250,7 +250,7 @@ data() {
         handleNotaCreata(){
             this.addNoteFormMode = false;
             this.popUpShow = true;
-            this.message = "Voto aggiunto con successo";
+            this.message = "Nota disciplinare creata con successo";
             this.type = "good";
 
             setTimeout(() => {
