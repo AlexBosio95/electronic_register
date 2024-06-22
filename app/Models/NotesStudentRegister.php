@@ -12,11 +12,13 @@ class NotesStudentRegister extends Model
     public $table = 'notes_student_register';
     public $fillable = ['student_id', 'teacher_id', 'data', 'note'];
 
-    public function teachers(){
-        $this->hasMany(Teacher::class);
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
     }
 
-    public function students(){
-        $this->hasMany(Student::class);
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
     }
 }
