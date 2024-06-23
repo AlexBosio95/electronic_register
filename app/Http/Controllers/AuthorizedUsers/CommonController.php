@@ -37,20 +37,15 @@ class CommonController extends Controller
                 } 
             }
 
-            $condizioneVisibilita = config('sections.'.$section.'.calendar', 'not set');
-            Log::info("fuori ".$condizioneVisibilita);
+            $condizioneVisibilita = config('sections.'.$section.'.calendar');
 
             //controllo per capire se devo inibire il calendario
             if ($condizioneVisibilita == false && $isVisibleCalendar){
                 if(config('sections.'.$section.'.section_name') == $currentPage){
                     $isVisibleCalendar = false;
-                    Log::info(
-                        "entrato". config('sections.'.$section.'.calendar'). config('sections.'.$section.'.section_name')
-                    );
                 }
             }
         }
-        Log::info("oltre ".$isVisibleCalendar);
         
 
         if ($teacher) {

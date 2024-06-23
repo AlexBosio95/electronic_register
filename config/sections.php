@@ -4,7 +4,7 @@ return [
     'dashboard' => [
         'section_name' => 'Presenze',
         'route_name' => 'dashboard',
-        'calendar' => 'true',
+        'calendar' => true,
         'visibility' => [
             'teacher' => ['get', 'put', 'post', 'delete'], 
             'student' => ['get']
@@ -13,7 +13,7 @@ return [
     'marks' => [
         'section_name' => 'Voti',
         'route_name' => 'marks',
-        'calendar' => 'true',
+        'calendar' => true,
         'visibility' => [
             'teacher' => ['get', 'put', 'post', 'delete'], 
             'student' => ['get']
@@ -22,7 +22,7 @@ return [
     'notes' => [
         'section_name' => 'Note disciplinari',
         'route_name' => 'notes',
-        'calendar' => 'true',
+        'calendar' => true,
         'visibility' => [
             'teacher' => ['get', 'put', 'post', 'delete'], 
             'student' => ['get']
@@ -31,7 +31,7 @@ return [
     'justifications' => [
         'section_name' => 'Giustificazioni/Assenze',
         'route_name' => 'justifications',
-        'calendar' => 'false',
+        'calendar' => false,
         'visibility' => [
             'teacher' => ['get', 'put', 'post', 'delete'], 
             'student' => ['get']
@@ -40,7 +40,7 @@ return [
     'plan' => [
         'section_name' => 'Registro Professori',
         'route_name' => 'plan',
-        'calendar' => 'false',
+        'calendar' => false,
         'visibility' => [
             'teacher' => ['get', 'put', 'post', 'delete'], 
             'student' => ['get']
@@ -49,31 +49,31 @@ return [
     'teachers' => [
         'section_name' => 'Professori',
         'route_name' => 'teachers',
-        'calendar' => 'false',
+        'calendar' => false,
         'visibility' => []
     ],
     'students' => [
         'section_name' => 'Studenti',
         'route_name' => 'students',
-        'calendar' => 'false',
+        'calendar' => false,
         'visibility' => []
     ],
     'classes' => [
         'section_name' => 'Classi',
         'route_name' => 'classes',
-        'calendar' => 'false',
+        'calendar' => false,
         'visibility' => []
     ],
     'subjects' => [
         'section_name' => 'Materie',
         'route_name' => 'subjects',
-        'calendar' => 'false',
+        'calendar' => false,
         'visibility' => []
     ],
     'timetable' => [
         'section_name' => 'Orario',
         'route_name' => 'timetable',
-        'calendar' => 'false',
+        'calendar' => false,
         'visibility' => [
             'teacher' => ['get'], 
             'student' => ['get']
