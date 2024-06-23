@@ -50,7 +50,7 @@ class CommonController extends Controller
                 }
             }
         }
-        Log::info("puzzi ".$isVisibleCalendar);
+        Log::info("oltre ".$isVisibleCalendar);
         
 
         if ($teacher) {
