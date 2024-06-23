@@ -111,6 +111,10 @@ export default {
     methods: {
         setErrorEmptyStudents(){
             if(this.students.length <= 0){
+                this.popUpShow = true;
+                setTimeout(() => {
+                    this.popUpShow = false;
+                }, 3200);
                 this.current_error = "La classe non ha studenti associati";
             }
         },
@@ -138,6 +142,15 @@ export default {
             .then(data => {
                 if(data.result){
                     this.justifications = data.data;
+                    if (this.justifications.length <= 0){
+                        this.popUpShow = true;
+                        this.message = "La classe non ha assenze associate";
+                        this.type = "error";
+
+                        setTimeout(() => {
+                            this.popUpShow = false;
+                        }, 3200);
+                    }
                 } else {
                     this.popUpShow = true;
                     this.message = data.message;;
