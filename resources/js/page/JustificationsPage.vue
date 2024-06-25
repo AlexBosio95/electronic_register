@@ -119,6 +119,7 @@ export default {
             }
         },
         searchJustifications(month){
+            this.popUpShow = false;
             this.current_error = "";
             this.mostraTable = true;
             var type = 'pending';
