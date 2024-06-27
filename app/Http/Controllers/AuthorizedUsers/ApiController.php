@@ -13,6 +13,7 @@ use App\Models\Student;
 use App\Models\GradesStudentRegister;
 use App\Models\GradeOption;
 use App\Models\Subject;
+use App\Models\NotesStudentRegister;
 use App\Http\Controllers\AuthorizedUsers\ControllerTraits\WithPresenceTrait;
 use App\Models\Absence;
 
@@ -28,7 +29,7 @@ class ApiController extends Controller
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
             Log::info($e);
         }
-             
+
         if ($selectedClass) {
             $timetable = $selectedClass->calendar();
             $filteredTimetable = $timetable->where('day_of_week', $dayOfWeek)->get();
@@ -166,10 +167,49 @@ class ApiController extends Controller
         return $this->ajaxLogAndResponse($students, $message, $result, $statusCode);
     }
 
+  
     public function getJustifications($month, $status){
         
         $absences = Absence::whereMonth('date', $month)->where('status', $status)->orderBy('date')->get();
         return $this->ajaxLogAndResponse($absences, "", true, 200);
+    }
+  
+  
+    /**
+     * Recupera le note di quella classe
+     */
+
+    public function getNotes(Request $request)
+    {
+        if ($request->has('students')) {
+            // Recupera la lista degli ID degli studenti
+            $students = explode(',', $request->input('students'));
+            
+            // Valida che tutti gli ID degli studenti siano numerici
+            if (array_filter($students, 'is_numeric') === $students) {
+                // Includi le relazioni con student e teacher
+                $notes = NotesStudentRegister::whereIn('student_id', $students)
+                    ->with(['student', 'teacher'])
+                    ->get();
+
+                $responseData = $notes;
+                $result = true;
+                $message = 'Note recuperate con successo';
+                $statusCode = 200;
+            } else {
+                $responseData = [];
+                $result = false;
+                $message = 'ID studenti non validi';
+                $statusCode = 400;
+            }
+        } else {
+            $responseData = [];
+            $result = false;
+            $message = 'Parametro "students" mancante';
+            $statusCode = 400;
+        }
+
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 
 
