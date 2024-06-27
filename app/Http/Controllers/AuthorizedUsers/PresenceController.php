@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AuthorizedUsers;
 
 use App\Http\Controllers\AuthorizedUsers\ControllerTraits\WithPresenceTrait;
 use App\Http\Controllers\Controller;
+use App\Models\Absence;
 use App\Models\AttendStudentRegister;
 use Illuminate\Http\Request;
 use App\Models\StudentRegister;
@@ -128,9 +129,38 @@ class PresenceController extends CommonController
         $record->data = $convertedDate;
         $record->hour = $hour;
         $record->note = "";
-        $record->save();
-        
+        $record->save();     
         $newRecordId = $record->id;
+
+        if ($newRecordId){
+            //se c'è già per quel giorno la aggiorno
+            if ($presence == 'A'){
+                try{
+                    $absence = Absence::where('date', $convertedDate)
+                                        ->where('student_id', $student)
+                                        ->get();
+                    if ($absence->count() == 1){
+                        $toUdate = $absence->first();
+                        $toUdate->hours += 1;
+                        $toUdate->save();
+                    } else {
+                        $absenceRecord = new Absence();
+                        $absenceRecord->student_id = $student;
+                        $absenceRecord->date = $convertedDate;
+                        $absenceRecord->status = 'pending';
+                        $absenceRecord->reason = '';
+                        $absenceRecord->save();
+                    }
+                } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+                    //return back()->withErrors('Record della presenza non trovato')->withInput();
+                    $message = 'Record della presenza non trovato';
+                    $result = false;
+                    $statusCode = 404;
+                    $responseData = [];
+                    return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
+                }
+            }    
+        }
 
         // Costruisci un array con i dati da restituire come JSON
         $responseData = [
@@ -189,18 +219,44 @@ class PresenceController extends CommonController
             return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
         }
         $presence = $request->input('attendance_mod');
-        try{
-            $toMod = AttendStudentRegister::findOrFail($id);
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
-            //return back()->withErrors('Record della presenza non trovato')->withInput();
-            $message = 'Record della presenza non trovato';
-            $result = false;
-            $statusCode = 404;
-            $responseData = [];
-            return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
+        $toMod = AttendStudentRegister::findOrFail($id);
+        //cerco l'assenza da aggiornare
+        if($presence != $toMod->presence){
+            if ($presence == 'A'){
+                try{
+                    $absence = Absence::where('date', $toMod->data)
+                                        ->where('student_id', $toMod->student_id)
+                                        ->get();
+                    if ($absence->count() == 1){
+                        $toUdate = $absence->first();
+                        $toUdate->hours += 1;
+                        $toUdate->save();
+                    }
+                } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){
+                    //return back()->withErrors('Record della presenza non trovato')->withInput();
+                    $message = 'Record della presenza non trovato';
+                    $result = false;
+                    $statusCode = 404;
+                    $responseData = [];
+                    return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
+                }
+            } elseif ($presence == 'P') {
+                $absence = Absence::where('date', $toMod->data)
+                                    ->where('student_id', $toMod->student_id)
+                                    ->get();
+                if ($absence->count() == 1 && $absence->first()->hours > 1){
+                    $toUdate = $absence->first();
+                    $toUdate->hours -= 1;
+                    $toUdate->save();
+                } elseif ($absence->count() == 1 && $absence->first()->hours <= 1) {
+                    $toUdate = $absence->first();
+                    $toUdate->delete();
+                }
+            }
+            $toMod->presence = $presence;
+            $toMod->save();
         }
-        $toMod->presence = $presence;
-        $toMod->save();
+
         // Costruisci un array con i dati da restituire come JSON
         $responseData = [];
         $result = true;
@@ -223,6 +279,19 @@ class PresenceController extends CommonController
             $statusCode = 404;
             $responseData = [];
             return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
+        }
+        
+        //cancella l'assenza
+        $absence = Absence::where('date', $pres->data)
+                            ->where('student_id', $pres->student_id)
+                            ->get();
+        if ($absence->count() == 1 && $absence->first()->hours > 1){
+            $toUdate = $absence->first();
+            $toUdate->hours -= 1;
+            $toUdate->save();
+        } elseif ($absence->count() == 1 && $absence->first()->hours <= 1) {
+            $toUdate = $absence->first();
+            $toUdate->delete();
         }
         $pres->delete();
         $result = true;

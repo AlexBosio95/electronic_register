@@ -23,8 +23,9 @@ class CommonController extends Controller
         $page = $currentPage;
         $method = $request->method();
         $main_sections = array_keys(config('sections'));
-        $section = [];
+        $sections = [];
 
+        $isVisibleCalendar = true;
         foreach($main_sections as $section){
             if ($user_role == 'admin'){
                 $sections[config('sections.'.$section.'.route_name')] =  config('sections.'.$section.'.section_name');  
@@ -34,14 +35,24 @@ class CommonController extends Controller
                         $sections[config('sections.'.$section.'.route_name')] = config('sections.'.$section.'.section_name');
                     }
                 } 
-            }      
+            }
+
+            $condizioneVisibilita = config('sections.'.$section.'.calendar');
+
+            //controllo per capire se devo inibire il calendario
+            if ($condizioneVisibilita == false && $isVisibleCalendar){
+                if(config('sections.'.$section.'.section_name') == $currentPage){
+                    $isVisibleCalendar = false;
+                }
+            }
         }
+        
 
         if ($teacher) {
             $classes = $teacher->classes;
-            return view('teacher.presents', compact('classes', 'user_role', 'page', 'sections', 'userId'));       
+            return view('teacher.presents', compact('classes', 'user_role', 'page', 'sections', 'userId', 'isVisibleCalendar'));       
         } else {
-            return view('teacher.presents', compact('classes', 'user_role', 'page', 'sections', 'userId'))->withErrors(['message' => 'Teacher not found.']);
+            return view('teacher.presents', compact('classes', 'user_role', 'page', 'sections', 'userId', 'isVisibleCalendar'))->withErrors(['message' => 'Teacher not found.']);
         }
     }
 

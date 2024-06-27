@@ -3,7 +3,7 @@
     <div class="w-60 bg-[#1F2937] flex flex-col items-center pt-5 pb-2 space-y-7 h-[720px]">
         <!-- menu items -->
         <div class="w-full pr-3 flex flex-col gap-y-1 text-gray-500 fill-gray-500 text-sm cursor-pointer">
-            <calendar
+            <calendar v-if="calendar == true"
                 v-model="dateSelected"
                 @date-selected="updateDateSelected">
 
@@ -86,6 +86,9 @@ export default {
         },
         current_user: {
             type: Number
+        },
+        calendar: {
+            type: Boolean
         }
     },
     data() {
@@ -163,7 +166,7 @@ export default {
                     current_user: this.current_user
                 };
                 break;
-            case 'Giustificazioni':
+            case 'Giustificazioni/Assenze':
                 component = 'JustificationsPage';
                 props = {
                     students: this.studentsByClass,
