@@ -30,8 +30,8 @@ export default {
     
   data(){
     return {
-    currentDate: new Date(),
-  };
+      currentDate: new Date()
+    };
   },
    
   computed: {
@@ -49,12 +49,14 @@ export default {
       this.currentDate = new Date(this.currentDate); // Forza l'aggiornamento della data
       var $monthToEmit = this.currentDate.getMonth()+1;
       this.$emit('current-month', $monthToEmit);
+      console.log($monthToEmit);
     },
     nextMonth() {
       this.currentDate.setMonth(this.currentDate.getMonth() + 1);
       this.currentDate = new Date(this.currentDate); // Forza l'aggiornamento della data
       var $monthToEmit = this.currentDate.getMonth()+1;
       this.$emit('current-month', $monthToEmit);
+      console.log($monthToEmit);
     }
   }
 }
