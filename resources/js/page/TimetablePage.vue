@@ -37,8 +37,46 @@ export default {
         };
     },
     methods: {
+        searchTimetable(){
 
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            
+
+            fetch(`/api/getTimetableByClass/${this.current_class}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    }
+                }   
+            )
+            .then(response => response.json())
+            .then(data => {
+                if(data.result){
+                    return;
+                } else {
+                    this.popUpShow = true;
+                    this.message = data.message;;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                    }, 3200);
+                }
+            })
+           
+
+        }
     },
+    mounted(){
+        this.searchTimetable();
+    },
+    watch: {
+        current_class(){
+            this.searchTimetable();
+        }
+    }
 }
 </script>
 

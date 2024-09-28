@@ -213,4 +213,35 @@ class ApiController extends Controller
     }
 
 
+    public function getTimetableByClass(string $classe){
+
+        if(is_numeric($classe)){
+            $results = DB::table('school_calendar')
+            ->join('subjects', 'school_calendar.subject_id', '=', 'subjects.id')
+            ->join('teachers', 'school_calendar.teacher_id', '=', 'teachers.id')
+            ->where('school_calendar.class_id', $classe) 
+            ->select(
+                'school_calendar.day_of_week',
+                'school_calendar.time_start',
+                'school_calendar.time_end',
+                'subjects.name as subject_name',
+                'teachers.name as teacher_name'
+            )->get();
+
+            $responseData = $results;
+            $result = true;
+            $message = 'Orario recuperato con successo';
+            $statusCode = 200;
+        }
+        else {
+            $responseData = [];
+            $result = false;
+            $message = 'ID classe non numerico';
+            $statusCode = 400;
+        }
+       
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
+    }
+
+
 }
