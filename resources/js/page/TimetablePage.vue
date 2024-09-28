@@ -12,8 +12,7 @@
 import PopUpComponent from '../components/common/PopUpComponent.vue';
 export default {
     components:{
-        PopUpComponent,
-        MenuMonths
+        PopUpComponent
     },
     props: {
         students: {
