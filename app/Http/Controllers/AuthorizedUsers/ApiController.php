@@ -227,7 +227,10 @@ class ApiController extends Controller
                 'school_calendar.time_end',
                 'subjects.name as subject_name',
                 'teachers.name as teacher_name'
-            )->get();
+            )
+            ->orderBy('school_calendar.day_of_week')  
+            ->orderBy('school_calendar.time_start') 
+            ->get();
 
             //prendo tutti i giorni una volta sola
             $uniqueDays = $results->pluck('day_of_week')->unique()->values();
@@ -240,8 +243,28 @@ class ApiController extends Controller
                 return array_search($a, $daysOfWeekOrder) <=> array_search($b, $daysOfWeekOrder);
             })->values();
 
+            
+
+            // Raggruppa i risultati per 'time_start'
+            $groupedByTimeStart = [];
+
+            foreach ($results as $entry) {
+                // Ottieni il time_start per ogni voce
+                $timeStart = $entry->time_start;
+
+                // Inizializza l'array per quel time_start se non esiste ancora
+                if (!isset($groupedByTimeStart[$timeStart])) {
+                    $groupedByTimeStart[$timeStart] = [];
+                }
+
+                // Aggiungi l'elemento all'array del time_start corrispondente
+                $groupedByTimeStart[$timeStart][] = (array) $entry;
+            }
+            Log::info(json_encode($groupedByTimeStart));
+
+
             $responseData = [
-                'timetable' => $results,
+                'timetable' => $groupedByTimeStart,
                 'days' => $sortedDays
             ];
             $result = true;

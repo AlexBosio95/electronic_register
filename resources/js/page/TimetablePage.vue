@@ -24,7 +24,14 @@
 
                     <!-- Righe per gli studenti -->
                     <tbody>
-                        
+
+                        <tr v-for="(entries, timeStart) in timetable" :key="timeStart">
+                            <td class="px-4 py-2 border">{{ timeStart }}</td>
+
+                            <td v-for="entry in entries" :key="entry.day_of_week" class="px-4 py-2 border text-center">
+                                {{ entry.subject_name }} <br> {{ entry.teacher_name }}
+                            </td>
+                        </tr>
                         
                     </tbody>
                 </table>
