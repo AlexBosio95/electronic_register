@@ -221,6 +221,7 @@ class ApiController extends Controller
             ->join('teachers', 'school_calendar.teacher_id', '=', 'teachers.id')
             ->where('school_calendar.class_id', $classe) 
             ->select(
+                'school_calendar.id',
                 'school_calendar.day_of_week',
                 'school_calendar.time_start',
                 'school_calendar.time_end',
@@ -228,7 +229,21 @@ class ApiController extends Controller
                 'teachers.name as teacher_name'
             )->get();
 
-            $responseData = $results;
+            //prendo tutti i giorni una volta sola
+            $uniqueDays = $results->pluck('day_of_week')->unique()->values();
+
+            // Definisco l'ordine dei giorni della settimana
+            $daysOfWeekOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            // Ordino i giorni unici in base all'ordine corretto
+            $sortedDays = $uniqueDays->sort(function ($a, $b) use ($daysOfWeekOrder) {
+                return array_search($a, $daysOfWeekOrder) <=> array_search($b, $daysOfWeekOrder);
+            })->values();
+
+            $responseData = [
+                'timetable' => $results,
+                'days' => $sortedDays
+            ];
             $result = true;
             $message = 'Orario recuperato con successo';
             $statusCode = 200;
@@ -240,6 +255,11 @@ class ApiController extends Controller
             $statusCode = 400;
         }
        
+
+        
+        
+
+
         return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
 

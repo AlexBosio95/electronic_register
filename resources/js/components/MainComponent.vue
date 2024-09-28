@@ -178,7 +178,6 @@ export default {
                 };
                 break;
             case 'Orario':
-                console.log("buongiorno a tutti");
                 component = 'TimetablePage';
                 props = {
                     students: this.studentsByClass,

@@ -5,6 +5,41 @@
             :type="type"
         />
 
+
+
+
+
+        <div v-else-if="students.length > 0 && mostraTable === true">
+        <div class="container mx-auto p-4">
+            <!-- Griglia -->
+            <div class="overflow-x-auto bg-gray-100 rounded-lg shadow-md p-4">
+                <table id="timeTable" class="table-auto w-full">
+                    <!-- Intestazione delle colonne -->
+                    <thead>
+                        <th class="px-4 py-2"></th> 
+                            <th v-for="day in days" :key="day" class="px-4 py-2">
+                                {{ day }}
+                            </th> 
+                    </thead>
+
+                    <!-- Righe per gli studenti -->
+                    <tbody>
+                        
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>    
+    </div>
+
+
+
+
+
+
+
+
+
 </template>
 
 <script>
@@ -34,6 +69,9 @@ export default {
             current_error: "",
             type: "error",
             popUpShow: false,
+            timetable: [],
+            days: [],
+            mostraTable: true
         };
     },
     methods: {
@@ -54,7 +92,9 @@ export default {
             .then(response => response.json())
             .then(data => {
                 if(data.result){
-                    return;
+                    this.timetable = data.data.timetable;
+                    this.days = data.data.days;
+                    console.log(this.days);
                 } else {
                     this.popUpShow = true;
                     this.message = data.message;;
