@@ -143,18 +143,9 @@ export default {
             .then(data => {
                 if(data.result){
                     this.justifications = data.data;
-                    if (this.justifications.length <= 0){
-                        this.popUpShow = true;
-                        this.message = "La classe non ha assenze associate";
-                        this.type = "error";
-
-                        setTimeout(() => {
-                            this.popUpShow = false;
-                        }, 3200);
-                    }
                 } else {
                     this.popUpShow = true;
-                    this.message = data.message;;
+                    this.current_error = data.message;;
                     this.type = "error";
 
                     setTimeout(() => {
@@ -192,7 +183,7 @@ export default {
             this.type = "error";
             setTimeout(() => {
                 this.popUpShow = false;
-                this.message = "";
+                this.current_error = "";
                 this.type = null;
             }, 1000);
             this.selectedItem = null;
