@@ -10,18 +10,20 @@ class TeacherRegister extends Model
     use HasFactory;
 
     protected $table = "teacher_register";
-    protected $fillable = ["note"];
+    protected $fillable = ['teacher_id', 'subject_id', 'class_id', 'note'];
 
-    public function teachers(){
-        $this->hasMany(Teacher::class);
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class);
     }
 
-    public function subjects(){
-        $this->hasMany(Subject::class);
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
     }
 
-    public function classes(){
-        $this->hasMany(Subject::class);
+    public function class()
+    {
+        return $this->belongsTo(Classe::class);
     }
-
 }

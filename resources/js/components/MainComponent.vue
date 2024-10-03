@@ -53,6 +53,7 @@ import DefaultPage from '../page/DefaultPage.vue';
 import NotesPage from '../page/NotesPage.vue';
 import GradesPage from '../page/GradesPage.vue';
 import JustificationsPage from '../page/JustificationsPage.vue';
+import PlanPage from '../page/PlanPage.vue';
 
 
 export default {
@@ -65,7 +66,8 @@ export default {
         DefaultPage,
         NotesPage,
         JustificationsPage,
-        PopUpComponent
+        PopUpComponent,
+        PlanPage
     },
     props: {
         classes: {
@@ -171,7 +173,16 @@ export default {
                 props = {
                     students: this.studentsByClass,
                     current_class: this.selectedClass,
-                    current_date: this.dateSelected,
+                    selectedDay: this.dateSelected,
+                    current_user: this.current_user
+                };
+                break;
+            case 'RegistroProfessori':
+                component = 'PlanPage';
+                props = {
+                    students: this.studentsByClass,
+                    current_class: this.selectedClass,
+                    selectedDay: this.dateSelected,
                     current_user: this.current_user
                 };
                 break;
