@@ -5,10 +5,6 @@
             :type="type"
         />
 
-
-
-
-
         <div v-else-if="students.length > 0 && mostraTable === true">
         <div class="container mx-auto p-4">
             <!-- Griglia -->
@@ -29,7 +25,8 @@
                             <td class="px-4 py-2 border">{{ timeStart }}</td>
 
                             <td v-for="entry in entries" :key="entry.day_of_week" class="px-4 py-2 border text-center">
-                                {{ entry.subject_name }} <br> {{ entry.teacher_name }}
+                                <!--{{ entry.subject_name }} <br> {{ entry.teacher_name }} -->
+                                <modal-manage-timetable :subject="entry.subject_name" :teacher="entry.teacher_name"> </modal-manage-timetable>
                             </td>
                         </tr>
                         
@@ -39,22 +36,16 @@
         </div>    
     </div>
 
-
-
-
-
-
-
-
-
 </template>
 
 <script>
 
 import PopUpComponent from '../components/common/PopUpComponent.vue';
+import ModalManageTimetable from '../components/ModalManageTimetable.vue';
 export default {
     components:{
-        PopUpComponent
+        PopUpComponent,
+        ModalManageTimetable
     },
     props: {
         students: {
