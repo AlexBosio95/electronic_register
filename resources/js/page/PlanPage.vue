@@ -11,13 +11,13 @@
                 v-if="isAddingNote"
                 @click="toggleView"
                 class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-800 transition-all w-full">
-                Visualizza vecchie note
+                Visualizza vecchie note registro
             </button>
             <button
                 v-else
                 @click="toggleView"
                 class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-800 transition-all w-full">
-                Aggiungi nuove note
+                Aggiungi nuove note registro
             </button>
         </div>
 
@@ -77,13 +77,15 @@
 
             <!-- Mostra le vecchie note -->
             <div v-if="oldNotes.length > 0">
-                <h4 class="text-md font-medium text-white mb-2">Note trovate:</h4>
-                <ul class="bg-gray-800 rounded-lg p-4 space-y-2">
-                    <li v-for="note in oldNotes" :key="note.id" class="text-white p-2 bg-gray-700 rounded">
-                        <p><strong>{{ formatDateTime(note.created_at) }}</strong></p>
-                        <p>{{ note.note }}</p>
-                    </li>
-                </ul>
+                <h4 class="text-md font-medium text-white mb-2">Note registro trovate:</h4>
+                <div class="max-h-[420px] overflow-y-auto">
+                    <ul class="bg-gray-800 rounded-lg p-4">
+                        <li v-for="note in oldNotes" :key="note.id" class="text-white p-4 bg-gray-700 rounded-lg">
+                            <p class="pb-2 text-end font-light text-sm">{{ formatDateTime(note.datetime) }}</p>
+                            <p>{{ note.note }}</p>
+                        </li>
+                    </ul>
+                </div>
             </div>
             <div v-else class="text-white">Nessuna nota trovata per l'intervallo di date selezionato.</div>
         </div>
@@ -128,7 +130,6 @@ export default {
                 return;
             }
 
-            // Converti la `selectedDay` nel formato corretto `Y-m-d`
             const date = new Date(this.selectedDay);
             const formattedDate = date.toISOString().split('T')[0];
 
@@ -140,7 +141,6 @@ export default {
                 subject_id: this.selectedSubject
             };
 
-            // Chiamata API per salvare i dati
             fetch('/api/salva-note', {
                 method: 'POST',
                 headers: {
@@ -228,19 +228,26 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     if (data.result) {
-                        this.oldNotes = data.data || [];  // Utilizza data.data
+                        this.oldNotes = data.data || [];
                     } else {
-                        alert('Errore nel recupero delle note: ' + data.message);
-                        this.oldNotes = [];
+                        this.popUpShow = true;
+                        this.message = data.message;
+                        this.type = "error";
+
+                        setTimeout(() => {
+                            this.popUpShow = false;
+                            this.message = "";
+                            this.type = null;
+                        }, 3200);
                     }
                 })
                 .catch(error => {
                     console.error('Errore:', error);
                     alert('Si è verificato un errore.');
                     this.oldNotes = [];
-                });
-            },
-            resetForm() {
+            });
+        },
+        resetForm() {
             this.selectedDateTime = '';
             this.lessonNote = '';
         },
@@ -269,11 +276,10 @@ export default {
             if (newValue) {
                 this.fetchOldNotes();
             }
-        }
+        },
     }
     };
 </script>
 
 <style scoped>
-/* Aggiungi eventuali stili personalizzati qui */
 </style>

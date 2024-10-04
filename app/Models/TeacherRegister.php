@@ -10,7 +10,7 @@ class TeacherRegister extends Model
     use HasFactory;
 
     protected $table = "teacher_register";
-    protected $fillable = ['teacher_id', 'subject_id', 'class_id', 'note'];
+    protected $fillable = ['teacher_id', 'subject_id', 'class_id', 'note', 'datetime'];
 
     public function teacher()
     {

@@ -31,29 +31,27 @@ class PlanController extends CommonController
      */
     public function store(Request $request)
     {
-        // Validazione dei dati in input
+        // Validazione dell'input
         $validatedData = $request->validate([
-            'teacher_id' => 'required|exists:teachers,id|nullable',
-            'subject_id' => 'required|exists:subjects,id|nullable',
-            'class_id'   => 'required|exists:classes,id|nullable',
-            'datetime'   => 'required|date_format:Y-m-d\TH:i', 
-            'note'       => 'required|string|max:500'
+            'teacher_id'  => 'required|exists:teachers,id',
+            'class_id'    => 'required|exists:classes,id',
+            'subject_id'    => 'required|exists:subject,id',
+            'note'        => 'required|string|max:500',
+            'datetime'    => 'required|date_format:Y-m-d\TH:i', 
         ]);
-
+    
         try {
-            $newRecord = TeacherRegister::create([
+            $note = TeacherRegister::create([
                 'teacher_id' => $validatedData['teacher_id'],
-                'subject_id' => $validatedData['subject_id'],
                 'class_id'   => $validatedData['class_id'],
+                'subject_id' => $validatedData['subject_id'],
                 'note'       => $validatedData['note'],
-                'created_at' => $validatedData['datetime'], 
+                'datetime'   => $validatedData['datetime'],
             ]);
-
-            return $this->ajaxLogAndResponse($newRecord, 'Nota creata con successo', true, 201);
-        } catch (ValidationException $e) {
-            return $this->ajaxLogAndResponse(null, 'Errore di validazione: ' . $e->getMessage(), false, 422);
+    
+            return $this->ajaxLogAndResponse($note, 'Nota salvata con successo', true, 200);
         } catch (\Exception $e) {
-            return $this->ajaxLogAndResponse(null, 'Errore durante il salvataggio della nota: ' . $e->getMessage(), false, 500);
+            return $this->ajaxLogAndResponse(null, 'Errore durante il salvataggio: ' . $e->getMessage(), false, 500);
         }
     }
 
@@ -91,7 +89,6 @@ class PlanController extends CommonController
 
     public function getOldNotes(Request $request)
     {
-        // Validazione dell'input
         $validatedData = $request->validate([
             'teacher_id'  => 'required|exists:teachers,id',
             'class_id'    => 'required|exists:classes,id',
@@ -102,8 +99,9 @@ class PlanController extends CommonController
         try {
             $notes = TeacherRegister::where('teacher_id', $validatedData['teacher_id'])
                 ->where('class_id', $validatedData['class_id'])
-                ->whereBetween('created_at', [$validatedData['start_date'], $validatedData['end_date']])
-                ->orderBy('created_at', 'asc')
+                ->whereDate('datetime', '>=', $validatedData['start_date'])
+                ->whereDate('datetime', '<=', $validatedData['end_date'])
+                ->orderBy('datetime', 'asc')
                 ->get();
 
             if ($notes->isEmpty()) {
@@ -115,4 +113,5 @@ class PlanController extends CommonController
             return $this->ajaxLogAndResponse(null, 'Errore durante il recupero delle note: ' . $e->getMessage(), false, 500);
         }
     }
+
 }
