@@ -19,20 +19,22 @@
                     
                     <div class="flex justify-between">
                         <button @click="isOpenSubject = !isOpenSubject" >{{ subject }}</button>
-                        <div v-if="isOpenSubject" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <div v-if="isOpenSubject && teachers != null" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Opzione 1</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Opzione 2</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Opzione 3</a>
+
+                                <button  v-for="teacher in teachers" :key="teacher.id" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ teacher.name }}</button>
+                                <!-- Logica che, quando clicco il teacher che voglio, mette isOpenSubject a false, 
+                                     fa una chiamata ajax che chiede le materie di quel prof in quella classe,
+                                     le mostra a schermo e, una volta scelto, faccio la chiamata per aggiornare il DB
+                                -->
                             </div>
                         </div>
                     
                         <button @click="isOpenTeacher = !isOpenTeacher" >{{ teacher }}</button>
                         <div v-if="isOpenTeacher" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Opzione 1</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Opzione 2</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Opzione 3</a>
+                                <a  v-for="teacher in teachers" :key="teacher.id" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ teacher.name }}</a>
+                                
                             </div>
                         </div>
                     </div>
@@ -62,6 +64,9 @@ export default {
         },
         teacher: {
             type: String
+        },
+        teachers: {
+            type: Object
         }
     },
     data() {

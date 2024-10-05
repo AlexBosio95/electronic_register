@@ -277,13 +277,38 @@ class ApiController extends Controller
             $message = 'ID classe non numerico';
             $statusCode = 400;
         }
-       
-
-        
-        
-
-
         return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
+    }
+
+
+    public function getTeacherPerClass(string $class){
+
+        if(is_numeric($class)){
+            $results = DB::table('teacher_classes')
+                ->join('teachers', 'teacher_classes.teacher_id', '=', 'teachers.id')
+                ->where('teacher_classes.class_id', $class)
+                ->select(
+                    'teachers.id',
+                    'teachers.name',
+                    'teachers.surname'
+                )
+                ->get();
+
+            $responseData = $results;
+            $message = "Professori recuperati correttamente";
+            $result = true;
+            $statusCode = 200;
+        } else {
+            $responseData = [];
+            $result = false;
+            $message = 'Impossibile recuperare correttamente i prof della classe';
+            $statusCode = 400;
+        }
+        
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
+       
+            
+        
     }
 
 

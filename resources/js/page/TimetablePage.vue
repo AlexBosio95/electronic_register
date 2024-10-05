@@ -42,6 +42,7 @@
     <modal-manage-timetable v-if="selectedSubject != null && selectedTeacher != null" 
         :subject="selectedSubject" 
         :teacher="selectedTeacher"
+        :teachers="teachers"
         @closeModal="closeAll"
         >
     </modal-manage-timetable>
@@ -81,7 +82,8 @@ export default {
             days: [],
             mostraTable: true,
             selectedSubject: null,
-            selectedTeacher: null
+            selectedTeacher: null,
+            teachers: null
         };
     },
     methods: {
@@ -104,7 +106,6 @@ export default {
                 if(data.result){
                     this.timetable = data.data.timetable;
                     this.days = data.data.days;
-                    console.log(this.days);
                 } else {
                     this.popUpShow = true;
                     this.message = data.message;;
@@ -122,11 +123,43 @@ export default {
         openModal(entry){
             this.selectedTeacher = entry.teacher_name;
             this.selectedSubject = entry.subject_name;
+            this.seacherTeachersByClass();
         },
         closeAll(){
             this.selectedTeacher = null;
             this.selectedSubject = null;
+            this.teachers = null;
+        },
+        seacherTeachersByClass(){
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            fetch(`/api/getTeacherPerClass/${this.current_class}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    }
+                }   
+            )
+            .then(response => response.json())
+            .then(data => {
+                if (data.result){
+                    this.teachers = data.data;
+                } else {
+                    this.popUpShow = true;
+                    this.message = data.message;;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                    }, 3200);
+                }
+            })
+
         }
+
     },
     mounted(){
         this.searchTimetable();
