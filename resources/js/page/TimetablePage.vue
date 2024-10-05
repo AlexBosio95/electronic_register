@@ -26,7 +26,9 @@
 
                             <td v-for="entry in entries" :key="entry.day_of_week" class="px-4 py-2 border text-center">
                                 <!--{{ entry.subject_name }} <br> {{ entry.teacher_name }} -->
-                                <modal-manage-timetable :subject="entry.subject_name" :teacher="entry.teacher_name"> </modal-manage-timetable>
+                                <button @click="openModal(entry)"> 
+                                    {{ entry.subject_name }} <br> {{ entry.teacher_name }}
+                                </button>
                             </td>
                         </tr>
                         
@@ -35,6 +37,14 @@
             </div>
         </div>    
     </div>
+
+
+    <modal-manage-timetable v-if="selectedSubject != null && selectedTeacher != null" 
+        :subject="selectedSubject" 
+        :teacher="selectedTeacher"
+        @closeModal="closeAll"
+        >
+    </modal-manage-timetable>
 
 </template>
 
@@ -69,7 +79,9 @@ export default {
             popUpShow: false,
             timetable: [],
             days: [],
-            mostraTable: true
+            mostraTable: true,
+            selectedSubject: null,
+            selectedTeacher: null
         };
     },
     methods: {
@@ -105,6 +117,15 @@ export default {
             })
            
 
+        },
+
+        openModal(entry){
+            this.selectedTeacher = entry.teacher_name;
+            this.selectedSubject = entry.subject_name;
+        },
+        closeAll(){
+            this.selectedTeacher = null;
+            this.selectedSubject = null;
         }
     },
     mounted(){
