@@ -43,7 +43,9 @@
         :subject="selectedSubject" 
         :teacher="selectedTeacher"
         :teachers="teachers"
+        :idToModify="idToModify"
         @closeModal="closeAll"
+        @updateCalendar="updateCalendar"
         >
     </modal-manage-timetable>
 
@@ -123,6 +125,7 @@ export default {
         openModal(entry){
             this.selectedTeacher = entry.teacher_name;
             this.selectedSubject = entry.subject_name;
+            this.idToModify = entry.id;
             this.seacherTeachersByClass();
         },
         closeAll(){
@@ -158,6 +161,10 @@ export default {
                 }
             })
 
+        },
+        updateCalendar(){
+            this.searchTimetable();
+            this.closeAll();
         }
 
     },

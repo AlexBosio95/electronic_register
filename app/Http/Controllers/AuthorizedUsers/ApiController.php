@@ -16,6 +16,7 @@ use App\Models\Subject;
 use App\Models\NotesStudentRegister;
 use App\Http\Controllers\AuthorizedUsers\ControllerTraits\WithPresenceTrait;
 use App\Models\Absence;
+use App\Models\SchoolCalendar;
 
 class ApiController extends Controller
 {
@@ -305,11 +306,54 @@ class ApiController extends Controller
             $statusCode = 400;
         }
         
-        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
-       
-            
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);        
         
     }
+
+    public function getTeacherSubjects(int $id){
+        if(is_numeric($id)){
+            $results = DB::table('teacher_subjects')
+                ->join('subjects', 'teacher_subjects.subject_id', '=', 'subjects.id')
+                ->where('teacher_subjects.teacher_id', $id)
+                ->select(
+                    'subjects.id',
+                    'subjects.name'
+                )
+                ->get();
+
+            $responseData = $results;
+            $message = "Materie recuperati correttamente";
+            $result = true;
+            $statusCode = 200;
+        } else {
+            $responseData = [];
+            $result = false;
+            $message = 'Impossibile recuperare correttamente i prof della classe';
+            $statusCode = 400;
+        }
+
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);  
+    }
+
+
+    public function updateTimetable(int $school_calendar_id, int $subject_id, int $teacher_id){
+
+        $idCalendar = SchoolCalendar::findOrFail($school_calendar_id);
+        Log::info($idCalendar);
+
+        $idCalendar->subject_id = $subject_id;
+        $idCalendar->teacher_id = $teacher_id;
+        $idCalendar->save();
+        $responseData = [];
+        $message = "Orario aggiornato correttamente";
+        $result = true;
+        $statusCode = 200;
+
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);  
+
+    }
+
+
 
 
 }

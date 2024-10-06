@@ -48,5 +48,7 @@ Route::middleware('checkApi')->group(function () {
     Route::post('/note-add', [NotesController::class, 'store']);
     Route::get('/getTimetableByClass/{classe}',[ApiController::class, 'getTimetableByClass']);
     Route::get('/getTeacherPerClass/{classe}',[ApiController::class, 'getTeacherPerClass']);
+    Route::get('/getTeacherSubjects/{teacher}', [ApiController::class, 'getTeacherSubjects']);
+    Route::put('updateTimetable/{calendarId}/{subjectId}/{teacherId}', [ApiController::class, 'updateTimetable']);
 
 });

@@ -18,28 +18,22 @@
                 <div class="bg-white p-8 rounded-lg z-50 shadow-md max-w-sm mx-auto relative">
                     
                     <div class="flex justify-between">
-                        <button @click="isOpenSubject = !isOpenSubject" >{{ subject }}</button>
-                        <div v-if="isOpenSubject && teachers != null" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <button v-if="teacher_name != null && subject_name != null" >{{ teacher_name }}</button>
+                        <div v-if="isOpenTeacher && teachers != null" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
-
-                                <button  v-for="teacher in teachers" :key="teacher.id" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ teacher.name }}</button>
-                                <!-- Logica che, quando clicco il teacher che voglio, mette isOpenSubject a false, 
-                                     fa una chiamata ajax che chiede le materie di quel prof in quella classe,
-                                     le mostra a schermo e, una volta scelto, faccio la chiamata per aggiornare il DB
-                                -->
+                                <button  v-for="teacher in teachers" :key="teacher.id" href="#" @click="showTeacherSubjects(teacher.id, teacher.name)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ teacher.name }}</button>
                             </div>
                         </div>
                     
-                        <button @click="isOpenTeacher = !isOpenTeacher" >{{ teacher }}</button>
-                        <div v-if="isOpenTeacher" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                        <button v-if="teacher_name != null && subject_name != null" >{{ subject_name }}</button>
+                        <div v-if="isOpenSubject && subjects != null" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                             <div class="py-1">
-                                <a  v-for="teacher in teachers" :key="teacher.id" href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ teacher.name }}</a>
-                                
+                                <button  v-for="subject in subjects" :key="subject.id" href="#" @click="selectSubject(subject.id, subject.name)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ subject.name }}</button>               
                             </div>
                         </div>
                     </div>
                     
-                    <button class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" >Conferma</button>
+                    <button v-if="teacher_id != null && subject_id != null" @click="updateTimetable()" class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" >Conferma</button>
                     
                 </div>
                 
@@ -67,6 +61,9 @@ export default {
         },
         teachers: {
             type: Object
+        },
+        idToModify: {
+            type: String
         }
     },
     data() {
@@ -74,12 +71,117 @@ export default {
             current_error: "",
             type: "error",
             popUpShow: false,
-            isOpenTeacher: false,
-            isOpenSubject: false
+            isOpenTeacher: true,
+            isOpenSubject: false,
+            subjects: null,
+            teacher_id: null,
+            teacher_name: null,
+            subject_id: null,
+            subject_name: null
         };
     },
     methods: {
-        
+        showTeacherSubjects(teacherId, teacherName){
+
+            this.teacher_id = teacherId;
+            this.teacher_name = teacherName;
+
+            //sistemiamo i flag per materie e prof
+            this.isOpenSubject = true;
+            this.isOpenTeacher = false;
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');            
+
+            fetch
+            (`/api/getTeacherSubjects/${teacherId}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    }
+                }   
+            )
+            .then(response => response.json())
+            .then(data => {
+                if(data.result){
+                    this.subjects = data.data;
+                } else {
+                    this.popUpShow = true;
+                    this.message = data.message;;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                    }, 3200);
+                }
+            })
+        },
+
+        selectSubject(subjectId, subjectName){
+            this.subject_id = subjectId;
+            this.subject_name = subjectName;
+            this.isOpenSubject = false;
+        },
+        updateTimetable(){
+
+
+
+
+
+
+
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');            
+
+            fetch
+            (`/api/updateTimetable/${this.idToModify}/${this.subject_id}/${this.teacher_id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                    }
+                }   
+            )
+            .then(response => response.json())
+            .then(data => {
+                if(data.result){
+                   this.$emit('updateCalendar');
+                } else {
+                    this.popUpShow = true;
+                    this.message = data.message;;
+                    this.type = "error";
+
+                    setTimeout(() => {
+                        this.popUpShow = false;
+                    }, 3200);
+                }
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            //setto a null tutti i valori che mi servono solo per cambiare l'orario
+            this.subjects = null,
+            this.teacher_id = null,
+            this.teacher_name = null,
+            this.subject_id = null,
+            this.subject_name = null
+        }
     }
 }
 </script>
