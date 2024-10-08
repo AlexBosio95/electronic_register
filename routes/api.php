@@ -10,6 +10,7 @@ use App\Http\Controllers\AuthorizedUsers\MarksController;
 use App\Http\Controllers\AuthorizedUsers\PresenceController;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\AuthorizedUsers\NotesController;
+use App\Http\Controllers\AuthorizedUsers\TimetableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,5 +46,9 @@ Route::middleware('checkApi')->group(function () {
     Route::delete('/notes/{id}', [NotesController::class, 'destroy']);
     Route::put('/notes/{id}', [NotesController::class, 'update']);
     Route::post('/note-add', [NotesController::class, 'store']);
+    Route::get('/getTimetableByClass/{classe}',[ApiController::class, 'getTimetableByClass']);
+    Route::get('/getTeacherPerClass/{classe}',[ApiController::class, 'getTeacherPerClass']);
+    Route::get('/getTeacherSubjects/{teacher}', [ApiController::class, 'getTeacherSubjects']);
+    Route::put('updateTimetable/{calendarId}/{subjectId}/{teacherId}', [ApiController::class, 'updateTimetable']);
 
 });

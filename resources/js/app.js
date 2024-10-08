@@ -19,6 +19,7 @@ import MenuSections from './components/menu/MenuSections.vue';
 import Calendar from './components/menu/Calendar.vue';
 import ButtonModal from './components/ButtonModal.vue';
 import ModalManageAttendance from './components/ModalManageAttendance.vue';
+import ModalManageTimetable from './components/ModalManageTimetable.vue';
 import PopUpComponent from './components/common/PopUpComponent.vue'
 import MenuMonths from './components/menu/MenuMonths.vue';
 import ModalManageAbsences from './components/ModalManageAbsences.vue';
@@ -42,6 +43,7 @@ app.component('manage-attendance', ModalManageAttendance);
 app.component('popup-component', PopUpComponent);
 app.component('menu-months', MenuMonths);
 app.component('modal-absences', ModalManageAbsences);
+app.component('modal-manage-timetable', ModalManageTimetable);
 
 app.mount('#app');
 

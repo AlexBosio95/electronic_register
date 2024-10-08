@@ -16,6 +16,7 @@ use App\Models\Subject;
 use App\Models\NotesStudentRegister;
 use App\Http\Controllers\AuthorizedUsers\ControllerTraits\WithPresenceTrait;
 use App\Models\Absence;
+use App\Models\SchoolCalendar;
 
 class ApiController extends Controller
 {
@@ -211,6 +212,148 @@ class ApiController extends Controller
 
         return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
     }
+
+
+    public function getTimetableByClass(string $classe){
+
+        if(is_numeric($classe)){
+            $results = DB::table('school_calendar')
+            ->join('subjects', 'school_calendar.subject_id', '=', 'subjects.id')
+            ->join('teachers', 'school_calendar.teacher_id', '=', 'teachers.id')
+            ->where('school_calendar.class_id', $classe) 
+            ->select(
+                'school_calendar.id',
+                'school_calendar.day_of_week',
+                'school_calendar.time_start',
+                'school_calendar.time_end',
+                'subjects.name as subject_name',
+                'teachers.name as teacher_name'
+            )
+            ->orderBy('school_calendar.day_of_week')  
+            ->orderBy('school_calendar.time_start') 
+            ->get();
+
+            //prendo tutti i giorni una volta sola
+            $uniqueDays = $results->pluck('day_of_week')->unique()->values();
+
+            // Definisco l'ordine dei giorni della settimana
+            $daysOfWeekOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            
+            // Ordino i giorni unici in base all'ordine corretto
+            $sortedDays = $uniqueDays->sort(function ($a, $b) use ($daysOfWeekOrder) {
+                return array_search($a, $daysOfWeekOrder) <=> array_search($b, $daysOfWeekOrder);
+            })->values();
+
+            
+
+            // Raggruppa i risultati per 'time_start'
+            $groupedByTimeStart = [];
+
+            foreach ($results as $entry) {
+                // Ottieni il time_start per ogni voce
+                $timeStart = $entry->time_start;
+
+                // Inizializza l'array per quel time_start se non esiste ancora
+                if (!isset($groupedByTimeStart[$timeStart])) {
+                    $groupedByTimeStart[$timeStart] = [];
+                }
+
+                // Aggiungi l'elemento all'array del time_start corrispondente
+                $groupedByTimeStart[$timeStart][] = (array) $entry;
+            }
+            Log::info(json_encode($groupedByTimeStart));
+
+
+            $responseData = [
+                'timetable' => $groupedByTimeStart,
+                'days' => $sortedDays
+            ];
+            $result = true;
+            $message = 'Orario recuperato con successo';
+            $statusCode = 200;
+        }
+        else {
+            $responseData = [];
+            $result = false;
+            $message = 'ID classe non numerico';
+            $statusCode = 400;
+        }
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);
+    }
+
+
+    public function getTeacherPerClass(string $class){
+
+        if(is_numeric($class)){
+            $results = DB::table('teacher_classes')
+                ->join('teachers', 'teacher_classes.teacher_id', '=', 'teachers.id')
+                ->where('teacher_classes.class_id', $class)
+                ->select(
+                    'teachers.id',
+                    'teachers.name',
+                    'teachers.surname'
+                )
+                ->get();
+
+            $responseData = $results;
+            $message = "Professori recuperati correttamente";
+            $result = true;
+            $statusCode = 200;
+        } else {
+            $responseData = [];
+            $result = false;
+            $message = 'Impossibile recuperare correttamente i prof della classe';
+            $statusCode = 400;
+        }
+        
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);        
+        
+    }
+
+    public function getTeacherSubjects(int $id){
+        if(is_numeric($id)){
+            $results = DB::table('teacher_subjects')
+                ->join('subjects', 'teacher_subjects.subject_id', '=', 'subjects.id')
+                ->where('teacher_subjects.teacher_id', $id)
+                ->select(
+                    'subjects.id',
+                    'subjects.name'
+                )
+                ->get();
+
+            $responseData = $results;
+            $message = "Materie recuperati correttamente";
+            $result = true;
+            $statusCode = 200;
+        } else {
+            $responseData = [];
+            $result = false;
+            $message = 'Impossibile recuperare correttamente i prof della classe';
+            $statusCode = 400;
+        }
+
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);  
+    }
+
+
+    public function updateTimetable(int $school_calendar_id, int $subject_id, int $teacher_id){
+
+        $idCalendar = SchoolCalendar::findOrFail($school_calendar_id);
+        Log::info($idCalendar);
+
+        $idCalendar->subject_id = $subject_id;
+        $idCalendar->teacher_id = $teacher_id;
+        $idCalendar->save();
+        $responseData = [];
+        $message = "Orario aggiornato correttamente";
+        $result = true;
+        $statusCode = 200;
+
+        return $this->ajaxLogAndResponse($responseData, $message, $result, $statusCode);  
+
+    }
+
+
 
 
 }
