@@ -15,27 +15,78 @@
                 <!-- Contenuto del modal -->
                 <h2 class="text-lg font-semibold mb-4">Modifica l'orario</h2>
                 
-                <div class="bg-white p-8 rounded-lg z-50 shadow-md max-w-sm mx-auto relative">
-                    
-                    <div class="flex justify-between">
-                        <button v-if="teacher_name != null && subject_name != null" >{{ teacher_name }}</button>
-                        <div v-if="isOpenTeacher && teachers != null" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                            <div class="py-1">
-                                <button  v-for="teacher in teachers" :key="teacher.id" href="#" @click="showTeacherSubjects(teacher.id, teacher.name)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ teacher.name }}</button>
+                <div class="bg-white p-8 rounded-lg z-50 shadow-lg max-w-sm mx-auto relative">
+                    <div class="flex justify-between items-center space-x-6">
+                        <!-- Pulsante del docente -->
+                        <div class="relative w-1/2">
+                            <button
+                                v-if="teacher_name != null"
+                                @click="isOpenTeacher = !isOpenTeacher"
+                                class="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-lg shadow-sm text-center font-semibold hover:bg-gray-200 transition duration-300 ease-in-out"
+                            >
+                                {{ teacher_name || 'Seleziona Docente' }}
+                            </button>
+                            <div v-if="isOpenTeacher && teachers != null" class="absolute z-50 mt-2 w-full rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                                <div class="py-2 max-h-60 overflow-y-auto">
+                                <!-- Lista dei docenti -->
+                                    <div class="divide-y divide-gray-200">
+                                        <button
+                                        v-for="current_teacher in teachers"
+                                        :key="current_teacher.id"
+                                        @click="showTeacherSubjects(current_teacher.id, current_teacher.name)"
+                                        :class="{
+                                            'bg-blue-500 text-white font-semibold': current_teacher.name === teacher, 
+                                            'text-gray-700 hover:bg-blue-100 hover:text-blue-800': current_teacher.name !== teacher
+                                        }"
+                                        :disabled="current_teacher.name === teacher"
+                                        class="block w-full px-4 py-2 text-sm font-medium transition duration-200 ease-in-out"
+                                        >
+                                        {{ current_teacher.name }}
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    
-                        <button v-if="teacher_name != null && subject_name != null" >{{ subject_name }}</button>
+
+                        <!-- Pulsante della materia -->
+                        <div class="relative w-1/2">
+                        <button
+                            v-if="subject_name != null"
+                            @click="isOpenSubject = !isOpenSubject"
+                            class="w-full bg-gray-100 text-gray-700 px-4 py-2 rounded-lg shadow-sm text-center font-semibold hover:bg-gray-200 transition duration-300 ease-in-out"
+                        >
+                            {{ subject_name || 'Seleziona Materia' }}
+                        </button>
                         <div v-if="isOpenSubject && subjects != null" class="absolute z-50 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-                            <div class="py-1">
-                                <button  v-for="subject in subjects" :key="subject.id" href="#" @click="selectSubject(subject.id, subject.name)" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">{{ subject.name }}</button>               
+                            <div class="py-1 max-h-60 overflow-y-auto">
+                            <button
+                                v-for="sub in subjects"
+                                :key="sub.id"
+                                @click="selectSubject(sub.id, sub.name)"
+                                :class="{
+                                'bg-blue-500 text-white font-semibold': sub.name === subject, 
+                                'text-gray-700 hover:bg-blue-100': sub.name !== subject
+                                }"
+                                :disabled="sub.name === subject"
+                                class="block w-full px-4 py-2 text-sm font-medium transition duration-200 ease-in-out"
+                            >
+                                {{ sub.name }}
+                            </button>
                             </div>
+                        </div>
                         </div>
                     </div>
-                    
-                    <button v-if="teacher_id != null && subject_id != null" @click="updateTimetable()" class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4" >Conferma</button>
-                    
+
+                    <!-- Pulsante di conferma -->
+                    <button
+                        v-if="teacher_id != null && subject_id != null"
+                        @click="updateTimetable()"
+                        class="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded mt-6 transition duration-300 ease-in-out shadow-lg"
+                    >
+                        Conferma
+                    </button>
                 </div>
+
                 
             </div>
         </div>
