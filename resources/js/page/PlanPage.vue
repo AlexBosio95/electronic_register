@@ -80,7 +80,7 @@
                 <h4 class="text-md font-medium text-white mb-2">Note registro trovate:</h4>
                 <div class="max-h-[420px] overflow-y-auto">
                     <ul class="bg-gray-800 rounded-lg p-4">
-                        <li v-for="note in oldNotes" :key="note.id" class="text-white p-4 bg-gray-700 rounded-lg">
+                        <li v-for="note in oldNotes" :key="note.id" class="text-white p-4 bg-gray-700 rounded-lg mb-3">
                             <p class="pb-2 text-end font-light text-sm">{{ formatDateTime(note.datetime) }}</p>
                             <p>{{ note.note }}</p>
                         </li>

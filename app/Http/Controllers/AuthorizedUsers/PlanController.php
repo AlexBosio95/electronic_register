@@ -35,7 +35,7 @@ class PlanController extends CommonController
         $validatedData = $request->validate([
             'teacher_id'  => 'required|exists:teachers,id',
             'class_id'    => 'required|exists:classes,id',
-            'subject_id'    => 'required|exists:subject,id',
+            'subject_id'    => 'required|exists:subjects,id',
             'note'        => 'required|string|max:500',
             'datetime'    => 'required|date_format:Y-m-d\TH:i', 
         ]);
