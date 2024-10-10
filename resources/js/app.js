@@ -11,6 +11,7 @@ import PresentsPage from './page/PresentsPage.vue';
 import DefaultPage from './page/DefaultPage.vue';
 import NotesPage from './page/NotesPage.vue';
 import JustificationsPage from './page/JustificationsPage.vue';
+import PlanPage from './page/PlanPage.vue';
 
 // Componenti
 import MenuClassesComponent from './components/menu/MenuClassesComponent.vue';
@@ -31,6 +32,7 @@ app.component('grades-component', GradesPage);
 app.component('notes-component', NotesPage);
 app.component('default-component', DefaultPage);
 app.component('justification-component', JustificationsPage);
+app.component('plan-component', PlanPage);
 
 // Componenti
 app.component('menu-classes-component', MenuClassesComponent);

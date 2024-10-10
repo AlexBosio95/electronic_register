@@ -38,9 +38,9 @@ return [
         ]
     ],
     'plan' => [
-        'section_name' => 'Registro Professori',
+        'section_name' => 'RegistroProfessori',
         'route_name' => 'plan',
-        'calendar' => false,
+        'calendar' => true,
         'visibility' => [
             'teacher' => ['get', 'put', 'post', 'delete'], 
             'student' => ['get']
