@@ -13,7 +13,7 @@
                     </svg>
                 </button>
                 <!-- Contenuto del modal -->
-                <h2 class="text-lg font-semibold mb-4">Modifica l'orario</h2>
+                <h2 class="text-lg font-semibold mb-4">Modifica il docente e la materia</h2>
                 
                 <div class="bg-white p-8 rounded-lg z-50 shadow-lg max-w-sm mx-auto relative">
                     <div class="flex justify-between items-center space-x-6">
@@ -157,13 +157,7 @@ export default {
                 if(data.result){
                     this.subjects = data.data;
                 } else {
-                    this.popUpShow = true;
-                    this.message = data.message;;
-                    this.type = "error";
-
-                    setTimeout(() => {
-                        this.popUpShow = false;
-                    }, 3200);
+                    this.$emit('errorSubjects', data.message);
                 }
             })
         },
@@ -174,13 +168,6 @@ export default {
             this.isOpenSubject = false;
         },
         updateTimetable(){
-
-
-
-
-
-
-
 
             const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');            
 
@@ -208,23 +195,6 @@ export default {
                     }, 3200);
                 }
             })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
             //setto a null tutti i valori che mi servono solo per cambiare l'orario
             this.subjects = null,

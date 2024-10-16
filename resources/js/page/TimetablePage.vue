@@ -46,6 +46,7 @@
         :idToModify="idToModify"
         @closeModal="closeAll"
         @updateCalendar="updateCalendar"
+        @errorSubjects="setError"
         >
     </modal-manage-timetable>
 
@@ -165,6 +166,11 @@ export default {
         updateCalendar(){
             this.searchTimetable();
             this.closeAll();
+        },
+        setError(message){
+            this.popUpShow = true;
+            this.message = message;
+            this.type = "error";
         }
 
     },
