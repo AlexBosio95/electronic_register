@@ -11,6 +11,7 @@ use App\Http\Controllers\AuthorizedUsers\PresenceController;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\AuthorizedUsers\NotesController;
 use App\Http\Controllers\AuthorizedUsers\PlanController;
+use App\Http\Controllers\AuthorizedUsers\TimetableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,5 +49,9 @@ Route::middleware('checkApi')->group(function () {
     Route::post('/note-add', [NotesController::class, 'store']);
     Route::post('/salva-note', [PlanController::class, 'store']);
     Route::get('/vecchie-note', [PlanController::class, 'getOldNotes']);
+    Route::get('/getTimetableByClass/{classe}',[ApiController::class, 'getTimetableByClass']);
+    Route::get('/getTeacherPerClass/{classe}',[ApiController::class, 'getTeacherPerClass']);
+    Route::get('/getTeacherSubjects/{teacher}', [ApiController::class, 'getTeacherSubjects']);
+    Route::put('updateTimetable/{calendarId}/{subjectId}/{teacherId}', [ApiController::class, 'updateTimetable']);
 
 });

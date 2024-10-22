@@ -54,6 +54,7 @@ import NotesPage from '../page/NotesPage.vue';
 import GradesPage from '../page/GradesPage.vue';
 import JustificationsPage from '../page/JustificationsPage.vue';
 import PlanPage from '../page/PlanPage.vue';
+import TimetablePage from '../page/TimetablePage.vue';
 
 
 export default {
@@ -68,6 +69,7 @@ export default {
         JustificationsPage,
         PopUpComponent,
         PlanPage
+        TimetablePage
     },
     props: {
         classes: {
@@ -183,6 +185,15 @@ export default {
                     students: this.studentsByClass,
                     current_class: this.selectedClass,
                     selectedDay: this.dateSelected,
+                    current_user: this.current_user
+                };
+                break;
+            case 'Orario':
+                component = 'TimetablePage';
+                props = {
+                    students: this.studentsByClass,
+                    current_class: this.selectedClass,
+                    current_date: this.dateSelected,
                     current_user: this.current_user
                 };
                 break;
