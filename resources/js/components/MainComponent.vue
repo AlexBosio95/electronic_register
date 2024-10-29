@@ -68,7 +68,7 @@ export default {
         NotesPage,
         JustificationsPage,
         PopUpComponent,
-        PlanPage
+        PlanPage,
         TimetablePage
     },
     props: {
